@@ -1,0 +1,28 @@
+# ---- .NET ----
+bin/
+obj/
+*.user
+appsettings.Development.json.user
+.vs/
+
+# ---- Node / Angular ----
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# ---- Docker ----
+*.env
+.env
+
+# ---- IDE ----
+.vscode/
+.idea/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log
+logs/
