@@ -1,0 +1,12 @@
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+
+import { Patient } from '../../core/models/patient.model';
+
+export const PatientsActions = createActionGroup({
+  source: 'Patients',
+  events: {
+    'Load Patients': emptyProps(),
+    'Load Patients Success': props<{ patients: Patient[] }>(),
+    'Load Patients Failure': props<{ error: string }>()
+  }
+});

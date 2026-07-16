@@ -1,0 +1,27 @@
+<div class="patients-list">
+  <h1>Patients</h1>
+
+  <p *ngIf="loading$ | async">Loading patients...</p>
+  <p class="error" *ngIf="error$ | async as error">{{ error }}</p>
+
+  <table *ngIf="(patients$ | async)?.length">
+    <thead>
+      <tr>
+        <th>MRN</th>
+        <th>Name</th>
+        <th>Device</th>
+        <th>Serial Number</th>
+        <th>Implant Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let patient of patients$ | async">
+        <td>{{ patient.medicalRecordNumber }}</td>
+        <td>{{ patient.firstName }} {{ patient.lastName }}</td>
+        <td>{{ patient.deviceType }}</td>
+        <td>{{ patient.deviceSerialNumber }}</td>
+        <td>{{ patient.implantDate | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

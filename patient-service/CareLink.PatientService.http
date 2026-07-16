@@ -1,0 +1,6 @@
+@CareLink.PatientService_HostAddress = http://localhost:5293
+
+GET {{CareLink.PatientService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

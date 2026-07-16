@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/api-gateway/">
+    <Project Path="api-gateway/CareLink.ApiGateway.csproj" />
+  </Folder>
+  <Folder Name="/patient-service/">
+    <Project Path="patient-service/CareLink.PatientService.csproj" />
+  </Folder>
+</Solution>
