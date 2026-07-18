@@ -1,27 +1,49 @@
-<div class="patients-list">
-  <h1>Patients</h1>
+<div class="patients-page">
+  <header class="patients-page__header">
+    <div>
+      <h1>Patients</h1>
+      <p class="subtitle">Cardiac device patients under monitoring</p>
+    </div>
+    <button type="button" class="btn btn--primary" (click)="openAddForm()">+ Add Patient</button>
+  </header>
 
-  <p *ngIf="loading$ | async">Loading patients...</p>
-  <p class="error" *ngIf="error$ | async as error">{{ error }}</p>
+  <section class="card">
+    <p class="state-message" *ngIf="loading$ | async">Loading patients…</p>
+    <p class="state-message state-message--error" *ngIf="error$ | async as error">{{ error }}</p>
 
-  <table *ngIf="(patients$ | async)?.length">
-    <thead>
-      <tr>
-        <th>MRN</th>
-        <th>Name</th>
-        <th>Device</th>
-        <th>Serial Number</th>
-        <th>Implant Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let patient of patients$ | async">
-        <td>{{ patient.medicalRecordNumber }}</td>
-        <td>{{ patient.firstName }} {{ patient.lastName }}</td>
-        <td>{{ patient.deviceType }}</td>
-        <td>{{ patient.deviceSerialNumber }}</td>
-        <td>{{ patient.implantDate | date }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <ng-container *ngIf="patients$ | async as patients">
+      <table *ngIf="patients.length; else emptyState">
+        <thead>
+          <tr>
+            <th>MRN</th>
+            <th>Name</th>
+            <th>Device</th>
+            <th>Serial Number</th>
+            <th>Implant Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients">
+            <td class="mono">{{ patient.medicalRecordNumber }}</td>
+            <td class="patient-name">{{ patient.firstName }} {{ patient.lastName }}</td>
+            <td><span class="device-badge">{{ patient.deviceType }}</span></td>
+            <td class="mono">{{ patient.deviceSerialNumber }}</td>
+            <td>{{ patient.implantDate | date }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #emptyState>
+        <p class="state-message" *ngIf="(loading$ | async) === false">
+          No patients yet. Click "Add Patient" to get started.
+        </p>
+      </ng-template>
+    </ng-container>
+  </section>
+</div>
+
+<div class="modal-backdrop" *ngIf="showAddForm" (click)="closeAddForm()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <app-add-patient-form (close)="closeAddForm()"></app-add-patient-form>
+  </div>
 </div>

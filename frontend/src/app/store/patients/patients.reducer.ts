@@ -7,13 +7,17 @@ import { PatientsActions } from './patients.actions';
 export interface PatientsState extends EntityState<Patient> {
   loading: boolean;
   error: string | null;
+  creating: boolean;
+  createError: string | null;
 }
 
 export const patientsAdapter = createEntityAdapter<Patient>();
 
 const initialState: PatientsState = patientsAdapter.getInitialState({
   loading: false,
-  error: null
+  error: null,
+  creating: false,
+  createError: null
 });
 
 export const patientsFeature = createFeature({
@@ -28,6 +32,20 @@ export const patientsFeature = createFeature({
       ...state,
       loading: false,
       error
+    })),
+
+    on(PatientsActions.createPatient, (state) => ({
+      ...state,
+      creating: true,
+      createError: null
+    })),
+    on(PatientsActions.createPatientSuccess, (state, { patient }) =>
+      patientsAdapter.addOne(patient, { ...state, creating: false })
+    ),
+    on(PatientsActions.createPatientFailure, (state, { error }) => ({
+      ...state,
+      creating: false,
+      createError: error
     }))
   )
 });

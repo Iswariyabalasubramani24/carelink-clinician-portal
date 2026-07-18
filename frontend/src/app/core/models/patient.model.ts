@@ -1,12 +1,14 @@
 export enum CardiacDeviceType {
+  ICD = 'ICD',
   Pacemaker = 'Pacemaker',
-  ImplantableCardioverterDefibrillator = 'ImplantableCardioverterDefibrillator',
-  CardiacResynchronizationTherapy = 'CardiacResynchronizationTherapy',
-  LoopRecorder = 'LoopRecorder'
+  CRT_P = 'CRT_P',
+  CRT_D = 'CRT_D',
+  ICM = 'ICM'
 }
 
 export interface Patient {
   id: number;
+  tenantId: number;
   medicalRecordNumber: string;
   firstName: string;
   lastName: string;

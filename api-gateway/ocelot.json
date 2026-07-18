@@ -6,7 +6,7 @@
       "DownstreamPathTemplate": "/api/patients",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5001 }
+        { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
@@ -15,7 +15,7 @@
       "DownstreamPathTemplate": "/api/patients/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5001 }
+        { "Host": "localhost", "Port": 5010 }
       ]
     }
   ],

@@ -7,6 +7,10 @@ export const PatientsActions = createActionGroup({
   events: {
     'Load Patients': emptyProps(),
     'Load Patients Success': props<{ patients: Patient[] }>(),
-    'Load Patients Failure': props<{ error: string }>()
+    'Load Patients Failure': props<{ error: string }>(),
+
+    'Create Patient': props<{ patient: Partial<Patient> }>(),
+    'Create Patient Success': props<{ patient: Patient }>(),
+    'Create Patient Failure': props<{ error: string }>()
   }
 });

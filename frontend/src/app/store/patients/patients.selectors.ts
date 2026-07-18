@@ -5,3 +5,5 @@ const { selectAll } = patientsAdapter.getSelectors(patientsFeature.selectPatient
 export const selectAllPatients = selectAll;
 export const { selectLoading: selectPatientsLoading, selectError: selectPatientsError } =
   patientsFeature;
+export const { selectCreating: selectPatientCreating, selectCreateError: selectPatientCreateError } =
+  patientsFeature;
