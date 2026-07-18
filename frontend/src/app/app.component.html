@@ -1,5 +1,9 @@
 <header class="app-header">
   <h1>CareLink Clinician Portal</h1>
+  <div class="app-header__session" *ngIf="currentClinician$ | async as clinician">
+    <span class="app-header__clinician">{{ clinician.firstName }} {{ clinician.lastName }}</span>
+    <button type="button" class="logout-btn" (click)="onLogout()">Logout</button>
+  </div>
 </header>
 <main>
   <router-outlet />

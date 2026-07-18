@@ -23,8 +23,8 @@ describe('PatientsListComponent', () => {
       id: 1,
       tenantId: 1,
       medicalRecordNumber: 'APL-1001',
-      firstName: 'Rajesh',
-      lastName: 'Kumar',
+      firstName: 'Paul',
+      lastName: 'Joseph',
       dateOfBirth: '1965-04-12',
       deviceType: CardiacDeviceType.ICD,
       deviceSerialNumber: 'MDT-ICD-0001',
@@ -35,8 +35,8 @@ describe('PatientsListComponent', () => {
       id: 2,
       tenantId: 1,
       medicalRecordNumber: 'APL-1002',
-      firstName: 'Priya',
-      lastName: 'Sharma',
+      firstName: 'Sarah',
+      lastName: 'John',
       dateOfBirth: '1972-09-30',
       deviceType: CardiacDeviceType.Pacemaker,
       deviceSerialNumber: 'BSX-PM-0002',
@@ -73,11 +73,11 @@ describe('PatientsListComponent', () => {
 
     const text = (fixture.debugElement.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('APL-1001');
-    expect(text).toContain('Rajesh Kumar');
+    expect(text).toContain('Paul Joseph');
     expect(text).toContain('ICD');
     expect(text).toContain('MDT-ICD-0001');
     expect(text).toContain('APL-1002');
-    expect(text).toContain('Priya Sharma');
+    expect(text).toContain('Sarah John');
     expect(text).toContain('Pacemaker');
   });
 

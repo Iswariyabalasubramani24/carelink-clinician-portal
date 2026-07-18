@@ -117,7 +117,6 @@ describe('AddPatientFormComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith(
       PatientsActions.createPatient({
         patient: {
-          tenantId: 1,
           medicalRecordNumber: validValues.medicalRecordNumber,
           firstName: validValues.firstName,
           lastName: validValues.lastName,

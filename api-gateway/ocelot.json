@@ -1,6 +1,15 @@
 {
   "Routes": [
     {
+      "UpstreamPathTemplate": "/api/auth/{endpoint}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/auth/{endpoint}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/patients",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "DownstreamPathTemplate": "/api/patients",

@@ -10,6 +10,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Patient> Patients => Set<Patient>();
 
+    public DbSet<Clinician> Clinicians => Set<Clinician>();
+
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -34,6 +38,34 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany(t => t.Patients)
                 .HasForeignKey(p => p.TenantId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Clinician>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Email).IsRequired().HasMaxLength(256);
+            entity.HasIndex(c => c.Email).IsUnique();
+            entity.Property(c => c.PasswordHash).IsRequired();
+            entity.Property(c => c.FirstName).IsRequired().HasMaxLength(100);
+            entity.Property(c => c.LastName).IsRequired().HasMaxLength(100);
+            entity.Property(c => c.Role).HasConversion<string>();
+
+            entity.HasOne(c => c.Tenant)
+                .WithMany()
+                .HasForeignKey(c => c.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+            entity.Property(r => r.Token).IsRequired().HasMaxLength(512);
+            entity.HasIndex(r => r.Token).IsUnique();
+
+            entity.HasOne(r => r.Clinician)
+                .WithMany()
+                .HasForeignKey(r => r.ClinicianId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

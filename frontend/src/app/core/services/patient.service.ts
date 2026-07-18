@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -9,14 +9,11 @@ import { Patient } from '../models/patient.model';
 export class PatientService {
   private readonly baseUrl = `${environment.apiUrl}/patients`;
 
-  // TODO: hardcoded to tenant 1 until a tenant/hospital selector is added (later sprint)
-  private readonly currentTenantId = 1;
-
   constructor(private readonly http: HttpClient) {}
 
+  // tenantId is derived server-side from the JWT access token - no longer sent by the client.
   getAll(): Observable<Patient[]> {
-    const params = new HttpParams().set('tenantId', this.currentTenantId);
-    return this.http.get<Patient[]>(this.baseUrl, { params });
+    return this.http.get<Patient[]>(this.baseUrl);
   }
 
   getById(id: number): Observable<Patient> {

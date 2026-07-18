@@ -1,10 +1,18 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+
+import { AuthService } from './core/services/auth.service';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [
+        { provide: AuthService, useValue: { currentClinician$: of(null), logout: jest.fn() } },
+        { provide: Router, useValue: { navigateByUrl: jest.fn() } }
+      ]
     }).compileComponents();
   });
 

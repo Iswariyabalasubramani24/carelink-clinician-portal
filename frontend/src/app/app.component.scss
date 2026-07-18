@@ -1,4 +1,7 @@
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   padding: var(--space-4) var(--space-6);
@@ -6,5 +9,33 @@
   h1 {
     font-size: 1.1rem;
     color: var(--color-primary);
+  }
+
+  &__session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  &__clinician {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+.logout-btn {
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 }

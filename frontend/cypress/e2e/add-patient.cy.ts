@@ -15,7 +15,13 @@ describe('Patient list and Add Patient flow', () => {
   };
 
   beforeEach(() => {
-    cy.visit('/patients');
+    // Patients endpoints are now JWT-protected (Sprint 2) - log in first.
+    cy.clearCookies();
+    cy.visit('/login');
+    cy.get('#email').type('doctor@apollo.com');
+    cy.get('#password').type('Test@123');
+    cy.contains('button', 'Sign in').click();
+    cy.location('pathname', { timeout: 10000 }).should('eq', '/patients');
   });
 
   it('loads existing patients, validates required fields, and adds a new patient end-to-end', () => {

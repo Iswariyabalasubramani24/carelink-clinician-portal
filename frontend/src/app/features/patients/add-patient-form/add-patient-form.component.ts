@@ -71,9 +71,6 @@ export class AddPatientFormComponent {
   submitError: string | null = null;
   submitSucceeded = false;
 
-  // TODO: hardcoded to tenant 1 until a tenant/hospital selector is added (later sprint)
-  private readonly currentTenantId = 1;
-
   constructor(
     private readonly fb: FormBuilder,
     private readonly store: Store,
@@ -104,7 +101,6 @@ export class AddPatientFormComponent {
     this.store.dispatch(
       PatientsActions.createPatient({
         patient: {
-          tenantId: this.currentTenantId,
           medicalRecordNumber: value.medicalRecordNumber,
           firstName: value.firstName,
           lastName: value.lastName,

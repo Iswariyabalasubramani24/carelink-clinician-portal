@@ -1,0 +1,62 @@
+using CareLink.API.Contracts;
+using CareLink.Application.Auth.Commands;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CareLink.API.Controllers;
+
+[ApiController]
+[Route("api/auth")]
+public class AuthController(IMediator mediator, IWebHostEnvironment environment) : ControllerBase
+{
+    private const string RefreshTokenCookieName = "refreshToken";
+
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
+    {
+        var result = await mediator.Send(command);
+
+        SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
+
+        return Ok(LoginResponse.FromAuthResult(result));
+    }
+
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    public async Task<ActionResult<RefreshAccessTokenResult>> Refresh()
+    {
+        var refreshToken = Request.Cookies[RefreshTokenCookieName];
+        var result = await mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken ?? string.Empty });
+        return Ok(result);
+    }
+
+    [HttpPost("logout")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Logout()
+    {
+        var refreshToken = Request.Cookies[RefreshTokenCookieName];
+
+        if (!string.IsNullOrEmpty(refreshToken))
+        {
+            await mediator.Send(new LogoutCommand { RefreshToken = refreshToken });
+        }
+
+        Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path = "/api/auth" });
+
+        return NoContent();
+    }
+
+    private void SetRefreshTokenCookie(string token, DateTime expiresAt)
+    {
+        Response.Cookies.Append(RefreshTokenCookieName, token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = !environment.IsDevelopment(),
+            SameSite = SameSiteMode.Lax,
+            Path = "/api/auth",
+            Expires = expiresAt
+        });
+    }
+}
