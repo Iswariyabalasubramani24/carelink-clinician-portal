@@ -83,5 +83,53 @@
   "clinicSwitcher": {
     "select": "Switch hospital",
     "switchTo": "Switch hospital…"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patients"
+  },
+  "dashboard": {
+    "title": "Home Dashboard",
+    "subtitle": "An overview of your patients and monitoring status",
+    "loading": "Loading dashboard…",
+    "loadError": "Failed to load dashboard summary.",
+    "newPatients": "New Patients This Week",
+    "disconnectedMonitors": "Disconnected Monitors",
+    "totalActivePatients": "Total Active Patients"
+  },
+  "patientDetail": {
+    "back": "← Back to Patients",
+    "notFound": "Patient not found.",
+    "tabs": {
+      "overview": "Overview",
+      "equipment": "Equipment",
+      "history": "History"
+    },
+    "overview": {
+      "mrn": "MRN",
+      "dob": "Date of Birth",
+      "phone": "Phone Number",
+      "email": "Email",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "equipment": {
+      "deviceType": "Device Type",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "serialNumber": "Serial Number",
+      "implantDate": "Implant Date"
+    },
+    "history": {
+      "date": "Date",
+      "heartRate": "Heart Rate (bpm)",
+      "batteryLevel": "Battery Level (%)",
+      "loading": "Loading transmission history…",
+      "loadError": "Failed to load transmission history.",
+      "empty": "No transmission history available.",
+      "heartRateChart": "Heart Rate Trend",
+      "batteryChart": "Battery Level Trend"
+    }
   }
 }

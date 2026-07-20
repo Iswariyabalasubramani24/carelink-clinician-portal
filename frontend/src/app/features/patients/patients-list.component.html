@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let patient of patients">
+          <tr *ngFor="let patient of patients" class="patient-row" [routerLink]="['/patients', patient.id]">
             <td class="mono">{{ patient.medicalRecordNumber }}</td>
             <td class="patient-name">{{ patient.firstName }} {{ patient.lastName }}</td>
             <td><span class="device-badge">{{ patient.deviceType }}</span></td>

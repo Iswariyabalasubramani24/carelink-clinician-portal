@@ -21,4 +21,11 @@ public class PatientRepository(ApplicationDbContext db) : IPatientRepository
             .OrderBy(p => p.LastName)
             .ToListAsync();
     }
+
+    public async Task<Patient?> GetByIdAsync(int id, int tenantId)
+    {
+        return await db.Patients
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id && p.TenantId == tenantId);
+    }
 }

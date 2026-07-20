@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -16,7 +17,7 @@ import { AddPatientFormComponent } from './add-patient-form/add-patient-form.com
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, TranslateModule, AddPatientFormComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, AddPatientFormComponent],
   templateUrl: './patients-list.component.html',
   styleUrl: './patients-list.component.scss'
 })

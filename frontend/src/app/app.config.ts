@@ -6,6 +6,7 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { routes } from './app.routes';
 import { patientsFeature } from './store/patients/patients.reducer';
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideTranslateService(),
     provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
+    provideCharts(withDefaultRegisterables()),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAuth,

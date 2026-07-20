@@ -27,6 +27,13 @@ public class PatientsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}/transmissions")]
+    public async Task<ActionResult<IEnumerable<TransmissionHistoryDto>>> GetTransmissionHistory(int id)
+    {
+        var result = await mediator.Send(new GetPatientTransmissionHistoryQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;

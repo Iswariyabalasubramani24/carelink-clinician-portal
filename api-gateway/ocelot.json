@@ -44,6 +44,24 @@
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/patients/{id}/transmissions",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/patients/{id}/transmissions",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/dashboard/summary",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/dashboard/summary",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
     }
   ],
   "GlobalConfiguration": {

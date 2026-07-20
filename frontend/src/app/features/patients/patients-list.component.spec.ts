@@ -1,5 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -31,6 +32,7 @@ describe('PatientsListComponent', () => {
       deviceType: CardiacDeviceType.ICD,
       deviceSerialNumber: 'MDT-ICD-0001',
       implantDate: '2022-03-15',
+      isActive: true,
       createdAt: '2026-07-17T20:34:52Z'
     },
     {
@@ -43,6 +45,7 @@ describe('PatientsListComponent', () => {
       deviceType: CardiacDeviceType.Pacemaker,
       deviceSerialNumber: 'BSX-PM-0002',
       implantDate: '2021-11-02',
+      isActive: true,
       createdAt: '2026-07-17T20:34:55Z'
     }
   ];
@@ -53,7 +56,8 @@ describe('PatientsListComponent', () => {
       providers: [
         provideTranslateService(),
         provideMockStore({ initialState: {} }),
-        provideMockActions(() => new Subject().asObservable())
+        provideMockActions(() => new Subject().asObservable()),
+        provideRouter([])
       ]
     }).compileComponents();
 

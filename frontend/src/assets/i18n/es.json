@@ -83,5 +83,53 @@
   "clinicSwitcher": {
     "select": "Cambiar de hospital",
     "switchTo": "Cambiar de hospital…"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "patients": "Pacientes"
+  },
+  "dashboard": {
+    "title": "Panel de inicio",
+    "subtitle": "Un resumen de sus pacientes y el estado de monitoreo",
+    "loading": "Cargando el panel…",
+    "loadError": "No se pudo cargar el resumen del panel.",
+    "newPatients": "Nuevos pacientes esta semana",
+    "disconnectedMonitors": "Monitores desconectados",
+    "totalActivePatients": "Total de pacientes activos"
+  },
+  "patientDetail": {
+    "back": "← Volver a pacientes",
+    "notFound": "Paciente no encontrado.",
+    "tabs": {
+      "overview": "Resumen",
+      "equipment": "Equipo",
+      "history": "Historial"
+    },
+    "overview": {
+      "mrn": "N.º de historia",
+      "dob": "Fecha de nacimiento",
+      "phone": "Número de teléfono",
+      "email": "Correo electrónico",
+      "status": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "equipment": {
+      "deviceType": "Tipo de dispositivo",
+      "manufacturer": "Fabricante",
+      "model": "Modelo",
+      "serialNumber": "Número de serie",
+      "implantDate": "Fecha de implante"
+    },
+    "history": {
+      "date": "Fecha",
+      "heartRate": "Frecuencia cardíaca (bpm)",
+      "batteryLevel": "Nivel de batería (%)",
+      "loading": "Cargando historial de transmisión…",
+      "loadError": "No se pudo cargar el historial de transmisión.",
+      "empty": "No hay historial de transmisión disponible.",
+      "heartRateChart": "Tendencia de la frecuencia cardíaca",
+      "batteryChart": "Tendencia del nivel de batería"
+    }
   }
 }

@@ -1,0 +1,128 @@
+<div class="patient-detail-page">
+  <a routerLink="/patients" class="back-link">{{ 'patientDetail.back' | translate }}</a>
+
+  <ng-container *ngIf="patients$ | async as patients">
+    <ng-container *ngIf="findPatient(patients) as patient; else notFoundOrLoading">
+      <header class="patient-detail-page__header">
+        <h1>{{ patient.firstName }} {{ patient.lastName }}</h1>
+        <p class="subtitle">{{ patient.medicalRecordNumber }}</p>
+      </header>
+
+      <div class="tabs">
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'overview'"
+          (click)="setTab('overview')"
+        >
+          {{ 'patientDetail.tabs.overview' | translate }}
+        </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'equipment'"
+          (click)="setTab('equipment')"
+        >
+          {{ 'patientDetail.tabs.equipment' | translate }}
+        </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'history'"
+          (click)="setTab('history')"
+        >
+          {{ 'patientDetail.tabs.history' | translate }}
+        </button>
+      </div>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'overview'">
+        <dl class="detail-list">
+          <dt>{{ 'patientDetail.overview.mrn' | translate }}</dt>
+          <dd>{{ patient.medicalRecordNumber }}</dd>
+          <dt>{{ 'patientDetail.overview.dob' | translate }}</dt>
+          <dd>{{ patient.dateOfBirth | date }}</dd>
+          <dt>{{ 'patientDetail.overview.phone' | translate }}</dt>
+          <dd>{{ patient.phoneNumber || '—' }}</dd>
+          <dt>{{ 'patientDetail.overview.email' | translate }}</dt>
+          <dd>{{ patient.email || '—' }}</dd>
+          <dt>{{ 'patientDetail.overview.status' | translate }}</dt>
+          <dd>
+            {{
+              (patient.isActive ? 'patientDetail.overview.active' : 'patientDetail.overview.inactive')
+                | translate
+            }}
+          </dd>
+        </dl>
+      </section>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'equipment'">
+        <dl class="detail-list">
+          <dt>{{ 'patientDetail.equipment.deviceType' | translate }}</dt>
+          <dd><span class="device-badge">{{ patient.deviceType }}</span></dd>
+          <dt>{{ 'patientDetail.equipment.manufacturer' | translate }}</dt>
+          <dd>{{ patient.deviceManufacturer || '—' }}</dd>
+          <dt>{{ 'patientDetail.equipment.model' | translate }}</dt>
+          <dd>{{ patient.deviceModel || '—' }}</dd>
+          <dt>{{ 'patientDetail.equipment.serialNumber' | translate }}</dt>
+          <dd class="mono">{{ patient.deviceSerialNumber }}</dd>
+          <dt>{{ 'patientDetail.equipment.implantDate' | translate }}</dt>
+          <dd>{{ patient.implantDate | date }}</dd>
+        </dl>
+      </section>
+
+      <section class="tab-panel" *ngIf="activeTab === 'history'">
+        <p class="state-message" *ngIf="historyLoading">{{ 'patientDetail.history.loading' | translate }}</p>
+        <p class="state-message state-message--error" *ngIf="historyError">
+          {{ 'patientDetail.history.loadError' | translate }}
+        </p>
+
+        <ng-container *ngIf="!historyLoading && !historyError">
+          <ng-container *ngIf="history.length; else noHistory">
+            <div class="chart-grid">
+              <div class="card chart-card">
+                <h3>{{ 'patientDetail.history.heartRateChart' | translate }}</h3>
+                <div class="chart-container">
+                  <canvas baseChart type="line" [data]="heartRateChartData" [options]="chartOptions"></canvas>
+                </div>
+              </div>
+              <div class="card chart-card">
+                <h3>{{ 'patientDetail.history.batteryChart' | translate }}</h3>
+                <div class="chart-container">
+                  <canvas baseChart type="line" [data]="batteryChartData" [options]="chartOptions"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <table class="card history-table">
+              <thead>
+                <tr>
+                  <th>{{ 'patientDetail.history.date' | translate }}</th>
+                  <th>{{ 'patientDetail.history.heartRate' | translate }}</th>
+                  <th>{{ 'patientDetail.history.batteryLevel' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let point of history">
+                  <td>{{ point.date | date }}</td>
+                  <td>{{ point.heartRate }}</td>
+                  <td>{{ point.batteryLevel }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+
+          <ng-template #noHistory>
+            <p class="state-message">{{ 'patientDetail.history.empty' | translate }}</p>
+          </ng-template>
+        </ng-container>
+      </section>
+    </ng-container>
+
+    <ng-template #notFoundOrLoading>
+      <p class="state-message" *ngIf="patientsLoading$ | async">{{ 'patients.loading' | translate }}</p>
+      <p class="state-message" *ngIf="(patientsLoading$ | async) === false">
+        {{ 'patientDetail.notFound' | translate }}
+      </p>
+    </ng-template>
+  </ng-container>
+</div>

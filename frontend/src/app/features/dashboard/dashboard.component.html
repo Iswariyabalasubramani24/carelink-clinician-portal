@@ -1,0 +1,26 @@
+<div class="dashboard-page">
+  <header class="dashboard-page__header">
+    <h1>{{ 'dashboard.title' | translate }}</h1>
+    <p class="subtitle">{{ 'dashboard.subtitle' | translate }}</p>
+  </header>
+
+  <p class="state-message" *ngIf="loading">{{ 'dashboard.loading' | translate }}</p>
+  <p class="state-message state-message--error" *ngIf="error">{{ 'dashboard.loadError' | translate }}</p>
+
+  <div class="widget-grid" *ngIf="summary as s">
+    <button type="button" class="widget-card" (click)="goToPatients()">
+      <span class="widget-card__count">{{ s.newPatientsCount }}</span>
+      <span class="widget-card__label">{{ 'dashboard.newPatients' | translate }}</span>
+    </button>
+
+    <button type="button" class="widget-card widget-card--warning" (click)="goToPatients()">
+      <span class="widget-card__count">{{ s.disconnectedMonitorsCount }}</span>
+      <span class="widget-card__label">{{ 'dashboard.disconnectedMonitors' | translate }}</span>
+    </button>
+
+    <button type="button" class="widget-card" (click)="goToPatients()">
+      <span class="widget-card__count">{{ s.totalActivePatientsCount }}</span>
+      <span class="widget-card__label">{{ 'dashboard.totalActivePatients' | translate }}</span>
+    </button>
+  </div>
+</div>

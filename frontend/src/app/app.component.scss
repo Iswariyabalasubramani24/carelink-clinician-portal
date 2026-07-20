@@ -11,6 +11,33 @@
     color: var(--color-primary);
   }
 
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-left: var(--space-6);
+    margin-right: auto;
+  }
+
+  &__nav-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+
+    &:hover {
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    &--active {
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+  }
+
   &__actions {
     display: flex;
     align-items: center;

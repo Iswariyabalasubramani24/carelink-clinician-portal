@@ -83,5 +83,53 @@
   "clinicSwitcher": {
     "select": "Changer d'hôpital",
     "switchTo": "Changer d'hôpital…"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "patients": "Patients"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "subtitle": "Vue d'ensemble de vos patients et de l'état de surveillance",
+    "loading": "Chargement du tableau de bord…",
+    "loadError": "Échec du chargement du résumé du tableau de bord.",
+    "newPatients": "Nouveaux patients cette semaine",
+    "disconnectedMonitors": "Moniteurs déconnectés",
+    "totalActivePatients": "Total des patients actifs"
+  },
+  "patientDetail": {
+    "back": "← Retour aux patients",
+    "notFound": "Patient introuvable.",
+    "tabs": {
+      "overview": "Aperçu",
+      "equipment": "Équipement",
+      "history": "Historique"
+    },
+    "overview": {
+      "mrn": "N° de dossier",
+      "dob": "Date de naissance",
+      "phone": "Numéro de téléphone",
+      "email": "E-mail",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "equipment": {
+      "deviceType": "Type de dispositif",
+      "manufacturer": "Fabricant",
+      "model": "Modèle",
+      "serialNumber": "Numéro de série",
+      "implantDate": "Date d'implantation"
+    },
+    "history": {
+      "date": "Date",
+      "heartRate": "Fréquence cardiaque (bpm)",
+      "batteryLevel": "Niveau de batterie (%)",
+      "loading": "Chargement de l'historique des transmissions…",
+      "loadError": "Échec du chargement de l'historique des transmissions.",
+      "empty": "Aucun historique de transmission disponible.",
+      "heartRateChart": "Tendance de la fréquence cardiaque",
+      "batteryChart": "Tendance du niveau de batterie"
+    }
   }
 }

@@ -83,5 +83,53 @@
   "clinicSwitcher": {
     "select": "Krankenhaus wechseln",
     "switchTo": "Krankenhaus wechseln…"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patienten"
+  },
+  "dashboard": {
+    "title": "Startseite",
+    "subtitle": "Überblick über Ihre Patienten und den Überwachungsstatus",
+    "loading": "Dashboard wird geladen…",
+    "loadError": "Dashboard-Zusammenfassung konnte nicht geladen werden.",
+    "newPatients": "Neue Patienten diese Woche",
+    "disconnectedMonitors": "Getrennte Monitore",
+    "totalActivePatients": "Aktive Patienten insgesamt"
+  },
+  "patientDetail": {
+    "back": "← Zurück zu Patienten",
+    "notFound": "Patient nicht gefunden.",
+    "tabs": {
+      "overview": "Übersicht",
+      "equipment": "Ausrüstung",
+      "history": "Verlauf"
+    },
+    "overview": {
+      "mrn": "Aktenzeichen",
+      "dob": "Geburtsdatum",
+      "phone": "Telefonnummer",
+      "email": "E-Mail",
+      "status": "Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "equipment": {
+      "deviceType": "Gerätetyp",
+      "manufacturer": "Hersteller",
+      "model": "Modell",
+      "serialNumber": "Seriennummer",
+      "implantDate": "Implantationsdatum"
+    },
+    "history": {
+      "date": "Datum",
+      "heartRate": "Herzfrequenz (bpm)",
+      "batteryLevel": "Batteriestand (%)",
+      "loading": "Übertragungsverlauf wird geladen…",
+      "loadError": "Übertragungsverlauf konnte nicht geladen werden.",
+      "empty": "Kein Übertragungsverlauf verfügbar.",
+      "heartRateChart": "Herzfrequenzverlauf",
+      "batteryChart": "Batteriestandverlauf"
+    }
   }
 }

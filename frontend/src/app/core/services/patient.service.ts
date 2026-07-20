@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { Patient } from '../models/patient.model';
+import { TransmissionHistoryPoint } from '../models/transmission-history.model';
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
@@ -30,5 +31,9 @@ export class PatientService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  getTransmissionHistory(id: number): Observable<TransmissionHistoryPoint[]> {
+    return this.http.get<TransmissionHistoryPoint[]>(`${this.baseUrl}/${id}/transmissions`);
   }
 }

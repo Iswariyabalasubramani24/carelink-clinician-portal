@@ -20,6 +20,10 @@ export interface Patient {
   deviceModel?: string;
   deviceSerialNumber: string;
   implantDate: string;
+  batteryLevel?: number;
+  lastHeartRate?: number;
+  lastSyncedAt?: string;
+  isActive: boolean;
   createdAt: string;
   updatedAt?: string;
 }

@@ -154,6 +154,7 @@ describe('AddPatientFormComponent', () => {
       id: 1,
       tenantId: 1,
       ...validValues,
+      isActive: true,
       createdAt: '2026-07-18T00:00:00Z'
     };
 

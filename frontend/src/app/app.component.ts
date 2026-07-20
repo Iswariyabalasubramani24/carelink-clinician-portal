@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
@@ -13,7 +13,15 @@ import { ClinicSwitcherComponent } from './core/components/clinic-switcher/clini
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TranslateModule, LanguageSwitcherComponent, ClinicSwitcherComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    TranslateModule,
+    LanguageSwitcherComponent,
+    ClinicSwitcherComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
