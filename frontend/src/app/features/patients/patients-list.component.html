@@ -1,25 +1,27 @@
 <div class="patients-page">
   <header class="patients-page__header">
     <div>
-      <h1>Patients</h1>
-      <p class="subtitle">Cardiac device patients under monitoring</p>
+      <h1>{{ 'patients.title' | translate }}</h1>
+      <p class="subtitle">{{ 'patients.subtitle' | translate }}</p>
     </div>
-    <button type="button" class="btn btn--primary" (click)="openAddForm()">+ Add Patient</button>
+    <button type="button" class="btn btn--primary" (click)="openAddForm()">
+      {{ 'patients.addPatient' | translate }}
+    </button>
   </header>
 
   <section class="card">
-    <p class="state-message" *ngIf="loading$ | async">Loading patients…</p>
+    <p class="state-message" *ngIf="loading$ | async">{{ 'patients.loading' | translate }}</p>
     <p class="state-message state-message--error" *ngIf="error$ | async as error">{{ error }}</p>
 
     <ng-container *ngIf="patients$ | async as patients">
       <table *ngIf="patients.length; else emptyState">
         <thead>
           <tr>
-            <th>MRN</th>
-            <th>Name</th>
-            <th>Device</th>
-            <th>Serial Number</th>
-            <th>Implant Date</th>
+            <th>{{ 'patients.table.mrn' | translate }}</th>
+            <th>{{ 'patients.table.name' | translate }}</th>
+            <th>{{ 'patients.table.device' | translate }}</th>
+            <th>{{ 'patients.table.serialNumber' | translate }}</th>
+            <th>{{ 'patients.table.implantDate' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +37,7 @@
 
       <ng-template #emptyState>
         <p class="state-message" *ngIf="(loading$ | async) === false">
-          No patients yet. Click "Add Patient" to get started.
+          {{ 'patients.empty' | translate }}
         </p>
       </ng-template>
     </ng-container>

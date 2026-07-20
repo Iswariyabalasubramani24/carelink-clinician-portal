@@ -41,7 +41,7 @@ public class LoginCommandHandlerTests
         passwordHasher.Setup(h => h.Verify("Test@123", "hashed-password")).Returns(true);
 
         var tokenGenerator = new Mock<IJwtTokenGenerator>();
-        tokenGenerator.Setup(g => g.GenerateAccessToken(clinician)).Returns(accessToken);
+        tokenGenerator.Setup(g => g.GenerateAccessToken(clinician, clinician.TenantId)).Returns(accessToken);
         tokenGenerator.Setup(g => g.GenerateRefreshToken()).Returns(refreshToken);
 
         var refreshTokenRepo = new Mock<IRefreshTokenRepository>();
@@ -62,7 +62,7 @@ public class LoginCommandHandlerTests
 
         refreshTokenRepo.Verify(
             r => r.AddAsync(It.Is<RefreshToken>(t =>
-                t.ClinicianId == 1 && t.Token == "refresh-token-value" && !t.IsRevoked)),
+                t.ClinicianId == 1 && t.TenantId == 1 && t.Token == "refresh-token-value" && !t.IsRevoked)),
             Times.Once);
     }
 

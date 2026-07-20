@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Clinician, LoginResponse, RefreshResponse } from '../models/auth.model';
+import { Clinician, LoginResponse, RefreshResponse, SwitchTenantResponse } from '../models/auth.model';
+import { Tenant } from '../models/tenant.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -39,6 +40,16 @@ export class AuthService {
       .pipe(finalize(() => this.clearSession()));
   }
 
+  getMyTenants(): Observable<Tenant[]> {
+    return this.http.get<Tenant[]>(`${environment.apiUrl}/tenants/mine`);
+  }
+
+  switchTenant(tenantId: number): Observable<SwitchTenantResponse> {
+    return this.http
+      .post<SwitchTenantResponse>(`${this.baseUrl}/switch-tenant`, { tenantId }, { withCredentials: true })
+      .pipe(tap((response) => this.applyTenantSwitch(response)));
+  }
+
   getAccessToken(): string | null {
     return this.accessToken;
   }
@@ -58,6 +69,14 @@ export class AuthService {
       tenantId: response.tenantId
     });
     this.isAuthenticatedSubject.next(true);
+  }
+
+  private applyTenantSwitch(response: SwitchTenantResponse): void {
+    this.accessToken = response.accessToken;
+    const current = this.currentClinicianSubject.value;
+    if (current) {
+      this.currentClinicianSubject.next({ ...current, tenantId: response.tenantId });
+    }
   }
 
   private clearSession(): void {

@@ -2,13 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../core/services/auth.service';
+import { CountryLanguageSelectorComponent } from './country-language-selector/country-language-selector.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, CountryLanguageSelectorComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -24,7 +26,8 @@ export class LoginComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly translate: TranslateService
   ) {}
 
   onSubmit(): void {
@@ -42,9 +45,12 @@ export class LoginComponent {
         this.loading = false;
         this.router.navigateByUrl('/patients');
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
-        this.errorMessage = err.error?.error ?? 'Invalid email or password.';
+        // The backend intentionally returns one generic message for both a
+        // wrong password and a non-existent email (avoids user enumeration),
+        // so the localized equivalent is shown here regardless of server text.
+        this.errorMessage = this.translate.instant('login.invalidCredentials');
       }
     });
   }

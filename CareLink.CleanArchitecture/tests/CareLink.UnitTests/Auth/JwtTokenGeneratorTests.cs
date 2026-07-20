@@ -36,7 +36,7 @@ public class JwtTokenGeneratorTests
         var generator = MakeGenerator();
         var clinician = MakeClinician();
 
-        var result = generator.GenerateAccessToken(clinician);
+        var result = generator.GenerateAccessToken(clinician, clinician.TenantId);
 
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(result.Token);
 
@@ -49,13 +49,29 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
+    public void GenerateAccessToken_UsesThePassedTenantIdNotTheCliniciansOwn()
+    {
+        // Guards the multi-hospital switching feature: the token must reflect
+        // whichever tenant is currently active for the session, which can
+        // differ from the clinician's own default TenantId after a switch.
+        var generator = MakeGenerator();
+        var clinician = MakeClinician();
+
+        var result = generator.GenerateAccessToken(clinician, 99);
+
+        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(result.Token);
+
+        Assert.Equal("99", jwt.Claims.First(c => c.Type == "tenantId").Value);
+    }
+
+    [Fact]
     public void GenerateAccessToken_ExpiresApproximatelyFifteenMinutesFromNow()
     {
         var generator = MakeGenerator();
         var clinician = MakeClinician();
 
         var before = DateTime.UtcNow;
-        var result = generator.GenerateAccessToken(clinician);
+        var result = generator.GenerateAccessToken(clinician, clinician.TenantId);
 
         var expectedExpiry = before.AddMinutes(15);
         Assert.True(Math.Abs((result.ExpiresAt - expectedExpiry).TotalSeconds) < 5);

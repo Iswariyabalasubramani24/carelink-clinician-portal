@@ -8,7 +8,7 @@ public record RefreshTokenResult(string Token, DateTime ExpiresAt);
 
 public interface IJwtTokenGenerator
 {
-    AccessTokenResult GenerateAccessToken(Clinician clinician);
+    AccessTokenResult GenerateAccessToken(Clinician clinician, int tenantId);
 
     RefreshTokenResult GenerateRefreshToken();
 }

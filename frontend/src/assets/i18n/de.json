@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Med Kliniker-Portal",
+    "logout": "Abmelden"
+  },
+  "login": {
+    "brand": "Med",
+    "subtitle": "Kliniker-Portal",
+    "country": "Land",
+    "language": "Sprache",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "signingIn": "Anmeldung läuft…",
+    "emailRequired": "E-Mail ist erforderlich.",
+    "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+    "passwordRequired": "Passwort ist erforderlich.",
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort."
+  },
+  "patients": {
+    "title": "Patienten",
+    "subtitle": "Überwachte Patienten mit Herzgeräten",
+    "addPatient": "+ Patient hinzufügen",
+    "loading": "Patienten werden geladen…",
+    "empty": "Noch keine Patienten. Klicken Sie auf „Patient hinzufügen“, um zu beginnen.",
+    "table": {
+      "mrn": "Aktenzeichen",
+      "name": "Name",
+      "device": "Gerät",
+      "serialNumber": "Seriennummer",
+      "implantDate": "Implantationsdatum"
+    }
+  },
+  "addPatientForm": {
+    "title": "Patient hinzufügen",
+    "close": "Schließen",
+    "personalInfo": "Persönliche Angaben",
+    "deviceInfo": "Geräteinformationen",
+    "mrn": "Aktenzeichen *",
+    "firstName": "Vorname *",
+    "lastName": "Nachname *",
+    "dob": "Geburtsdatum *",
+    "phone": "Telefonnummer",
+    "email": "E-Mail",
+    "deviceType": "Gerätetyp *",
+    "selectDeviceType": "Gerätetyp auswählen",
+    "manufacturer": "Gerätehersteller",
+    "model": "Gerätemodell",
+    "serial": "Geräteseriennummer *",
+    "implantDate": "Implantationsdatum *",
+    "cancel": "Abbrechen",
+    "submit": "Patient hinzufügen",
+    "saving": "Wird gespeichert…",
+    "successMessage": "Patient erfolgreich hinzugefügt.",
+    "errors": {
+      "mrnRequired": "Aktenzeichen ist erforderlich.",
+      "firstNameRequired": "Vorname ist erforderlich.",
+      "lastNameRequired": "Nachname ist erforderlich.",
+      "dobRequired": "Geburtsdatum ist erforderlich.",
+      "dobFuture": "Das Geburtsdatum darf nicht in der Zukunft liegen.",
+      "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "deviceTypeRequired": "Gerätetyp ist erforderlich.",
+      "serialRequired": "Seriennummer ist erforderlich.",
+      "implantDateRequired": "Implantationsdatum ist erforderlich.",
+      "implantDateFuture": "Das Implantationsdatum darf nicht in der Zukunft liegen.",
+      "implantBeforeBirth": "Das Implantationsdatum darf nicht vor dem Geburtsdatum liegen."
+    },
+    "deviceTypes": {
+      "icd": "ICD — Implantierbarer Kardioverter-Defibrillator",
+      "pacemaker": "Herzschrittmacher",
+      "crtP": "CRT-P — Resynchronisationstherapie (Schrittmacher)",
+      "crtD": "CRT-D — Resynchronisationstherapie (Defibrillator)",
+      "icm": "ICM — Implantierbarer Ereignisrekorder"
+    }
+  },
+  "language": {
+    "select": "Sprache",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "clinicSwitcher": {
+    "select": "Krankenhaus wechseln",
+    "switchTo": "Krankenhaus wechseln…"
+  }
+}

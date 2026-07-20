@@ -26,12 +26,13 @@ public class LoginCommandHandler(
             throw new InvalidCredentialsException();
         }
 
-        var accessToken = tokenGenerator.GenerateAccessToken(clinician);
+        var accessToken = tokenGenerator.GenerateAccessToken(clinician, clinician.TenantId);
         var refreshToken = tokenGenerator.GenerateRefreshToken();
 
         await refreshTokenRepository.AddAsync(new RefreshToken
         {
             ClinicianId = clinician.Id,
+            TenantId = clinician.TenantId,
             Token = refreshToken.Token,
             ExpiresAt = refreshToken.ExpiresAt,
             IsRevoked = false

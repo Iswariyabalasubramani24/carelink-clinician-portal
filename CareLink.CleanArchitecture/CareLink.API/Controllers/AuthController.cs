@@ -12,6 +12,22 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
 {
     private const string RefreshTokenCookieName = "refreshToken";
 
+    [HttpPost("switch-tenant")]
+    [Authorize]
+    public async Task<ActionResult<SwitchTenantResult>> SwitchTenant(SwitchTenantRequest request)
+    {
+        var refreshToken = Request.Cookies[RefreshTokenCookieName] ?? string.Empty;
+
+        var result = await mediator.Send(new SwitchTenantCommand
+        {
+            ClinicianId = GetClinicianId(),
+            RefreshToken = refreshToken,
+            TenantId = request.TenantId
+        });
+
+        return Ok(result);
+    }
+
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
@@ -46,6 +62,12 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
         Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path = "/api/auth" });
 
         return NoContent();
+    }
+
+    private int GetClinicianId()
+    {
+        var claim = User.FindFirst("clinicianId")?.Value;
+        return int.Parse(claim!);
     }
 
     private void SetRefreshTokenCookie(string token, DateTime expiresAt)

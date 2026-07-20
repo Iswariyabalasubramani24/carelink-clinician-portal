@@ -33,7 +33,7 @@ public class RefreshTokenCommandHandler(
         }
 
         var clinician = storedToken.Clinician;
-        var accessToken = tokenGenerator.GenerateAccessToken(clinician);
+        var accessToken = tokenGenerator.GenerateAccessToken(clinician, storedToken.TenantId);
 
         return new RefreshAccessTokenResult(
             accessToken.Token,
@@ -43,6 +43,6 @@ public class RefreshTokenCommandHandler(
             clinician.FirstName,
             clinician.LastName,
             clinician.Role.ToString(),
-            clinician.TenantId);
+            storedToken.TenantId);
     }
 }

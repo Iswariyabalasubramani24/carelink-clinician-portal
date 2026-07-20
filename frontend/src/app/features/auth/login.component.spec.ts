@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { AuthService } from '../../core/services/auth.service';
+import { TenantService } from '../../core/services/tenant.service';
+import { useEnglishTestTranslations } from '../../core/testing/translate-testing';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -11,6 +14,7 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let authServiceMock: { login: jest.Mock };
   let routerMock: { navigateByUrl: jest.Mock };
+  let tenantServiceMock: { getAll: jest.Mock };
 
   function submitForm(): void {
     fixture.debugElement.query(By.css('form')).triggerEventHandler('ngSubmit', null);
@@ -20,14 +24,19 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     authServiceMock = { login: jest.fn() };
     routerMock = { navigateByUrl: jest.fn() };
+    tenantServiceMock = { getAll: jest.fn().mockReturnValue(of([])) };
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
+        provideTranslateService(),
         { provide: AuthService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
+        { provide: TenantService, useValue: tenantServiceMock }
       ]
     }).compileComponents();
+
+    useEnglishTestTranslations(TestBed.inject(TranslateService));
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
@@ -80,9 +89,9 @@ describe('LoginComponent', () => {
     expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/patients');
   });
 
-  it('shows a clear error message and does not navigate when login fails', () => {
+  it('shows a clear, localized error message and does not navigate when login fails', () => {
     authServiceMock.login.mockReturnValue(
-      throwError(() => ({ error: { error: 'Invalid email or password.' } }))
+      throwError(() => ({ error: { error: 'some server-generated text' } }))
     );
 
     component.form.setValue({ email: 'doctor@apollo.com', password: 'WrongPassword' });

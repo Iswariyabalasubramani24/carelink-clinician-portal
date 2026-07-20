@@ -1,12 +1,19 @@
 <div class="add-patient-form">
   <header class="add-patient-form__header">
-    <h2>Add Patient</h2>
-    <button type="button" class="icon-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+    <h2>{{ 'addPatientForm.title' | translate }}</h2>
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="onCancel()"
+      [attr.aria-label]="'addPatientForm.close' | translate"
+    >
+      &times;
+    </button>
   </header>
 
   <div class="banner banner--success" *ngIf="submitSucceeded">
     <span class="banner__icon">✓</span>
-    Patient added successfully.
+    {{ 'addPatientForm.successMessage' | translate }}
   </div>
 
   <div class="banner banner--error" *ngIf="submitError">
@@ -16,10 +23,10 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!submitSucceeded" novalidate>
     <section class="form-section">
-      <h3>Personal Information</h3>
+      <h3>{{ 'addPatientForm.personalInfo' | translate }}</h3>
       <div class="form-grid">
         <div class="form-field">
-          <label for="mrn">Medical Record Number *</label>
+          <label for="mrn">{{ 'addPatientForm.mrn' | translate }}</label>
           <input
             id="mrn"
             type="text"
@@ -30,119 +37,121 @@
             class="field-error"
             *ngIf="form.get('medicalRecordNumber')?.touched && form.get('medicalRecordNumber')?.hasError('required')"
           >
-            Medical record number is required.
+            {{ 'addPatientForm.errors.mrnRequired' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="firstName">First Name *</label>
+          <label for="firstName">{{ 'addPatientForm.firstName' | translate }}</label>
           <input id="firstName" type="text" formControlName="firstName" />
           <span
             class="field-error"
             *ngIf="form.get('firstName')?.touched && form.get('firstName')?.hasError('required')"
           >
-            First name is required.
+            {{ 'addPatientForm.errors.firstNameRequired' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="lastName">Last Name *</label>
+          <label for="lastName">{{ 'addPatientForm.lastName' | translate }}</label>
           <input id="lastName" type="text" formControlName="lastName" />
           <span
             class="field-error"
             *ngIf="form.get('lastName')?.touched && form.get('lastName')?.hasError('required')"
           >
-            Last name is required.
+            {{ 'addPatientForm.errors.lastNameRequired' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="dob">Date of Birth *</label>
+          <label for="dob">{{ 'addPatientForm.dob' | translate }}</label>
           <input id="dob" type="date" formControlName="dateOfBirth" />
           <span
             class="field-error"
             *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.hasError('required')"
           >
-            Date of birth is required.
+            {{ 'addPatientForm.errors.dobRequired' | translate }}
           </span>
           <span
             class="field-error"
             *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.hasError('futureDate')"
           >
-            Date of birth cannot be in the future.
+            {{ 'addPatientForm.errors.dobFuture' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="phone">Phone Number</label>
+          <label for="phone">{{ 'addPatientForm.phone' | translate }}</label>
           <input id="phone" type="tel" formControlName="phoneNumber" />
         </div>
 
         <div class="form-field">
-          <label for="email">Email</label>
+          <label for="email">{{ 'addPatientForm.email' | translate }}</label>
           <input id="email" type="email" formControlName="email" />
           <span class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
-            Enter a valid email address.
+            {{ 'addPatientForm.errors.emailInvalid' | translate }}
           </span>
         </div>
       </div>
     </section>
 
     <section class="form-section">
-      <h3>Device Information</h3>
+      <h3>{{ 'addPatientForm.deviceInfo' | translate }}</h3>
       <div class="form-grid">
         <div class="form-field">
-          <label for="deviceType">Device Type *</label>
+          <label for="deviceType">{{ 'addPatientForm.deviceType' | translate }}</label>
           <select id="deviceType" formControlName="deviceType">
-            <option value="" disabled>Select device type</option>
-            <option *ngFor="let device of deviceTypes" [value]="device.value">{{ device.label }}</option>
+            <option value="" disabled>{{ 'addPatientForm.selectDeviceType' | translate }}</option>
+            <option *ngFor="let device of deviceTypes" [value]="device.value">
+              {{ device.labelKey | translate }}
+            </option>
           </select>
           <span
             class="field-error"
             *ngIf="form.get('deviceType')?.touched && form.get('deviceType')?.hasError('required')"
           >
-            Device type is required.
+            {{ 'addPatientForm.errors.deviceTypeRequired' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="manufacturer">Device Manufacturer</label>
+          <label for="manufacturer">{{ 'addPatientForm.manufacturer' | translate }}</label>
           <input id="manufacturer" type="text" formControlName="deviceManufacturer" />
         </div>
 
         <div class="form-field">
-          <label for="model">Device Model</label>
+          <label for="model">{{ 'addPatientForm.model' | translate }}</label>
           <input id="model" type="text" formControlName="deviceModel" />
         </div>
 
         <div class="form-field">
-          <label for="serial">Device Serial Number *</label>
+          <label for="serial">{{ 'addPatientForm.serial' | translate }}</label>
           <input id="serial" type="text" formControlName="deviceSerialNumber" />
           <span
             class="field-error"
             *ngIf="form.get('deviceSerialNumber')?.touched && form.get('deviceSerialNumber')?.hasError('required')"
           >
-            Serial number is required.
+            {{ 'addPatientForm.errors.serialRequired' | translate }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="implantDate">Implant Date *</label>
+          <label for="implantDate">{{ 'addPatientForm.implantDate' | translate }}</label>
           <input id="implantDate" type="date" formControlName="implantDate" />
           <span
             class="field-error"
             *ngIf="form.get('implantDate')?.touched && form.get('implantDate')?.hasError('required')"
           >
-            Implant date is required.
+            {{ 'addPatientForm.errors.implantDateRequired' | translate }}
           </span>
           <span
             class="field-error"
             *ngIf="form.get('implantDate')?.touched && form.get('implantDate')?.hasError('futureDate')"
           >
-            Implant date cannot be in the future.
+            {{ 'addPatientForm.errors.implantDateFuture' | translate }}
           </span>
           <span class="field-error" *ngIf="form.hasError('implantBeforeBirth') && form.get('implantDate')?.touched">
-            Implant date cannot be before date of birth.
+            {{ 'addPatientForm.errors.implantBeforeBirth' | translate }}
           </span>
         </div>
       </div>
@@ -150,10 +159,10 @@
 
     <footer class="form-actions">
       <button type="button" class="btn btn--secondary" (click)="onCancel()" [disabled]="creating$ | async">
-        Cancel
+        {{ 'addPatientForm.cancel' | translate }}
       </button>
       <button type="submit" class="btn btn--primary" [disabled]="creating$ | async">
-        {{ (creating$ | async) ? 'Saving…' : 'Add Patient' }}
+        {{ (creating$ | async) ? ('addPatientForm.saving' | translate) : ('addPatientForm.submit' | translate) }}
       </button>
     </footer>
   </form>

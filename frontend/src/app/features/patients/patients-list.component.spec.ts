@@ -2,9 +2,11 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { CardiacDeviceType, Patient } from '../../core/models/patient.model';
+import { useEnglishTestTranslations } from '../../core/testing/translate-testing';
 import {
   selectAllPatients,
   selectPatientCreating,
@@ -49,10 +51,13 @@ describe('PatientsListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PatientsListComponent],
       providers: [
+        provideTranslateService(),
         provideMockStore({ initialState: {} }),
         provideMockActions(() => new Subject().asObservable())
       ]
     }).compileComponents();
+
+    useEnglishTestTranslations(TestBed.inject(TranslateService));
 
     store = TestBed.inject(MockStore);
     store.overrideSelector(selectAllPatients, patients);

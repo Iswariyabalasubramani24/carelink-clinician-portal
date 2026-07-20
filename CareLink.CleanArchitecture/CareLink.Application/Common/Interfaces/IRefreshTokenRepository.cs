@@ -9,4 +9,6 @@ public interface IRefreshTokenRepository
     Task<RefreshToken?> GetByTokenAsync(string token);
 
     Task RevokeAsync(RefreshToken refreshToken);
+
+    Task UpdateActiveTenantAsync(RefreshToken refreshToken, int tenantId);
 }

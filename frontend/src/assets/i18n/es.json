@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Portal Clínico Med",
+    "logout": "Cerrar sesión"
+  },
+  "login": {
+    "brand": "Med",
+    "subtitle": "Portal Clínico",
+    "country": "País",
+    "language": "Idioma",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión…",
+    "emailRequired": "El correo electrónico es obligatorio.",
+    "emailInvalid": "Introduzca una dirección de correo electrónico válida.",
+    "passwordRequired": "La contraseña es obligatoria.",
+    "invalidCredentials": "Correo electrónico o contraseña no válidos."
+  },
+  "patients": {
+    "title": "Pacientes",
+    "subtitle": "Pacientes con dispositivos cardíacos bajo supervisión",
+    "addPatient": "+ Añadir paciente",
+    "loading": "Cargando pacientes…",
+    "empty": "Aún no hay pacientes. Haga clic en «Añadir paciente» para comenzar.",
+    "table": {
+      "mrn": "N.º de historia",
+      "name": "Nombre",
+      "device": "Dispositivo",
+      "serialNumber": "Número de serie",
+      "implantDate": "Fecha de implante"
+    }
+  },
+  "addPatientForm": {
+    "title": "Añadir paciente",
+    "close": "Cerrar",
+    "personalInfo": "Información personal",
+    "deviceInfo": "Información del dispositivo",
+    "mrn": "Número de historia clínica *",
+    "firstName": "Nombre *",
+    "lastName": "Apellido *",
+    "dob": "Fecha de nacimiento *",
+    "phone": "Número de teléfono",
+    "email": "Correo electrónico",
+    "deviceType": "Tipo de dispositivo *",
+    "selectDeviceType": "Seleccionar tipo de dispositivo",
+    "manufacturer": "Fabricante del dispositivo",
+    "model": "Modelo del dispositivo",
+    "serial": "Número de serie del dispositivo *",
+    "implantDate": "Fecha de implante *",
+    "cancel": "Cancelar",
+    "submit": "Añadir paciente",
+    "saving": "Guardando…",
+    "successMessage": "Paciente añadido correctamente.",
+    "errors": {
+      "mrnRequired": "El número de historia clínica es obligatorio.",
+      "firstNameRequired": "El nombre es obligatorio.",
+      "lastNameRequired": "El apellido es obligatorio.",
+      "dobRequired": "La fecha de nacimiento es obligatoria.",
+      "dobFuture": "La fecha de nacimiento no puede ser futura.",
+      "emailInvalid": "Introduzca una dirección de correo electrónico válida.",
+      "deviceTypeRequired": "El tipo de dispositivo es obligatorio.",
+      "serialRequired": "El número de serie es obligatorio.",
+      "implantDateRequired": "La fecha de implante es obligatoria.",
+      "implantDateFuture": "La fecha de implante no puede ser futura.",
+      "implantBeforeBirth": "La fecha de implante no puede ser anterior a la fecha de nacimiento."
+    },
+    "deviceTypes": {
+      "icd": "DCI — Desfibrilador cardioversor implantable",
+      "pacemaker": "Marcapasos",
+      "crtP": "TRC-P — Terapia de resincronización (marcapasos)",
+      "crtD": "TRC-D — Terapia de resincronización (desfibrilador)",
+      "icm": "MCI — Monitor cardíaco insertable"
+    }
+  },
+  "language": {
+    "select": "Idioma",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "clinicSwitcher": {
+    "select": "Cambiar de hospital",
+    "switchTo": "Cambiar de hospital…"
+  }
+}

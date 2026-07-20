@@ -24,4 +24,10 @@ public class RefreshTokenRepository(ApplicationDbContext db) : IRefreshTokenRepo
         refreshToken.IsRevoked = true;
         await db.SaveChangesAsync();
     }
+
+    public async Task UpdateActiveTenantAsync(RefreshToken refreshToken, int tenantId)
+    {
+        refreshToken.TenantId = tenantId;
+        await db.SaveChangesAsync();
+    }
 }

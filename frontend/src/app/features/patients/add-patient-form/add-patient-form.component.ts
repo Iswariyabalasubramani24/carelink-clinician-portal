@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
 import { CardiacDeviceType } from '../../../core/models/patient.model';
@@ -35,19 +36,19 @@ function implantNotBeforeBirth(group: AbstractControl): ValidationErrors | null 
 @Component({
   selector: 'app-add-patient-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-patient-form.component.html',
   styleUrl: './add-patient-form.component.scss'
 })
 export class AddPatientFormComponent {
   @Output() close = new EventEmitter<void>();
 
-  readonly deviceTypes: { value: CardiacDeviceType; label: string }[] = [
-    { value: CardiacDeviceType.ICD, label: 'ICD — Implantable Cardioverter Defibrillator' },
-    { value: CardiacDeviceType.Pacemaker, label: 'Pacemaker' },
-    { value: CardiacDeviceType.CRT_P, label: 'CRT-P — Resynchronization Therapy (Pacemaker)' },
-    { value: CardiacDeviceType.CRT_D, label: 'CRT-D — Resynchronization Therapy (Defibrillator)' },
-    { value: CardiacDeviceType.ICM, label: 'ICM — Insertable Cardiac Monitor' }
+  readonly deviceTypes: { value: CardiacDeviceType; labelKey: string }[] = [
+    { value: CardiacDeviceType.ICD, labelKey: 'addPatientForm.deviceTypes.icd' },
+    { value: CardiacDeviceType.Pacemaker, labelKey: 'addPatientForm.deviceTypes.pacemaker' },
+    { value: CardiacDeviceType.CRT_P, labelKey: 'addPatientForm.deviceTypes.crtP' },
+    { value: CardiacDeviceType.CRT_D, labelKey: 'addPatientForm.deviceTypes.crtD' },
+    { value: CardiacDeviceType.ICM, labelKey: 'addPatientForm.deviceTypes.icm' }
   ];
 
   readonly form = this.fb.nonNullable.group(

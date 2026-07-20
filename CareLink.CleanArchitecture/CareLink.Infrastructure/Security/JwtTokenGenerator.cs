@@ -13,7 +13,7 @@ public class JwtTokenGenerator(IOptions<JwtSettings> options) : IJwtTokenGenerat
 {
     private readonly JwtSettings _settings = options.Value;
 
-    public AccessTokenResult GenerateAccessToken(Clinician clinician)
+    public AccessTokenResult GenerateAccessToken(Clinician clinician, int tenantId)
     {
         var expiresAt = DateTime.UtcNow.AddMinutes(_settings.AccessTokenExpiryMinutes);
 
@@ -21,7 +21,7 @@ public class JwtTokenGenerator(IOptions<JwtSettings> options) : IJwtTokenGenerat
         {
             new Claim(JwtRegisteredClaimNames.Sub, clinician.Id.ToString()),
             new Claim("clinicianId", clinician.Id.ToString()),
-            new Claim("tenantId", clinician.TenantId.ToString()),
+            new Claim("tenantId", tenantId.ToString()),
             new Claim(ClaimTypes.Email, clinician.Email),
             new Claim(ClaimTypes.Role, clinician.Role.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

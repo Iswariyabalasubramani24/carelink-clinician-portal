@@ -14,6 +14,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<ClinicianTenant> ClinicianTenants => Set<ClinicianTenant>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -65,6 +67,27 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasOne(r => r.Clinician)
                 .WithMany()
                 .HasForeignKey(r => r.ClinicianId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Tenant>()
+                .WithMany()
+                .HasForeignKey(r => r.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ClinicianTenant>(entity =>
+        {
+            entity.HasKey(ct => ct.Id);
+            entity.HasIndex(ct => new { ct.ClinicianId, ct.TenantId }).IsUnique();
+
+            entity.HasOne(ct => ct.Clinician)
+                .WithMany()
+                .HasForeignKey(ct => ct.ClinicianId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(ct => ct.Tenant)
+                .WithMany()
+                .HasForeignKey(ct => ct.TenantId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

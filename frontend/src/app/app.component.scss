@@ -11,6 +11,12 @@
     color: var(--color-primary);
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
   &__session {
     display: flex;
     align-items: center;

@@ -28,3 +28,9 @@ export interface RefreshResponse {
   role: string;
   tenantId: number;
 }
+
+export interface SwitchTenantResponse {
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  tenantId: number;
+}

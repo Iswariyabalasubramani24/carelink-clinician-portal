@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Med Clinician Portal",
+    "logout": "Logout"
+  },
+  "login": {
+    "brand": "Med",
+    "subtitle": "Clinician Portal",
+    "country": "Country",
+    "language": "Language",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Password is required.",
+    "invalidCredentials": "Invalid email or password."
+  },
+  "patients": {
+    "title": "Patients",
+    "subtitle": "Cardiac device patients under monitoring",
+    "addPatient": "+ Add Patient",
+    "loading": "Loading patients…",
+    "empty": "No patients yet. Click \"Add Patient\" to get started.",
+    "table": {
+      "mrn": "MRN",
+      "name": "Name",
+      "device": "Device",
+      "serialNumber": "Serial Number",
+      "implantDate": "Implant Date"
+    }
+  },
+  "addPatientForm": {
+    "title": "Add Patient",
+    "close": "Close",
+    "personalInfo": "Personal Information",
+    "deviceInfo": "Device Information",
+    "mrn": "Medical Record Number *",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "dob": "Date of Birth *",
+    "phone": "Phone Number",
+    "email": "Email",
+    "deviceType": "Device Type *",
+    "selectDeviceType": "Select device type",
+    "manufacturer": "Device Manufacturer",
+    "model": "Device Model",
+    "serial": "Device Serial Number *",
+    "implantDate": "Implant Date *",
+    "cancel": "Cancel",
+    "submit": "Add Patient",
+    "saving": "Saving…",
+    "successMessage": "Patient added successfully.",
+    "errors": {
+      "mrnRequired": "Medical record number is required.",
+      "firstNameRequired": "First name is required.",
+      "lastNameRequired": "Last name is required.",
+      "dobRequired": "Date of birth is required.",
+      "dobFuture": "Date of birth cannot be in the future.",
+      "emailInvalid": "Enter a valid email address.",
+      "deviceTypeRequired": "Device type is required.",
+      "serialRequired": "Serial number is required.",
+      "implantDateRequired": "Implant date is required.",
+      "implantDateFuture": "Implant date cannot be in the future.",
+      "implantBeforeBirth": "Implant date cannot be before date of birth."
+    },
+    "deviceTypes": {
+      "icd": "ICD — Implantable Cardioverter Defibrillator",
+      "pacemaker": "Pacemaker",
+      "crtP": "CRT-P — Resynchronization Therapy (Pacemaker)",
+      "crtD": "CRT-D — Resynchronization Therapy (Defibrillator)",
+      "icm": "ICM — Insertable Cardiac Monitor"
+    }
+  },
+  "language": {
+    "select": "Language",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+  "clinicSwitcher": {
+    "select": "Switch hospital",
+    "switchTo": "Switch hospital…"
+  }
+}

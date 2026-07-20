@@ -72,6 +72,30 @@ namespace CareLink.Infrastructure.Migrations
                     b.ToTable("Clinicians");
                 });
 
+            modelBuilder.Entity("CareLink.Domain.Entities.ClinicianTenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClinicianId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("ClinicianId", "TenantId")
+                        .IsUnique();
+
+                    b.ToTable("ClinicianTenants");
+                });
+
             modelBuilder.Entity("CareLink.Domain.Entities.Patient", b =>
                 {
                     b.Property<int>("Id")
@@ -168,6 +192,9 @@ namespace CareLink.Infrastructure.Migrations
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("bit");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -176,6 +203,8 @@ namespace CareLink.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClinicianId");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("Token")
                         .IsUnique();
@@ -228,6 +257,25 @@ namespace CareLink.Infrastructure.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("CareLink.Domain.Entities.ClinicianTenant", b =>
+                {
+                    b.HasOne("CareLink.Domain.Entities.Clinician", "Clinician")
+                        .WithMany()
+                        .HasForeignKey("ClinicianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CareLink.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinician");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("CareLink.Domain.Entities.Patient", b =>
                 {
                     b.HasOne("CareLink.Domain.Entities.Tenant", "Tenant")
@@ -245,6 +293,12 @@ namespace CareLink.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ClinicianId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CareLink.Domain.Entities.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Clinician");

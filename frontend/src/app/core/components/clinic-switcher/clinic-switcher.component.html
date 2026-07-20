@@ -1,0 +1,12 @@
+<div class="clinic-switcher" *ngIf="currentTenantName">
+  <span class="clinic-switcher__current">{{ currentTenantName }}</span>
+  <select
+    *ngIf="otherTenants.length > 0"
+    class="clinic-switcher__select"
+    [attr.aria-label]="'clinicSwitcher.select' | translate"
+    [formControl]="switchControl"
+  >
+    <option value="" disabled>{{ 'clinicSwitcher.switchTo' | translate }}</option>
+    <option *ngFor="let tenant of otherTenants" [value]="tenant.id">{{ tenant.name }}</option>
+  </select>
+</div>

@@ -1,0 +1,15 @@
+<div class="country-language-selector" *ngIf="regions.length">
+  <div class="form-field">
+    <label for="country">{{ 'login.country' | translate }}</label>
+    <select id="country" [formControl]="countryControl">
+      <option *ngFor="let option of regions" [value]="option.region">{{ option.region }}</option>
+    </select>
+  </div>
+
+  <div class="form-field">
+    <label for="selectorLanguage">{{ 'login.language' | translate }}</label>
+    <select id="selectorLanguage" [formControl]="languageControl">
+      <option *ngFor="let option of languageOptions" [value]="option.code">{{ option.label }}</option>
+    </select>
+  </div>
+</div>
