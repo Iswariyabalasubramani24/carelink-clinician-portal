@@ -28,6 +28,10 @@ LOG_WORKSPACE="${LOG_WORKSPACE:-carelink-logs}"
 APPINSIGHTS_NAME="${APPINSIGHTS_NAME:-carelink-ai}"
 # SQL server name must be globally unique, lowercase.
 SQL_SERVER="${SQL_SERVER:-carelink-sql-$RANDOM}"
+# SQL can live in a different region than the cluster (reached over the network).
+# Override if your primary region is temporarily refusing new SQL servers
+# ("RegionDoesNotAllowProvisioning").
+SQL_LOCATION="${SQL_LOCATION:-$LOCATION}"
 SQL_DB="${SQL_DB:-CareLinkCleanArch}"
 SQL_ADMIN_USER="${SQL_ADMIN_USER:-carelinkadmin}"
 SQL_DB_SKU="${SQL_DB_SKU:-Basic}" # Basic ~5 USD/mo; use S0/GP_S_Gen5_1 for more headroom
@@ -83,7 +87,7 @@ echo ">> AKS ready: $AKS_NAME"
 # ---- Azure SQL server + database -----------------------------------------
 if ! az sql server show --name "$SQL_SERVER" --resource-group "$RESOURCE_GROUP" &>/dev/null; then
   az sql server create \
-    --name "$SQL_SERVER" --resource-group "$RESOURCE_GROUP" --location "$LOCATION" \
+    --name "$SQL_SERVER" --resource-group "$RESOURCE_GROUP" --location "$SQL_LOCATION" \
     --admin-user "$SQL_ADMIN_USER" --admin-password "$SQL_ADMIN_PASSWORD" --output none
 fi
 # Allow other Azure services (i.e. the AKS pods) to reach the SQL server.
