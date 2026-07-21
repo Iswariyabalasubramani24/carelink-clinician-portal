@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 
 import { CardiacDeviceType, Patient } from '../../core/models/patient.model';
 import { useEnglishTestTranslations } from '../../core/testing/translate-testing';
+import { PatientsActions } from '../../store/patients/patients.actions';
 import {
   selectAllPatients,
   selectPatientCreating,
@@ -110,5 +111,75 @@ describe('PatientsListComponent', () => {
     expect(component.showAddForm).toBe(true);
     expect(fixture.debugElement.query(By.css('.modal-backdrop'))).toBeTruthy();
     expect(fixture.debugElement.query(By.css('app-add-patient-form'))).toBeTruthy();
+  });
+
+  it('the Advanced Search panel is collapsed by default and expands on toggle click', async () => {
+    await setup(mockPatients);
+
+    expect(fixture.debugElement.query(By.css('.advanced-search__form'))).toBeFalsy();
+
+    const toggle = fixture.debugElement.query(By.css('.advanced-search__toggle'));
+    toggle.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.advanced-search__form'))).toBeTruthy();
+  });
+
+  it('submitting the search form dispatches searchPatients with the entered filters', async () => {
+    await setup(mockPatients);
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+
+    fixture.debugElement.query(By.css('.advanced-search__toggle')).nativeElement.click();
+    fixture.detectChanges();
+
+    const deviceSelect = fixture.debugElement.query(By.css('#searchDeviceType')).nativeElement as HTMLSelectElement;
+    deviceSelect.value = CardiacDeviceType.ICD;
+    deviceSelect.dispatchEvent(new Event('change'));
+
+    const statusSelect = fixture.debugElement.query(By.css('#searchStatus')).nativeElement as HTMLSelectElement;
+    statusSelect.value = 'active';
+    statusSelect.dispatchEvent(new Event('change'));
+
+    const keywordInput = fixture.debugElement.query(By.css('#searchKeyword')).nativeElement as HTMLInputElement;
+    keywordInput.value = 'Paul';
+    keywordInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    fixture.debugElement.query(By.css('.advanced-search__form')).triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      PatientsActions.searchPatients({
+        filters: {
+          deviceType: CardiacDeviceType.ICD,
+          isActive: true,
+          implantDateFrom: undefined,
+          implantDateTo: undefined,
+          keyword: 'Paul'
+        }
+      })
+    );
+  });
+
+  it('clicking Clear Filters resets the form and dispatches an unfiltered loadPatients', async () => {
+    await setup(mockPatients);
+
+    fixture.debugElement.query(By.css('.advanced-search__toggle')).nativeElement.click();
+    fixture.detectChanges();
+
+    const keywordInput = fixture.debugElement.query(By.css('#searchKeyword')).nativeElement as HTMLInputElement;
+    keywordInput.value = 'Paul';
+    keywordInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    const clearButton = Array.from(
+      fixture.debugElement.queryAll(By.css('.advanced-search__actions button'))
+    ).find((b) => b.nativeElement.textContent.includes('Clear Filters'))!;
+    clearButton.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(keywordInput.value).toBe('');
+    expect(dispatchSpy).toHaveBeenCalledWith(PatientsActions.loadPatients());
   });
 });

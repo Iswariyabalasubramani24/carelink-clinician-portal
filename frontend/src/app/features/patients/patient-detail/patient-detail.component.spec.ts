@@ -189,6 +189,90 @@ describe('PatientDetailComponent', () => {
     expect(el.textContent).toContain('MDT-ICD-0001');
   });
 
+  it('switches to the Profile tab and shows read-only patient identity fields', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const profileTab = getTabs().find((t) => t.textContent?.trim() === 'Profile');
+    profileTab?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('.tab--active')?.textContent).toContain('Profile');
+    expect(el.textContent).toContain('Rajesh');
+    expect(el.textContent).toContain('Kumar');
+    expect(el.textContent).toContain('APL-1001');
+    expect(el.textContent).toContain('Active');
+  });
+
+  it('renders the Schedule tab with the clinic-default interval and a read-only input', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const scheduleTab = getTabs().find((t) => t.textContent?.trim() === 'Schedule');
+    scheduleTab?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('.tab--active')?.textContent).toContain('Schedule');
+    const toggle = Array.from(el.querySelectorAll('.toggle-option')).find((b) =>
+      b.textContent?.includes('Use clinic default')
+    ) as HTMLButtonElement;
+    expect(toggle.classList.contains('toggle-option--active')).toBe(true);
+
+    const intervalInput = el.querySelector('#scheduleIntervalDays') as HTMLInputElement;
+    expect(intervalInput.value).toBe('30');
+    expect(intervalInput.readOnly).toBe(true);
+  });
+
+  it('renders the Schedule tab already in override mode when the patient has a per-patient override', async () => {
+    await setup({ scheduleSettings: { intervalDays: 14, isOverride: true } });
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const scheduleTab = getTabs().find((t) => t.textContent?.trim() === 'Schedule');
+    scheduleTab?.click();
+    fixture.detectChanges();
+
+    const overrideToggle = Array.from(el.querySelectorAll('.toggle-option')).find((b) =>
+      b.textContent?.includes('Override for this patient')
+    ) as HTMLButtonElement;
+    expect(overrideToggle.classList.contains('toggle-option--active')).toBe(true);
+
+    const intervalInput = el.querySelector('#scheduleIntervalDays') as HTMLInputElement;
+    expect(intervalInput.value).toBe('14');
+    expect(intervalInput.readOnly).toBe(false);
+  });
+
+  it('toggling to override, changing the interval, and saving persists the override', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const scheduleTab = getTabs().find((t) => t.textContent?.trim() === 'Schedule');
+    scheduleTab?.click();
+    fixture.detectChanges();
+
+    const overrideToggle = Array.from(el.querySelectorAll('.toggle-option')).find((b) =>
+      b.textContent?.includes('Override for this patient')
+    ) as HTMLButtonElement;
+    overrideToggle.click();
+    fixture.detectChanges();
+
+    const intervalInput = el.querySelector('#scheduleIntervalDays') as HTMLInputElement;
+    intervalInput.value = '14';
+    intervalInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const saveBtn = Array.from(el.querySelectorAll('.care-alert-actions button')).find((b) =>
+      b.textContent?.includes('Save')
+    ) as HTMLButtonElement;
+    saveBtn.click();
+    fixture.detectChanges();
+
+    expect(patientServiceMock.updateScheduleSettings).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ useOverride: true, intervalDays: 14 })
+    );
+    expect(el.textContent).toContain('Saved.');
+  });
+
   it('switches to the History tab and renders the transmission table plus both charts without throwing', async () => {
     await setup();
 
