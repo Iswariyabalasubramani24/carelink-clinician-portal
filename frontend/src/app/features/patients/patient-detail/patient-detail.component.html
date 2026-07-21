@@ -41,6 +41,14 @@
         >
           {{ 'patientDetail.tabs.careAlert' | translate }}
         </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'reports'"
+          (click)="setTab('reports')"
+        >
+          {{ 'patientDetail.tabs.reports' | translate }}
+        </button>
       </div>
 
       <section class="card tab-panel" *ngIf="activeTab === 'overview'">
@@ -208,6 +216,98 @@
             </span>
             <span class="save-message save-message--error" *ngIf="saveError">
               {{ 'patientDetail.careAlert.saveError' | translate }}
+            </span>
+          </div>
+        </ng-container>
+      </section>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'reports'">
+        <div class="report-generate">
+          <select class="urgency-select" [formControl]="reportTypeControl">
+            <option [value]="ReportType.FullReport">{{ 'patientDetail.reports.types.FullReport' | translate }}</option>
+            <option [value]="ReportType.SummaryReport">{{ 'patientDetail.reports.types.SummaryReport' | translate }}</option>
+            <option [value]="ReportType.EventReport">{{ 'patientDetail.reports.types.EventReport' | translate }}</option>
+          </select>
+          <button type="button" class="btn btn--primary" [disabled]="generatingReport" (click)="generateReport()">
+            {{ 'patientDetail.reports.generate' | translate }}
+          </button>
+          <span class="save-message save-message--error" *ngIf="generateReportError">
+            {{ 'patientDetail.reports.generateError' | translate }}
+          </span>
+        </div>
+
+        <p class="state-message" *ngIf="reportsLoading">{{ 'patientDetail.reports.loading' | translate }}</p>
+
+        <ng-container *ngIf="!reportsLoading">
+          <table class="history-table" *ngIf="reports.length; else noReports">
+            <thead>
+              <tr>
+                <th>{{ 'patientDetail.reports.type' | translate }}</th>
+                <th>{{ 'patientDetail.reports.generatedAt' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let report of reports">
+                <td>{{ 'patientDetail.reports.types.' + report.reportType | translate }}</td>
+                <td>{{ report.generatedAt | date: 'medium' }}</td>
+                <td>
+                  <button type="button" class="btn btn--secondary" (click)="downloadReport(report)">
+                    {{ 'patientDetail.reports.download' | translate }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noReports>
+            <p class="state-message">{{ 'patientDetail.reports.empty' | translate }}</p>
+          </ng-template>
+        </ng-container>
+
+        <h3 class="report-settings-heading">{{ 'patientDetail.reports.intervalSettingTitle' | translate }}</h3>
+        <p class="state-message" *ngIf="reportSettingsLoading">{{ 'patientDetail.reports.loading' | translate }}</p>
+
+        <ng-container *ngIf="!reportSettingsLoading">
+          <div class="override-toggle">
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="!reportUseOverride"
+              (click)="setReportUseOverride(false)"
+            >
+              {{ 'patientDetail.reports.useClinicDefault' | translate }}
+            </button>
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="reportUseOverride"
+              (click)="setReportUseOverride(true)"
+            >
+              {{ 'patientDetail.reports.overrideForPatient' | translate }}
+            </button>
+          </div>
+
+          <div class="report-interval-input">
+            <label for="reportIntervalDays">{{ 'patientDetail.reports.intervalDays' | translate }}</label>
+            <input
+              id="reportIntervalDays"
+              type="number"
+              min="1"
+              class="urgency-select"
+              [formControl]="reportIntervalControl"
+              [readonly]="!reportUseOverride"
+            />
+          </div>
+
+          <div class="care-alert-actions">
+            <button type="button" class="btn btn--primary" (click)="saveReportSettings()">
+              {{ 'patientDetail.reports.save' | translate }}
+            </button>
+            <span class="save-message save-message--success" *ngIf="reportSettingsSaveSucceeded">
+              {{ 'patientDetail.reports.saved' | translate }}
+            </span>
+            <span class="save-message save-message--error" *ngIf="reportSettingsSaveError">
+              {{ 'patientDetail.reports.saveError' | translate }}
             </span>
           </div>
         </ng-container>

@@ -5,6 +5,9 @@ using CareLink.Application.Alerts.Queries;
 using CareLink.Application.Patients;
 using CareLink.Application.Patients.Commands;
 using CareLink.Application.Patients.Queries;
+using CareLink.Application.Reports;
+using CareLink.Application.Reports.Commands;
+using CareLink.Application.Reports.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +64,40 @@ public class PatientsController(IMediator mediator) : ControllerBase
             TenantId = GetTenantId(),
             UseOverride = request.UseOverride,
             Overrides = request.Overrides
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/reports")]
+    public async Task<ActionResult<IEnumerable<ReportDto>>> GetReports(int id)
+    {
+        var result = await mediator.Send(new GetPatientReportsQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpPost("{id}/reports")]
+    public async Task<ActionResult<ReportDto>> GenerateReport(int id, GenerateReportRequest request)
+    {
+        var result = await mediator.Send(new GenerateReportCommand(id, GetTenantId(), request.ReportType));
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/report-settings")]
+    public async Task<ActionResult<PatientReportSettingsDto>> GetReportSettings(int id)
+    {
+        var result = await mediator.Send(new GetPatientReportSettingsQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/report-settings")]
+    public async Task<ActionResult<PatientReportSettingsDto>> UpdateReportSettings(int id, UpdatePatientReportSettingsRequest request)
+    {
+        var result = await mediator.Send(new UpdatePatientReportSettingsCommand
+        {
+            PatientId = id,
+            TenantId = GetTenantId(),
+            UseOverride = request.UseOverride,
+            IntervalDays = request.IntervalDays
         });
         return Ok(result);
     }

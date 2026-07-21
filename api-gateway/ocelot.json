@@ -116,6 +116,42 @@
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/patients/{id}/reports",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/patients/{id}/reports",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/patients/{id}/report-settings",
+      "UpstreamHttpMethod": [ "GET", "PUT" ],
+      "DownstreamPathTemplate": "/api/patients/{id}/report-settings",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/reports/{id}/download",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/reports/{id}/download",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/reports/clinic-settings",
+      "UpstreamHttpMethod": [ "GET", "PUT" ],
+      "DownstreamPathTemplate": "/api/reports/clinic-settings",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
     }
   ],
   "GlobalConfiguration": {

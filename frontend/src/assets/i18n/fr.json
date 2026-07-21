@@ -105,7 +105,8 @@
       "overview": "Aperçu",
       "equipment": "Équipement",
       "history": "Historique",
-      "careAlert": "Notification CareAlert"
+      "careAlert": "Notification CareAlert",
+      "reports": "Rapports"
     },
     "overview": {
       "mrn": "N° de dossier",
@@ -168,6 +169,27 @@
       "save": "Enregistrer",
       "saved": "Enregistré.",
       "saveError": "Échec de l'enregistrement des paramètres d'alerte."
+    },
+    "reports": {
+      "loading": "Chargement…",
+      "type": "Type de rapport",
+      "generatedAt": "Date de génération",
+      "download": "Télécharger",
+      "empty": "Aucun rapport généré pour le moment.",
+      "generate": "Générer un rapport",
+      "generateError": "Échec de la génération du rapport.",
+      "types": {
+        "FullReport": "Rapport complet",
+        "SummaryReport": "Rapport résumé",
+        "EventReport": "Rapport d'événement"
+      },
+      "intervalSettingTitle": "Intervalle de rapport",
+      "useClinicDefault": "Utiliser le paramètre par défaut de la clinique",
+      "overrideForPatient": "Remplacer pour ce patient",
+      "intervalDays": "Intervalle (jours)",
+      "save": "Enregistrer",
+      "saved": "Enregistré.",
+      "saveError": "Échec de l'enregistrement des paramètres de rapport."
     }
   }
 }

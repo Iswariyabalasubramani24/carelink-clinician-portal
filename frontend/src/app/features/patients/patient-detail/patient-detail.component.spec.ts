@@ -9,6 +9,10 @@ class ResizeObserverMock {
 }
 (globalThis as unknown as { ResizeObserver: unknown }).ResizeObserver = ResizeObserverMock;
 
+// jsdom doesn't implement the Blob URL APIs used to trigger a PDF download.
+window.URL.createObjectURL = jest.fn().mockReturnValue('blob:mock-url');
+window.URL.revokeObjectURL = jest.fn();
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -18,9 +22,11 @@ import { of } from 'rxjs';
 
 import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../core/models/alert.model';
 import { CardiacDeviceType, Patient } from '../../../core/models/patient.model';
+import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
 import { AlertService } from '../../../core/services/alert.service';
 import { PatientService } from '../../../core/services/patient.service';
+import { ReportService } from '../../../core/services/report.service';
 import { useEnglishTestTranslations } from '../../../core/testing/translate-testing';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
 import { PatientDetailComponent } from './patient-detail.component';
@@ -33,8 +39,13 @@ describe('PatientDetailComponent', () => {
     getAlerts: jest.Mock;
     getAlertSettings: jest.Mock;
     updateAlertSettings: jest.Mock;
+    getReports: jest.Mock;
+    generateReport: jest.Mock;
+    getReportSettings: jest.Mock;
+    updateReportSettings: jest.Mock;
   };
   let alertServiceMock: { acknowledge: jest.Mock; snooze: jest.Mock };
+  let reportServiceMock: { download: jest.Mock };
 
   const mockPatient: Patient = {
     id: 1,
@@ -75,16 +86,34 @@ describe('PatientDetailComponent', () => {
     { alertType: AlertType.DisconnectedMonitor, effectiveUrgency: AlertUrgency.Red, isOverride: false }
   ];
 
-  async function setup(options?: { alerts?: Alert[]; alertSettings?: PatientAlertSetting[] }): Promise<void> {
+  const mockReports: Report[] = [
+    { id: 1, patientId: 1, reportType: ReportType.FullReport, generatedAt: '2026-07-01T10:00:00Z' }
+  ];
+
+  const mockReportSettings: PatientReportSettings = { intervalDays: 30, isOverride: false };
+
+  async function setup(options?: {
+    alerts?: Alert[];
+    alertSettings?: PatientAlertSetting[];
+    reports?: Report[];
+    reportSettings?: PatientReportSettings;
+  }): Promise<void> {
     patientServiceMock = {
       getTransmissionHistory: jest.fn().mockReturnValue(of(mockHistory)),
       getAlerts: jest.fn().mockReturnValue(of(options?.alerts ?? [mockAlert])),
       getAlertSettings: jest.fn().mockReturnValue(of(options?.alertSettings ?? mockAlertSettings)),
-      updateAlertSettings: jest.fn().mockReturnValue(of(mockAlertSettings))
+      updateAlertSettings: jest.fn().mockReturnValue(of(mockAlertSettings)),
+      getReports: jest.fn().mockReturnValue(of(options?.reports ?? mockReports)),
+      generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
+      getReportSettings: jest.fn().mockReturnValue(of(options?.reportSettings ?? mockReportSettings)),
+      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings))
     };
     alertServiceMock = {
       acknowledge: jest.fn().mockReturnValue(of({ ...mockAlert, isAcknowledged: true })),
       snooze: jest.fn().mockReturnValue(of({ ...mockAlert, snoozedUntil: '2026-08-04T00:00:00Z' }))
+    };
+    reportServiceMock = {
+      download: jest.fn().mockReturnValue(of(new Blob(['pdf-bytes'], { type: 'application/pdf' })))
     };
 
     await TestBed.configureTestingModule({
@@ -95,6 +124,7 @@ describe('PatientDetailComponent', () => {
         provideCharts(withDefaultRegisterables()),
         { provide: PatientService, useValue: patientServiceMock },
         { provide: AlertService, useValue: alertServiceMock },
+        { provide: ReportService, useValue: reportServiceMock },
         {
           provide: ActivatedRoute,
           useValue: { snapshot: { paramMap: { get: () => '1' } } }
@@ -160,9 +190,14 @@ describe('PatientDetailComponent', () => {
       getTransmissionHistory: jest.fn().mockReturnValue(of(mockHistory)),
       getAlerts: jest.fn().mockReturnValue(of([])),
       getAlertSettings: jest.fn().mockReturnValue(of(mockAlertSettings)),
-      updateAlertSettings: jest.fn().mockReturnValue(of(mockAlertSettings))
+      updateAlertSettings: jest.fn().mockReturnValue(of(mockAlertSettings)),
+      getReports: jest.fn().mockReturnValue(of(mockReports)),
+      generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
+      getReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
+      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings))
     };
     alertServiceMock = { acknowledge: jest.fn(), snooze: jest.fn() };
+    reportServiceMock = { download: jest.fn() };
 
     await TestBed.configureTestingModule({
       imports: [PatientDetailComponent],
@@ -172,6 +207,7 @@ describe('PatientDetailComponent', () => {
         provideCharts(withDefaultRegisterables()),
         { provide: PatientService, useValue: patientServiceMock },
         { provide: AlertService, useValue: alertServiceMock },
+        { provide: ReportService, useValue: reportServiceMock },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => '999' } } } }
       ]
     }).compileComponents();
@@ -282,5 +318,66 @@ describe('PatientDetailComponent', () => {
       expect.objectContaining({ useOverride: true, overrides: expect.any(Array) })
     );
     expect(el.textContent).toContain('Saved.');
+  });
+
+  it('renders the Reports tab with the generated reports list', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const reportsTab = getTabs().find((t) => t.textContent?.includes('Reports'));
+    reportsTab?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('.tab--active')?.textContent).toContain('Reports');
+    expect(el.querySelectorAll('.history-table tbody tr').length).toBe(mockReports.length);
+    expect(el.textContent).toContain('Full Report');
+  });
+
+  it('shows the empty-state message when the patient has no reports yet', async () => {
+    await setup({ reports: [] });
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const reportsTab = getTabs().find((t) => t.textContent?.includes('Reports'));
+    reportsTab?.click();
+    fixture.detectChanges();
+
+    expect(el.textContent).toContain('No reports generated yet.');
+  });
+
+  it('clicking Generate Report calls the service with the selected type and reloads the list', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const reportsTab = getTabs().find((t) => t.textContent?.includes('Reports'));
+    reportsTab?.click();
+    fixture.detectChanges();
+
+    const generateBtn = Array.from(el.querySelectorAll('.report-generate button')).find((b) =>
+      b.textContent?.includes('Generate Report')
+    ) as HTMLButtonElement;
+    generateBtn.click();
+    fixture.detectChanges();
+
+    expect(patientServiceMock.generateReport).toHaveBeenCalledWith(1, ReportType.FullReport);
+    expect(patientServiceMock.getReports).toHaveBeenCalledTimes(2);
+  });
+
+  it('the download button is present per report row and triggers the report service with the correct id', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const reportsTab = getTabs().find((t) => t.textContent?.includes('Reports'));
+    reportsTab?.click();
+    fixture.detectChanges();
+
+    const downloadBtn = Array.from(el.querySelectorAll('.history-table tbody button')).find((b) =>
+      b.textContent?.includes('Download')
+    ) as HTMLButtonElement;
+    expect(downloadBtn).toBeTruthy();
+
+    downloadBtn.click();
+    fixture.detectChanges();
+
+    expect(reportServiceMock.download).toHaveBeenCalledWith(mockReports[0].id);
   });
 });

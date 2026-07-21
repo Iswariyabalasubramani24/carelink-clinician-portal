@@ -10,13 +10,15 @@ import { Observable } from 'rxjs';
 
 import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../core/models/alert.model';
 import { Patient } from '../../../core/models/patient.model';
+import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
 import { AlertService } from '../../../core/services/alert.service';
 import { PatientService } from '../../../core/services/patient.service';
+import { ReportService } from '../../../core/services/report.service';
 import { PatientsActions } from '../../../store/patients/patients.actions';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
 
-type DetailTab = 'overview' | 'equipment' | 'history' | 'careAlert';
+type DetailTab = 'overview' | 'equipment' | 'history' | 'careAlert' | 'reports';
 
 interface AlertSettingRow {
   alertType: AlertType;
@@ -59,11 +61,26 @@ export class PatientDetailComponent implements OnInit {
 
   readonly AlertUrgency = AlertUrgency;
 
+  reports: Report[] = [];
+  reportsLoading = true;
+  reportTypeControl = new FormControl<ReportType>(ReportType.FullReport, { nonNullable: true });
+  generatingReport = false;
+  generateReportError = false;
+
+  reportSettingsLoading = true;
+  reportUseOverride = false;
+  reportIntervalControl = new FormControl<number>(30, { nonNullable: true });
+  reportSettingsSaveSucceeded = false;
+  reportSettingsSaveError = false;
+
+  readonly ReportType = ReportType;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly store: Store,
     private readonly patientService: PatientService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +116,18 @@ export class PatientDetailComponent implements OnInit {
       },
       error: () => {
         this.alertSettingsLoading = false;
+      }
+    });
+
+    this.loadReports();
+
+    this.patientService.getReportSettings(this.patientId).subscribe({
+      next: (settings) => {
+        this.applyReportSettings(settings);
+        this.reportSettingsLoading = false;
+      },
+      error: () => {
+        this.reportSettingsLoading = false;
       }
     });
   }
@@ -148,6 +177,77 @@ export class PatientDetailComponent implements OnInit {
         this.saveError = true;
       }
     });
+  }
+
+  loadReports(): void {
+    this.reportsLoading = true;
+    this.patientService.getReports(this.patientId).subscribe({
+      next: (reports) => {
+        this.reports = reports;
+        this.reportsLoading = false;
+      },
+      error: () => {
+        this.reportsLoading = false;
+      }
+    });
+  }
+
+  generateReport(): void {
+    this.generatingReport = true;
+    this.generateReportError = false;
+
+    this.patientService.generateReport(this.patientId, this.reportTypeControl.value).subscribe({
+      next: () => {
+        this.generatingReport = false;
+        this.loadReports();
+      },
+      error: () => {
+        this.generatingReport = false;
+        this.generateReportError = true;
+      }
+    });
+  }
+
+  downloadReport(report: Report): void {
+    this.reportService.download(report.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${report.reportType}-${report.id}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      }
+    });
+  }
+
+  setReportUseOverride(useOverride: boolean): void {
+    this.reportUseOverride = useOverride;
+  }
+
+  saveReportSettings(): void {
+    this.reportSettingsSaveSucceeded = false;
+    this.reportSettingsSaveError = false;
+
+    this.patientService
+      .updateReportSettings(this.patientId, {
+        useOverride: this.reportUseOverride,
+        intervalDays: this.reportIntervalControl.value
+      })
+      .subscribe({
+        next: (settings) => {
+          this.applyReportSettings(settings);
+          this.reportSettingsSaveSucceeded = true;
+        },
+        error: () => {
+          this.reportSettingsSaveError = true;
+        }
+      });
+  }
+
+  private applyReportSettings(settings: PatientReportSettings): void {
+    this.reportUseOverride = settings.isOverride;
+    this.reportIntervalControl.setValue(settings.intervalDays);
   }
 
   private applyAlertSettings(settings: PatientAlertSetting[]): void {

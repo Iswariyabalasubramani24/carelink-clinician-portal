@@ -5,11 +5,17 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Alert, PatientAlertSetting } from '../models/alert.model';
 import { Patient } from '../models/patient.model';
+import { PatientReportSettings, Report, ReportType } from '../models/report.model';
 import { TransmissionHistoryPoint } from '../models/transmission-history.model';
 
 export interface UpdatePatientAlertSettingsPayload {
   useOverride: boolean;
   overrides: { alertType: string; urgency: string }[];
+}
+
+export interface UpdatePatientReportSettingsPayload {
+  useOverride: boolean;
+  intervalDays: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -53,5 +59,21 @@ export class PatientService {
 
   updateAlertSettings(id: number, payload: UpdatePatientAlertSettingsPayload): Observable<PatientAlertSetting[]> {
     return this.http.put<PatientAlertSetting[]>(`${this.baseUrl}/${id}/alert-settings`, payload);
+  }
+
+  getReports(id: number): Observable<Report[]> {
+    return this.http.get<Report[]>(`${this.baseUrl}/${id}/reports`);
+  }
+
+  generateReport(id: number, reportType: ReportType): Observable<Report> {
+    return this.http.post<Report>(`${this.baseUrl}/${id}/reports`, { reportType });
+  }
+
+  getReportSettings(id: number): Observable<PatientReportSettings> {
+    return this.http.get<PatientReportSettings>(`${this.baseUrl}/${id}/report-settings`);
+  }
+
+  updateReportSettings(id: number, payload: UpdatePatientReportSettingsPayload): Observable<PatientReportSettings> {
+    return this.http.put<PatientReportSettings>(`${this.baseUrl}/${id}/report-settings`, payload);
   }
 }

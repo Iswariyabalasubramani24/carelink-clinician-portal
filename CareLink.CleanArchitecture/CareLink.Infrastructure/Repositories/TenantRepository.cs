@@ -14,4 +14,11 @@ public class TenantRepository(ApplicationDbContext db) : ITenantRepository
             .OrderBy(t => t.Name)
             .ToListAsync();
     }
+
+    public async Task<Tenant?> GetByIdAsync(int id)
+    {
+        return await db.Tenants
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == id);
+    }
 }

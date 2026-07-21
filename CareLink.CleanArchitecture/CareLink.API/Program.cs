@@ -6,10 +6,14 @@ using CareLink.Application.Common.Exceptions;
 using CareLink.Application.Common.Interfaces;
 using CareLink.Infrastructure;
 using CareLink.Infrastructure.Repositories;
+using CareLink.Infrastructure.Reports;
 using CareLink.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using QuestPDF.Infrastructure;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +36,9 @@ builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IClinicAlertSettingsRepository, ClinicAlertSettingsRepository>();
 builder.Services.AddScoped<IPatientAlertSettingsRepository, PatientAlertSettingsRepository>();
 builder.Services.AddScoped<IAlertEvaluationService, AlertEvaluationService>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportSettingsRepository, ReportSettingsRepository>();
+builder.Services.AddScoped<IReportPdfGenerator, QuestPdfReportGenerator>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
@@ -95,6 +102,11 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });
     }
     catch (AlertNotFoundException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+    }
+    catch (ReportNotFoundException ex)
     {
         context.Response.StatusCode = StatusCodes.Status404NotFound;
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });

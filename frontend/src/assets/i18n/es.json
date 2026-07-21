@@ -105,7 +105,8 @@
       "overview": "Resumen",
       "equipment": "Equipo",
       "history": "Historial",
-      "careAlert": "Notificación CareAlert"
+      "careAlert": "Notificación CareAlert",
+      "reports": "Informes"
     },
     "overview": {
       "mrn": "N.º de historia",
@@ -168,6 +169,27 @@
       "save": "Guardar",
       "saved": "Guardado.",
       "saveError": "No se pudo guardar la configuración de alertas."
+    },
+    "reports": {
+      "loading": "Cargando…",
+      "type": "Tipo de informe",
+      "generatedAt": "Fecha de generación",
+      "download": "Descargar",
+      "empty": "Aún no se han generado informes.",
+      "generate": "Generar informe",
+      "generateError": "Error al generar el informe.",
+      "types": {
+        "FullReport": "Informe completo",
+        "SummaryReport": "Informe resumido",
+        "EventReport": "Informe de eventos"
+      },
+      "intervalSettingTitle": "Intervalo de informes",
+      "useClinicDefault": "Usar el valor predeterminado de la clínica",
+      "overrideForPatient": "Anular para este paciente",
+      "intervalDays": "Intervalo (días)",
+      "save": "Guardar",
+      "saved": "Guardado.",
+      "saveError": "Error al guardar la configuración del informe."
     }
   }
 }

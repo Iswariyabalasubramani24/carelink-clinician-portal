@@ -22,6 +22,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PatientAlertSettings> PatientAlertSettings => Set<PatientAlertSettings>();
 
+    public DbSet<Report> Reports => Set<Report>();
+
+    public DbSet<ReportSettings> ReportSettings => Set<ReportSettings>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -134,6 +138,41 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(s => s.AlertType).HasConversion<string>();
             entity.Property(s => s.Urgency).HasConversion<string>();
             entity.HasIndex(s => new { s.PatientId, s.AlertType }).IsUnique();
+
+            entity.HasOne(s => s.Patient)
+                .WithMany()
+                .HasForeignKey(s => s.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Report>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+            entity.Property(r => r.ReportType).HasConversion<string>();
+            entity.Property(r => r.DataSnapshot).IsRequired();
+            entity.HasIndex(r => r.PatientId);
+
+            entity.HasOne(r => r.Patient)
+                .WithMany()
+                .HasForeignKey(r => r.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Tenant>()
+                .WithMany()
+                .HasForeignKey(r => r.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ReportSettings>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.HasIndex(s => s.TenantId).IsUnique().HasFilter("[TenantId] IS NOT NULL");
+            entity.HasIndex(s => s.PatientId).IsUnique().HasFilter("[PatientId] IS NOT NULL");
+
+            entity.HasOne(s => s.Tenant)
+                .WithMany()
+                .HasForeignKey(s => s.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(s => s.Patient)
                 .WithMany()

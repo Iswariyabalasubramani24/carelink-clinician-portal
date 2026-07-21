@@ -105,7 +105,8 @@
       "overview": "Übersicht",
       "equipment": "Ausrüstung",
       "history": "Verlauf",
-      "careAlert": "CareAlert-Benachrichtigung"
+      "careAlert": "CareAlert-Benachrichtigung",
+      "reports": "Berichte"
     },
     "overview": {
       "mrn": "Aktenzeichen",
@@ -168,6 +169,27 @@
       "save": "Speichern",
       "saved": "Gespeichert.",
       "saveError": "Warnungseinstellungen konnten nicht gespeichert werden."
+    },
+    "reports": {
+      "loading": "Wird geladen…",
+      "type": "Berichtstyp",
+      "generatedAt": "Erstellungsdatum",
+      "download": "Herunterladen",
+      "empty": "Noch keine Berichte erstellt.",
+      "generate": "Bericht erstellen",
+      "generateError": "Fehler beim Erstellen des Berichts.",
+      "types": {
+        "FullReport": "Vollständiger Bericht",
+        "SummaryReport": "Zusammenfassender Bericht",
+        "EventReport": "Ereignisbericht"
+      },
+      "intervalSettingTitle": "Berichtsintervall",
+      "useClinicDefault": "Klinik-Standard verwenden",
+      "overrideForPatient": "Für diesen Patienten überschreiben",
+      "intervalDays": "Intervall (Tage)",
+      "save": "Speichern",
+      "saved": "Gespeichert.",
+      "saveError": "Fehler beim Speichern der Berichtseinstellungen."
     }
   }
 }

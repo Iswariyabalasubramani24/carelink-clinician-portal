@@ -105,7 +105,8 @@
       "overview": "Overview",
       "equipment": "Equipment",
       "history": "History",
-      "careAlert": "CareAlert Notification"
+      "careAlert": "CareAlert Notification",
+      "reports": "Reports"
     },
     "overview": {
       "mrn": "MRN",
@@ -168,6 +169,27 @@
       "save": "Save",
       "saved": "Saved.",
       "saveError": "Failed to save alert settings."
+    },
+    "reports": {
+      "loading": "Loading…",
+      "type": "Report Type",
+      "generatedAt": "Generated Date",
+      "download": "Download",
+      "empty": "No reports generated yet.",
+      "generate": "Generate Report",
+      "generateError": "Failed to generate report.",
+      "types": {
+        "FullReport": "Full Report",
+        "SummaryReport": "Summary Report",
+        "EventReport": "Event Report"
+      },
+      "intervalSettingTitle": "Report Interval",
+      "useClinicDefault": "Use clinic default",
+      "overrideForPatient": "Override for this patient",
+      "intervalDays": "Interval (days)",
+      "save": "Save",
+      "saved": "Saved.",
+      "saveError": "Failed to save report settings."
     }
   }
 }
