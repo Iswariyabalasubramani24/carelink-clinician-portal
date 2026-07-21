@@ -63,6 +63,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(c => c.FirstName).IsRequired().HasMaxLength(100);
             entity.Property(c => c.LastName).IsRequired().HasMaxLength(100);
             entity.Property(c => c.Role).HasConversion<string>();
+            entity.Property(c => c.LanguageCode).IsRequired().HasMaxLength(10);
 
             entity.HasOne(c => c.Tenant)
                 .WithMany()

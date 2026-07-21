@@ -161,6 +161,33 @@
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/clinic-users",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/clinic-users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/clinic-users/{id}/suspend",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/clinic-users/{id}/suspend",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/clinic-users/{id}/activate",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/clinic-users/{id}/activate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
     }
   ],
   "GlobalConfiguration": {

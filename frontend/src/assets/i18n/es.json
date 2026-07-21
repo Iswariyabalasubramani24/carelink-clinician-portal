@@ -15,7 +15,8 @@
     "emailRequired": "El correo electrónico es obligatorio.",
     "emailInvalid": "Introduzca una dirección de correo electrónico válida.",
     "passwordRequired": "La contraseña es obligatoria.",
-    "invalidCredentials": "Correo electrónico o contraseña no válidos."
+    "invalidCredentials": "Correo electrónico o contraseña no válidos.",
+    "accountSuspended": "Su cuenta ha sido suspendida. Póngase en contacto con el administrador de su clínica."
   },
   "patients": {
     "title": "Pacientes",
@@ -86,7 +87,8 @@
   },
   "nav": {
     "dashboard": "Panel",
-    "patients": "Pacientes"
+    "patients": "Pacientes",
+    "clinicManagement": "Gestión de la clínica"
   },
   "dashboard": {
     "title": "Panel de inicio",
@@ -198,6 +200,54 @@
       "postError": "Error al publicar la nota.",
       "loading": "Cargando…",
       "empty": "Aún no hay notas."
+    }
+  },
+  "clinicManagement": {
+    "title": "Gestión de la clínica",
+    "subtitle": "Gestione las cuentas de clínicos y administradores de su hospital",
+    "newUser": "+ Nuevo usuario",
+    "close": "Cerrar",
+    "tempPasswordTitle": "Contraseña temporal creada",
+    "tempPasswordNote": "Comparta esta contraseña de forma segura con el nuevo usuario - no se volverá a mostrar.",
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "suspended": "Suspendidos"
+    },
+    "loading": "Cargando…",
+    "loadError": "Error al cargar los usuarios.",
+    "empty": "No se encontraron usuarios.",
+    "createError": "Error al crear el usuario.",
+    "suspend": "Suspender",
+    "activate": "Activar",
+    "table": {
+      "name": "Nombre",
+      "email": "Usuario / Correo electrónico",
+      "createdAt": "Fecha de creación",
+      "role": "Rol",
+      "status": "Estado"
+    },
+    "roles": {
+      "Clinician": "Clínico",
+      "Admin": "Administrador"
+    },
+    "status": {
+      "active": "Activo",
+      "suspended": "Suspendido"
+    },
+    "form": {
+      "firstName": "Nombre",
+      "firstNameRequired": "El nombre es obligatorio.",
+      "lastName": "Apellido",
+      "lastNameRequired": "El apellido es obligatorio.",
+      "email": "Usuario / Correo electrónico",
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "emailInvalid": "Introduzca una dirección de correo electrónico válida.",
+      "language": "Idioma",
+      "role": "Rol",
+      "cancel": "Cancelar",
+      "saving": "Creando…",
+      "submit": "Crear usuario"
     }
   }
 }

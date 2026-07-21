@@ -41,6 +41,7 @@ builder.Services.AddScoped<IReportSettingsRepository, ReportSettingsRepository>(
 builder.Services.AddScoped<IReportPdfGenerator, QuestPdfReportGenerator>();
 builder.Services.AddScoped<IPatientNoteRepository, PatientNoteRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+builder.Services.AddScoped<ITemporaryPasswordGenerator, TemporaryPasswordGenerator>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -87,6 +88,11 @@ app.Use(async (context, next) =>
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });
     }
+    catch (AccountSuspendedException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+    }
     catch (InvalidRefreshTokenException ex)
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -110,6 +116,16 @@ app.Use(async (context, next) =>
     catch (ReportNotFoundException ex)
     {
         context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+    }
+    catch (ClinicianNotFoundException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+    }
+    catch (EmailAlreadyInUseException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status409Conflict;
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });
     }
 });

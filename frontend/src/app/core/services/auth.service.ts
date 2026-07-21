@@ -58,6 +58,10 @@ export class AuthService {
     return !!this.accessToken;
   }
 
+  getCurrentClinician(): Clinician | null {
+    return this.currentClinicianSubject.value;
+  }
+
   private applySession(response: LoginResponse | RefreshResponse): void {
     this.accessToken = response.accessToken;
     this.currentClinicianSubject.next({

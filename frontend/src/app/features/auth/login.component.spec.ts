@@ -103,4 +103,18 @@ describe('LoginComponent', () => {
     );
     expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
   });
+
+  it('shows the distinct suspended-account message on a 403 response, not the generic credentials error', () => {
+    authServiceMock.login.mockReturnValue(
+      throwError(() => ({ status: 403, error: { error: 'Your account has been suspended.' } }))
+    );
+
+    component.form.setValue({ email: 'kavita.menon@apollo.com', password: 'Tmp#Passw0rd' });
+    submitForm();
+
+    expect(component.errorMessage).toBe(
+      'Your account has been suspended. Please contact your clinic administrator.'
+    );
+    expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
+  });
 });

@@ -1,0 +1,187 @@
+<div class="clinic-management-page">
+  <header class="clinic-management-page__header">
+    <div>
+      <h1>{{ 'clinicManagement.title' | translate }}</h1>
+      <p class="subtitle">{{ 'clinicManagement.subtitle' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn--primary" (click)="openCreateForm()">
+      {{ 'clinicManagement.newUser' | translate }}
+    </button>
+  </header>
+
+  <div class="banner banner--success temp-password-banner" *ngIf="createdResult">
+    <div>
+      <strong>{{ 'clinicManagement.tempPasswordTitle' | translate }}</strong>
+      <p>{{ 'clinicManagement.tempPasswordNote' | translate }}</p>
+      <code class="temp-password">{{ createdResult.temporaryPassword }}</code>
+    </div>
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="dismissTempPassword()"
+      [attr.aria-label]="'clinicManagement.close' | translate"
+    >
+      &times;
+    </button>
+  </div>
+
+  <section class="card">
+    <div class="filter-toggle">
+      <button
+        type="button"
+        class="toggle-option"
+        [class.toggle-option--active]="statusFilter === 'all'"
+        (click)="setStatusFilter('all')"
+      >
+        {{ 'clinicManagement.filters.all' | translate }}
+      </button>
+      <button
+        type="button"
+        class="toggle-option"
+        [class.toggle-option--active]="statusFilter === 'active'"
+        (click)="setStatusFilter('active')"
+      >
+        {{ 'clinicManagement.filters.active' | translate }}
+      </button>
+      <button
+        type="button"
+        class="toggle-option"
+        [class.toggle-option--active]="statusFilter === 'suspended'"
+        (click)="setStatusFilter('suspended')"
+      >
+        {{ 'clinicManagement.filters.suspended' | translate }}
+      </button>
+    </div>
+
+    <p class="state-message" *ngIf="usersLoading">{{ 'clinicManagement.loading' | translate }}</p>
+    <p class="state-message state-message--error" *ngIf="usersError">{{ 'clinicManagement.loadError' | translate }}</p>
+
+    <table *ngIf="!usersLoading && !usersError && filteredUsers.length">
+      <thead>
+        <tr>
+          <th>{{ 'clinicManagement.table.name' | translate }}</th>
+          <th>{{ 'clinicManagement.table.email' | translate }}</th>
+          <th>{{ 'clinicManagement.table.createdAt' | translate }}</th>
+          <th>{{ 'clinicManagement.table.role' | translate }}</th>
+          <th>{{ 'clinicManagement.table.status' | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td class="user-name">{{ user.firstName }} {{ user.lastName }}</td>
+          <td class="mono">{{ user.email }}</td>
+          <td>{{ user.createdAt | date }}</td>
+          <td>{{ 'clinicManagement.roles.' + user.role | translate }}</td>
+          <td>
+            <span
+              class="status-badge"
+              [class.status-badge--active]="user.isActive"
+              [class.status-badge--suspended]="!user.isActive"
+            >
+              {{ (user.isActive ? 'clinicManagement.status.active' : 'clinicManagement.status.suspended') | translate }}
+            </span>
+          </td>
+          <td>
+            <button type="button" class="btn btn--secondary" (click)="toggleStatus(user)">
+              {{ (user.isActive ? 'clinicManagement.suspend' : 'clinicManagement.activate') | translate }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="state-message" *ngIf="!usersLoading && !usersError && filteredUsers.length === 0">
+      {{ 'clinicManagement.empty' | translate }}
+    </p>
+  </section>
+</div>
+
+<div class="modal-backdrop" *ngIf="showCreateForm" (click)="closeCreateForm()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="create-user-form">
+      <header class="create-user-form__header">
+        <h2>{{ 'clinicManagement.newUser' | translate }}</h2>
+        <button
+          type="button"
+          class="icon-btn"
+          (click)="closeCreateForm()"
+          [attr.aria-label]="'clinicManagement.close' | translate"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="banner banner--error" *ngIf="createError">{{ 'clinicManagement.createError' | translate }}</div>
+
+      <form [formGroup]="createForm" (ngSubmit)="onSubmitCreate()" novalidate>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="firstName">{{ 'clinicManagement.form.firstName' | translate }}</label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              [attr.aria-invalid]="createForm.get('firstName')?.invalid && createForm.get('firstName')?.touched"
+            />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('firstName')?.touched && createForm.get('firstName')?.hasError('required')"
+            >
+              {{ 'clinicManagement.form.firstNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="lastName">{{ 'clinicManagement.form.lastName' | translate }}</label>
+            <input id="lastName" type="text" formControlName="lastName" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('lastName')?.touched && createForm.get('lastName')?.hasError('required')"
+            >
+              {{ 'clinicManagement.form.lastNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="email">{{ 'clinicManagement.form.email' | translate }}</label>
+            <input id="email" type="email" formControlName="email" />
+            <span class="field-error" *ngIf="createForm.get('email')?.touched && createForm.get('email')?.hasError('required')">
+              {{ 'clinicManagement.form.emailRequired' | translate }}
+            </span>
+            <span class="field-error" *ngIf="createForm.get('email')?.touched && createForm.get('email')?.hasError('email')">
+              {{ 'clinicManagement.form.emailInvalid' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="languageCode">{{ 'clinicManagement.form.language' | translate }}</label>
+            <select id="languageCode" formControlName="languageCode">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="role">{{ 'clinicManagement.form.role' | translate }}</label>
+            <select id="role" formControlName="role">
+              <option [value]="ClinicianRole.Clinician">{{ 'clinicManagement.roles.Clinician' | translate }}</option>
+              <option [value]="ClinicianRole.Admin">{{ 'clinicManagement.roles.Admin' | translate }}</option>
+            </select>
+          </div>
+        </div>
+
+        <footer class="form-actions">
+          <button type="button" class="btn btn--secondary" (click)="closeCreateForm()" [disabled]="creating">
+            {{ 'clinicManagement.form.cancel' | translate }}
+          </button>
+          <button type="submit" class="btn btn--primary" [disabled]="creating">
+            {{ creating ? ('clinicManagement.form.saving' | translate) : ('clinicManagement.form.submit' | translate) }}
+          </button>
+        </footer>
+      </form>
+    </div>
+  </div>
+</div>

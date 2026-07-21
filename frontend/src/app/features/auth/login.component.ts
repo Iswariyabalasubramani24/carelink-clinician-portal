@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -45,12 +46,19 @@ export class LoginComponent {
         this.loading = false;
         this.router.navigateByUrl('/dashboard');
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.loading = false;
-        // The backend intentionally returns one generic message for both a
-        // wrong password and a non-existent email (avoids user enumeration),
-        // so the localized equivalent is shown here regardless of server text.
-        this.errorMessage = this.translate.instant('login.invalidCredentials');
+        if (err.status === 403) {
+          // A suspended account is a distinct, deliberate error - unlike wrong
+          // credentials, surfacing it isn't a user-enumeration risk since the
+          // clinician already proved they know the correct password.
+          this.errorMessage = this.translate.instant('login.accountSuspended');
+        } else {
+          // The backend intentionally returns one generic message for both a
+          // wrong password and a non-existent email (avoids user enumeration),
+          // so the localized equivalent is shown here regardless of server text.
+          this.errorMessage = this.translate.instant('login.invalidCredentials');
+        }
       }
     });
   }

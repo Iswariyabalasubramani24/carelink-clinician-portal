@@ -15,7 +15,8 @@
     "emailRequired": "L'e-mail est requis.",
     "emailInvalid": "Saisissez une adresse e-mail valide.",
     "passwordRequired": "Le mot de passe est requis.",
-    "invalidCredentials": "E-mail ou mot de passe invalide."
+    "invalidCredentials": "E-mail ou mot de passe invalide.",
+    "accountSuspended": "Votre compte a été suspendu. Veuillez contacter l'administrateur de votre clinique."
   },
   "patients": {
     "title": "Patients",
@@ -86,7 +87,8 @@
   },
   "nav": {
     "dashboard": "Tableau de bord",
-    "patients": "Patients"
+    "patients": "Patients",
+    "clinicManagement": "Gestion de la clinique"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -198,6 +200,54 @@
       "postError": "Échec de la publication de la note.",
       "loading": "Chargement…",
       "empty": "Aucune note pour le moment."
+    }
+  },
+  "clinicManagement": {
+    "title": "Gestion de la clinique",
+    "subtitle": "Gérer les comptes cliniciens et administrateurs de votre hôpital",
+    "newUser": "+ Nouvel utilisateur",
+    "close": "Fermer",
+    "tempPasswordTitle": "Mot de passe temporaire créé",
+    "tempPasswordNote": "Partagez ce mot de passe de manière sécurisée avec le nouvel utilisateur - il ne sera plus affiché.",
+    "filters": {
+      "all": "Tous",
+      "active": "Actifs",
+      "suspended": "Suspendus"
+    },
+    "loading": "Chargement…",
+    "loadError": "Échec du chargement des utilisateurs.",
+    "empty": "Aucun utilisateur trouvé.",
+    "createError": "Échec de la création de l'utilisateur.",
+    "suspend": "Suspendre",
+    "activate": "Activer",
+    "table": {
+      "name": "Nom",
+      "email": "Nom d'utilisateur / E-mail",
+      "createdAt": "Date de création",
+      "role": "Rôle",
+      "status": "Statut"
+    },
+    "roles": {
+      "Clinician": "Clinicien",
+      "Admin": "Administrateur"
+    },
+    "status": {
+      "active": "Actif",
+      "suspended": "Suspendu"
+    },
+    "form": {
+      "firstName": "Prénom",
+      "firstNameRequired": "Le prénom est requis.",
+      "lastName": "Nom de famille",
+      "lastNameRequired": "Le nom de famille est requis.",
+      "email": "Nom d'utilisateur / E-mail",
+      "emailRequired": "L'e-mail est requis.",
+      "emailInvalid": "Saisissez une adresse e-mail valide.",
+      "language": "Langue",
+      "role": "Rôle",
+      "cancel": "Annuler",
+      "saving": "Création…",
+      "submit": "Créer l'utilisateur"
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -26,6 +27,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/patients/patient-detail/patient-detail.component').then(
         (m) => m.PatientDetailComponent
+      )
+  },
+  {
+    path: 'clinic-management',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./features/clinic-management/clinic-management.component').then(
+        (m) => m.ClinicManagementComponent
       )
   }
 ];

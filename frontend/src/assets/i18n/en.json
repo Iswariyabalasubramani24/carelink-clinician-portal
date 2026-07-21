@@ -15,7 +15,8 @@
     "emailRequired": "Email is required.",
     "emailInvalid": "Enter a valid email address.",
     "passwordRequired": "Password is required.",
-    "invalidCredentials": "Invalid email or password."
+    "invalidCredentials": "Invalid email or password.",
+    "accountSuspended": "Your account has been suspended. Please contact your clinic administrator."
   },
   "patients": {
     "title": "Patients",
@@ -86,7 +87,8 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "patients": "Patients"
+    "patients": "Patients",
+    "clinicManagement": "Clinic Management"
   },
   "dashboard": {
     "title": "Home Dashboard",
@@ -198,6 +200,54 @@
       "postError": "Failed to post note.",
       "loading": "Loading…",
       "empty": "No notes yet."
+    }
+  },
+  "clinicManagement": {
+    "title": "Clinic Management",
+    "subtitle": "Manage clinician and admin accounts for your hospital",
+    "newUser": "+ New User",
+    "close": "Close",
+    "tempPasswordTitle": "Temporary password created",
+    "tempPasswordNote": "Share this password securely with the new user - it won't be shown again.",
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "loading": "Loading…",
+    "loadError": "Failed to load clinic users.",
+    "empty": "No users found.",
+    "createError": "Failed to create user.",
+    "suspend": "Suspend",
+    "activate": "Activate",
+    "table": {
+      "name": "Name",
+      "email": "Username / Email",
+      "createdAt": "Created Date",
+      "role": "Role",
+      "status": "Status"
+    },
+    "roles": {
+      "Clinician": "Clinician",
+      "Admin": "Admin"
+    },
+    "status": {
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "form": {
+      "firstName": "First Name",
+      "firstNameRequired": "First name is required.",
+      "lastName": "Last Name",
+      "lastNameRequired": "Last name is required.",
+      "email": "Username / Email",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "language": "Language",
+      "role": "Role",
+      "cancel": "Cancel",
+      "saving": "Creating…",
+      "submit": "Create User"
     }
   }
 }

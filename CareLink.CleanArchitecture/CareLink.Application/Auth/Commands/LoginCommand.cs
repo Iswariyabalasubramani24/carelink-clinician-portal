@@ -21,9 +21,17 @@ public class LoginCommandHandler(
     {
         var clinician = await clinicianRepository.GetByEmailAsync(request.Email);
 
-        if (clinician is null || !clinician.IsActive || !passwordHasher.Verify(request.Password, clinician.PasswordHash))
+        // Check credentials before suspension status: revealing "this account is
+        // suspended" only to someone who already proved they know the correct
+        // password avoids leaking account state to a credential-guessing attacker.
+        if (clinician is null || !passwordHasher.Verify(request.Password, clinician.PasswordHash))
         {
             throw new InvalidCredentialsException();
+        }
+
+        if (!clinician.IsActive)
+        {
+            throw new AccountSuspendedException();
         }
 
         var accessToken = tokenGenerator.GenerateAccessToken(clinician, clinician.TenantId);

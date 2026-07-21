@@ -15,7 +15,8 @@
     "emailRequired": "E-Mail ist erforderlich.",
     "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
     "passwordRequired": "Passwort ist erforderlich.",
-    "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort."
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
+    "accountSuspended": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an Ihren Klinikadministrator."
   },
   "patients": {
     "title": "Patienten",
@@ -86,7 +87,8 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "patients": "Patienten"
+    "patients": "Patienten",
+    "clinicManagement": "Klinikverwaltung"
   },
   "dashboard": {
     "title": "Startseite",
@@ -198,6 +200,54 @@
       "postError": "Notiz konnte nicht veröffentlicht werden.",
       "loading": "Wird geladen…",
       "empty": "Noch keine Notizen."
+    }
+  },
+  "clinicManagement": {
+    "title": "Klinikverwaltung",
+    "subtitle": "Verwalten Sie Kliniker- und Administratorkonten für Ihr Krankenhaus",
+    "newUser": "+ Neuer Benutzer",
+    "close": "Schließen",
+    "tempPasswordTitle": "Temporäres Passwort erstellt",
+    "tempPasswordNote": "Teilen Sie dieses Passwort sicher mit dem neuen Benutzer - es wird nicht erneut angezeigt.",
+    "filters": {
+      "all": "Alle",
+      "active": "Aktiv",
+      "suspended": "Gesperrt"
+    },
+    "loading": "Wird geladen…",
+    "loadError": "Fehler beim Laden der Benutzer.",
+    "empty": "Keine Benutzer gefunden.",
+    "createError": "Fehler beim Erstellen des Benutzers.",
+    "suspend": "Sperren",
+    "activate": "Aktivieren",
+    "table": {
+      "name": "Name",
+      "email": "Benutzername / E-Mail",
+      "createdAt": "Erstellungsdatum",
+      "role": "Rolle",
+      "status": "Status"
+    },
+    "roles": {
+      "Clinician": "Kliniker",
+      "Admin": "Administrator"
+    },
+    "status": {
+      "active": "Aktiv",
+      "suspended": "Gesperrt"
+    },
+    "form": {
+      "firstName": "Vorname",
+      "firstNameRequired": "Vorname ist erforderlich.",
+      "lastName": "Nachname",
+      "lastNameRequired": "Nachname ist erforderlich.",
+      "email": "Benutzername / E-Mail",
+      "emailRequired": "E-Mail ist erforderlich.",
+      "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "language": "Sprache",
+      "role": "Rolle",
+      "cancel": "Abbrechen",
+      "saving": "Wird erstellt…",
+      "submit": "Benutzer erstellen"
     }
   }
 }

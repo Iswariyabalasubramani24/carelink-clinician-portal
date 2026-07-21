@@ -108,4 +108,30 @@ public class LoginCommandHandlerTests
         passwordHasher.Verify(h => h.Verify(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         refreshTokenRepo.Verify(r => r.AddAsync(It.IsAny<RefreshToken>()), Times.Never);
     }
+
+    [Fact]
+    public async Task Handle_SuspendedAccountWithCorrectPassword_ThrowsAccountSuspendedException()
+    {
+        // Credentials are verified before suspension status is checked, so a
+        // suspended user who enters the correct password gets a distinct,
+        // clear error rather than being told "invalid credentials".
+        var clinician = MakeClinician(isActive: false);
+
+        var clinicianRepo = new Mock<IClinicianRepository>();
+        clinicianRepo.Setup(r => r.GetByEmailAsync("doctor@apollo.com")).ReturnsAsync(clinician);
+
+        var passwordHasher = new Mock<IPasswordHasher>();
+        passwordHasher.Setup(h => h.Verify("Test@123", "hashed-password")).Returns(true);
+
+        var tokenGenerator = new Mock<IJwtTokenGenerator>();
+        var refreshTokenRepo = new Mock<IRefreshTokenRepository>();
+
+        var handler = new LoginCommandHandler(
+            clinicianRepo.Object, passwordHasher.Object, tokenGenerator.Object, refreshTokenRepo.Object);
+
+        await Assert.ThrowsAsync<AccountSuspendedException>(
+            () => handler.Handle(ValidCommand(), CancellationToken.None));
+
+        refreshTokenRepo.Verify(r => r.AddAsync(It.IsAny<RefreshToken>()), Times.Never);
+    }
 }

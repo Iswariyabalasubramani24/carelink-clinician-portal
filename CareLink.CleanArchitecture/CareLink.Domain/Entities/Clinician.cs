@@ -16,6 +16,8 @@ public class Clinician
 
     public ClinicianRole Role { get; set; }
 
+    public string LanguageCode { get; set; } = "en";
+
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; set; }
