@@ -95,7 +95,8 @@
     "loadError": "Échec du chargement du résumé du tableau de bord.",
     "newPatients": "Nouveaux patients cette semaine",
     "disconnectedMonitors": "Moniteurs déconnectés",
-    "totalActivePatients": "Total des patients actifs"
+    "totalActivePatients": "Total des patients actifs",
+    "activeAlerts": "Alertes actives"
   },
   "patientDetail": {
     "back": "← Retour aux patients",
@@ -103,7 +104,8 @@
     "tabs": {
       "overview": "Aperçu",
       "equipment": "Équipement",
-      "history": "Historique"
+      "history": "Historique",
+      "careAlert": "Notification CareAlert"
     },
     "overview": {
       "mrn": "N° de dossier",
@@ -130,6 +132,42 @@
       "empty": "Aucun historique de transmission disponible.",
       "heartRateChart": "Tendance de la fréquence cardiaque",
       "batteryChart": "Tendance du niveau de batterie"
+    },
+    "alerts": {
+      "acknowledge": "Confirmer",
+      "snooze": "Reporter (15 jours)",
+      "IrregularHeartbeat": {
+        "title": "Rythme cardiaque irrégulier détecté",
+        "message": "Le dispositif de ce patient a signalé un rythme cardiaque irrégulier qui pourrait nécessiter un examen."
+      },
+      "LowBattery": {
+        "title": "Batterie du dispositif faible",
+        "message": "La batterie du dispositif de ce patient est faible et pourrait devoir être remplacée bientôt."
+      },
+      "DisconnectedMonitor": {
+        "title": "Avis de moniteur déconnecté",
+        "message": "Le moniteur de ce patient n'a pas transmis de données récemment. Veuillez vérifier la connexion."
+      }
+    },
+    "careAlert": {
+      "loading": "Chargement des paramètres d'alerte…",
+      "useClinicDefault": "Utiliser le paramètre par défaut de la clinique",
+      "overrideForPatient": "Remplacer pour ce patient",
+      "alertType": "Type d'alerte",
+      "urgency": "Urgence",
+      "types": {
+        "IrregularHeartbeat": "Rythme cardiaque irrégulier",
+        "LowBattery": "Batterie faible",
+        "DisconnectedMonitor": "Moniteur déconnecté"
+      },
+      "urgencyLevels": {
+        "red": "Rouge",
+        "yellow": "Jaune",
+        "none": "Aucune"
+      },
+      "save": "Enregistrer",
+      "saved": "Enregistré.",
+      "saveError": "Échec de l'enregistrement des paramètres d'alerte."
     }
   }
 }

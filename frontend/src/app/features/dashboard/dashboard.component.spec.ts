@@ -16,7 +16,8 @@ describe('DashboardComponent', () => {
   const summary: DashboardSummary = {
     newPatientsCount: 3,
     disconnectedMonitorsCount: 2,
-    totalActivePatientsCount: 17
+    totalActivePatientsCount: 17,
+    activeAlertsCount: 24
   };
 
   async function setup(getSummaryReturn = of(summary)): Promise<void> {
@@ -38,16 +39,17 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   }
 
-  it('renders the three widget cards with the counts returned by the summary endpoint', async () => {
+  it('renders the four widget cards with the counts returned by the summary endpoint', async () => {
     await setup();
 
     const el = fixture.debugElement.nativeElement as HTMLElement;
     const counts = Array.from(el.querySelectorAll('.widget-card__count')).map((n) => n.textContent?.trim());
 
-    expect(counts).toEqual(['3', '2', '17']);
+    expect(counts).toEqual(['3', '2', '17', '24']);
     expect(el.textContent).toContain('New Patients This Week');
     expect(el.textContent).toContain('Disconnected Monitors');
     expect(el.textContent).toContain('Total Active Patients');
+    expect(el.textContent).toContain('Active Alerts');
   });
 
   it('navigates to /patients when a widget card is clicked', async () => {

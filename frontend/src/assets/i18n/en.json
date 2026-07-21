@@ -95,7 +95,8 @@
     "loadError": "Failed to load dashboard summary.",
     "newPatients": "New Patients This Week",
     "disconnectedMonitors": "Disconnected Monitors",
-    "totalActivePatients": "Total Active Patients"
+    "totalActivePatients": "Total Active Patients",
+    "activeAlerts": "Active Alerts"
   },
   "patientDetail": {
     "back": "← Back to Patients",
@@ -103,7 +104,8 @@
     "tabs": {
       "overview": "Overview",
       "equipment": "Equipment",
-      "history": "History"
+      "history": "History",
+      "careAlert": "CareAlert Notification"
     },
     "overview": {
       "mrn": "MRN",
@@ -130,6 +132,42 @@
       "empty": "No transmission history available.",
       "heartRateChart": "Heart Rate Trend",
       "batteryChart": "Battery Level Trend"
+    },
+    "alerts": {
+      "acknowledge": "Acknowledge",
+      "snooze": "Snooze (15 days)",
+      "IrregularHeartbeat": {
+        "title": "Irregular Heartbeat Detected",
+        "message": "This patient's device has reported an irregular heartbeat pattern that may require review."
+      },
+      "LowBattery": {
+        "title": "Low Device Battery",
+        "message": "This patient's device battery is running low and may need replacement soon."
+      },
+      "DisconnectedMonitor": {
+        "title": "Notice of Disconnected Monitor",
+        "message": "This patient's monitor has not transmitted data recently. Please check the connection."
+      }
+    },
+    "careAlert": {
+      "loading": "Loading alert settings…",
+      "useClinicDefault": "Use clinic default",
+      "overrideForPatient": "Override for this patient",
+      "alertType": "Alert Type",
+      "urgency": "Urgency",
+      "types": {
+        "IrregularHeartbeat": "Irregular Heartbeat",
+        "LowBattery": "Low Battery",
+        "DisconnectedMonitor": "Disconnected Monitor"
+      },
+      "urgencyLevels": {
+        "red": "Red",
+        "yellow": "Yellow",
+        "none": "None"
+      },
+      "save": "Save",
+      "saved": "Saved.",
+      "saveError": "Failed to save alert settings."
     }
   }
 }

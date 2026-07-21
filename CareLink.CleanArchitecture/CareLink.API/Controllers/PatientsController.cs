@@ -1,3 +1,7 @@
+using CareLink.API.Contracts;
+using CareLink.Application.Alerts;
+using CareLink.Application.Alerts.Commands;
+using CareLink.Application.Alerts.Queries;
 using CareLink.Application.Patients;
 using CareLink.Application.Patients.Commands;
 using CareLink.Application.Patients.Queries;
@@ -31,6 +35,33 @@ public class PatientsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<IEnumerable<TransmissionHistoryDto>>> GetTransmissionHistory(int id)
     {
         var result = await mediator.Send(new GetPatientTransmissionHistoryQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/alerts")]
+    public async Task<ActionResult<IEnumerable<AlertDto>>> GetAlerts(int id)
+    {
+        var result = await mediator.Send(new GetPatientAlertsQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/alert-settings")]
+    public async Task<ActionResult<IEnumerable<PatientAlertSettingsDto>>> GetAlertSettings(int id)
+    {
+        var result = await mediator.Send(new GetPatientAlertSettingsQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/alert-settings")]
+    public async Task<ActionResult<IEnumerable<PatientAlertSettingsDto>>> UpdateAlertSettings(int id, UpdatePatientAlertSettingsRequest request)
+    {
+        var result = await mediator.Send(new UpdatePatientAlertSettingsCommand
+        {
+            PatientId = id,
+            TenantId = GetTenantId(),
+            UseOverride = request.UseOverride,
+            Overrides = request.Overrides
+        });
         return Ok(result);
     }
 

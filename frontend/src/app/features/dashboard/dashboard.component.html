@@ -22,5 +22,10 @@
       <span class="widget-card__count">{{ s.totalActivePatientsCount }}</span>
       <span class="widget-card__label">{{ 'dashboard.totalActivePatients' | translate }}</span>
     </button>
+
+    <button type="button" class="widget-card widget-card--warning" (click)="goToPatients()">
+      <span class="widget-card__count">{{ s.activeAlertsCount }}</span>
+      <span class="widget-card__label">{{ 'dashboard.activeAlerts' | translate }}</span>
+    </button>
   </div>
 </div>

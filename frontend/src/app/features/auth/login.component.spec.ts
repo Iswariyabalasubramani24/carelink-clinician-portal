@@ -86,7 +86,7 @@ describe('LoginComponent', () => {
     submitForm();
 
     expect(authServiceMock.login).toHaveBeenCalledWith('doctor@apollo.com', 'Test@123');
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/patients');
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/dashboard');
   });
 
   it('shows a clear, localized error message and does not navigate when login fails', () => {

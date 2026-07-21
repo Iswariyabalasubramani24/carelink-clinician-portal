@@ -3,8 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { Alert, PatientAlertSetting } from '../models/alert.model';
 import { Patient } from '../models/patient.model';
 import { TransmissionHistoryPoint } from '../models/transmission-history.model';
+
+export interface UpdatePatientAlertSettingsPayload {
+  useOverride: boolean;
+  overrides: { alertType: string; urgency: string }[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
@@ -35,5 +41,17 @@ export class PatientService {
 
   getTransmissionHistory(id: number): Observable<TransmissionHistoryPoint[]> {
     return this.http.get<TransmissionHistoryPoint[]>(`${this.baseUrl}/${id}/transmissions`);
+  }
+
+  getAlerts(id: number): Observable<Alert[]> {
+    return this.http.get<Alert[]>(`${this.baseUrl}/${id}/alerts`);
+  }
+
+  getAlertSettings(id: number): Observable<PatientAlertSetting[]> {
+    return this.http.get<PatientAlertSetting[]>(`${this.baseUrl}/${id}/alert-settings`);
+  }
+
+  updateAlertSettings(id: number, payload: UpdatePatientAlertSettingsPayload): Observable<PatientAlertSetting[]> {
+    return this.http.put<PatientAlertSetting[]>(`${this.baseUrl}/${id}/alert-settings`, payload);
   }
 }

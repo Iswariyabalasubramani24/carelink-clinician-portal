@@ -95,7 +95,8 @@
     "loadError": "Dashboard-Zusammenfassung konnte nicht geladen werden.",
     "newPatients": "Neue Patienten diese Woche",
     "disconnectedMonitors": "Getrennte Monitore",
-    "totalActivePatients": "Aktive Patienten insgesamt"
+    "totalActivePatients": "Aktive Patienten insgesamt",
+    "activeAlerts": "Aktive Warnungen"
   },
   "patientDetail": {
     "back": "← Zurück zu Patienten",
@@ -103,7 +104,8 @@
     "tabs": {
       "overview": "Übersicht",
       "equipment": "Ausrüstung",
-      "history": "Verlauf"
+      "history": "Verlauf",
+      "careAlert": "CareAlert-Benachrichtigung"
     },
     "overview": {
       "mrn": "Aktenzeichen",
@@ -130,6 +132,42 @@
       "empty": "Kein Übertragungsverlauf verfügbar.",
       "heartRateChart": "Herzfrequenzverlauf",
       "batteryChart": "Batteriestandverlauf"
+    },
+    "alerts": {
+      "acknowledge": "Bestätigen",
+      "snooze": "Schlummern (15 Tage)",
+      "IrregularHeartbeat": {
+        "title": "Unregelmäßiger Herzschlag festgestellt",
+        "message": "Das Gerät dieses Patienten hat ein unregelmäßiges Herzschlagmuster gemeldet, das überprüft werden sollte."
+      },
+      "LowBattery": {
+        "title": "Niedriger Gerätebatteriestand",
+        "message": "Der Batteriestand des Geräts dieses Patienten ist niedrig und muss möglicherweise bald ersetzt werden."
+      },
+      "DisconnectedMonitor": {
+        "title": "Hinweis auf getrennten Monitor",
+        "message": "Der Monitor dieses Patienten hat seit einiger Zeit keine Daten übertragen. Bitte überprüfen Sie die Verbindung."
+      }
+    },
+    "careAlert": {
+      "loading": "Warnungseinstellungen werden geladen…",
+      "useClinicDefault": "Klinik-Standard verwenden",
+      "overrideForPatient": "Für diesen Patienten überschreiben",
+      "alertType": "Warnungstyp",
+      "urgency": "Dringlichkeit",
+      "types": {
+        "IrregularHeartbeat": "Unregelmäßiger Herzschlag",
+        "LowBattery": "Niedriger Batteriestand",
+        "DisconnectedMonitor": "Getrennter Monitor"
+      },
+      "urgencyLevels": {
+        "red": "Rot",
+        "yellow": "Gelb",
+        "none": "Keine"
+      },
+      "save": "Speichern",
+      "saved": "Gespeichert.",
+      "saveError": "Warnungseinstellungen konnten nicht gespeichert werden."
     }
   }
 }

@@ -16,6 +16,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ClinicianTenant> ClinicianTenants => Set<ClinicianTenant>();
 
+    public DbSet<Alert> Alerts => Set<Alert>();
+
+    public DbSet<ClinicAlertSettings> ClinicAlertSettings => Set<ClinicAlertSettings>();
+
+    public DbSet<PatientAlertSettings> PatientAlertSettings => Set<PatientAlertSettings>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -88,6 +94,50 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasOne(ct => ct.Tenant)
                 .WithMany()
                 .HasForeignKey(ct => ct.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Alert>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.AlertType).HasConversion<string>();
+            entity.Property(a => a.Urgency).HasConversion<string>();
+            entity.HasIndex(a => new { a.PatientId, a.AlertType });
+
+            entity.HasOne(a => a.Patient)
+                .WithMany()
+                .HasForeignKey(a => a.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Tenant>()
+                .WithMany()
+                .HasForeignKey(a => a.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ClinicAlertSettings>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.AlertType).HasConversion<string>();
+            entity.Property(s => s.DefaultUrgency).HasConversion<string>();
+            entity.HasIndex(s => new { s.TenantId, s.AlertType }).IsUnique();
+
+            entity.HasOne(s => s.Tenant)
+                .WithMany()
+                .HasForeignKey(s => s.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PatientAlertSettings>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.AlertType).HasConversion<string>();
+            entity.Property(s => s.Urgency).HasConversion<string>();
+            entity.HasIndex(s => new { s.PatientId, s.AlertType }).IsUnique();
+
+            entity.HasOne(s => s.Patient)
+                .WithMany()
+                .HasForeignKey(s => s.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

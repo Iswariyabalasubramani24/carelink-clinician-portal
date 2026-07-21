@@ -13,7 +13,12 @@ describe('Authentication flow', () => {
     cy.get('#password').type('Test@123');
     cy.contains('button', 'Sign in').click();
 
-    // 3. Redirected to /patients and patient data loads
+    // 3. Redirected to /dashboard (the new post-login landing page)
+    cy.location('pathname', { timeout: 10000 }).should('eq', '/dashboard');
+    cy.contains('h1', 'Home Dashboard').should('be.visible');
+
+    // Navigate to Patients and confirm patient data loads
+    cy.contains('a', 'Patients').click();
     cy.location('pathname', { timeout: 10000 }).should('eq', '/patients');
     cy.contains('h1', 'Patients').should('be.visible');
     cy.get('tbody tr', { timeout: 10000 }).should('have.length.greaterThan', 0);

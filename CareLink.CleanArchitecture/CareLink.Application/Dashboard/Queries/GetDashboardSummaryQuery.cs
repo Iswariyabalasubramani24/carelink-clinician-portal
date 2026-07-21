@@ -15,7 +15,7 @@ public class GetDashboardSummaryQuery : IRequest<DashboardSummaryDto>
     }
 }
 
-public class GetDashboardSummaryQueryHandler(IPatientRepository patientRepository)
+public class GetDashboardSummaryQueryHandler(IPatientRepository patientRepository, IAlertEvaluationService alertEvaluationService)
     : IRequestHandler<GetDashboardSummaryQuery, DashboardSummaryDto>
 {
     private const int NewPatientWindowDays = 7;
@@ -34,6 +34,8 @@ public class GetDashboardSummaryQueryHandler(IPatientRepository patientRepositor
         var disconnectedMonitorsCount = activePatients.Count(p => p.LastSyncedAt is null || p.LastSyncedAt < disconnectedCutoff);
         var totalActivePatientsCount = activePatients.Count;
 
-        return new DashboardSummaryDto(newPatientsCount, disconnectedMonitorsCount, totalActivePatientsCount);
+        var activeAlerts = await alertEvaluationService.GetActiveAlertsForTenantAsync(request.TenantId);
+
+        return new DashboardSummaryDto(newPatientsCount, disconnectedMonitorsCount, totalActivePatientsCount, activeAlerts.Count);
     }
 }

@@ -33,9 +33,37 @@
         >
           {{ 'patientDetail.tabs.history' | translate }}
         </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'careAlert'"
+          (click)="setTab('careAlert')"
+        >
+          {{ 'patientDetail.tabs.careAlert' | translate }}
+        </button>
       </div>
 
       <section class="card tab-panel" *ngIf="activeTab === 'overview'">
+        <div
+          class="alert-banner"
+          *ngFor="let alert of alerts"
+          [class.alert-banner--red]="alert.urgency === 'Red'"
+          [class.alert-banner--yellow]="alert.urgency === 'Yellow'"
+        >
+          <div class="alert-banner__content">
+            <strong>{{ 'patientDetail.alerts.' + alert.alertType + '.title' | translate }}</strong>
+            <p>{{ 'patientDetail.alerts.' + alert.alertType + '.message' | translate }}</p>
+          </div>
+          <div class="alert-banner__actions">
+            <button type="button" class="btn btn--secondary" (click)="snoozeAlert(alert)">
+              {{ 'patientDetail.alerts.snooze' | translate }}
+            </button>
+            <button type="button" class="btn btn--primary" (click)="acknowledgeAlert(alert)">
+              {{ 'patientDetail.alerts.acknowledge' | translate }}
+            </button>
+          </div>
+        </div>
+
         <dl class="detail-list">
           <dt>{{ 'patientDetail.overview.mrn' | translate }}</dt>
           <dd>{{ patient.medicalRecordNumber }}</dd>
@@ -114,6 +142,74 @@
           <ng-template #noHistory>
             <p class="state-message">{{ 'patientDetail.history.empty' | translate }}</p>
           </ng-template>
+        </ng-container>
+      </section>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'careAlert'">
+        <p class="state-message" *ngIf="alertSettingsLoading">{{ 'patientDetail.careAlert.loading' | translate }}</p>
+
+        <ng-container *ngIf="!alertSettingsLoading">
+          <div class="override-toggle">
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="!useOverride"
+              (click)="setUseOverride(false)"
+            >
+              {{ 'patientDetail.careAlert.useClinicDefault' | translate }}
+            </button>
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="useOverride"
+              (click)="setUseOverride(true)"
+            >
+              {{ 'patientDetail.careAlert.overrideForPatient' | translate }}
+            </button>
+          </div>
+
+          <table class="care-alert-table">
+            <thead>
+              <tr>
+                <th>{{ 'patientDetail.careAlert.alertType' | translate }}</th>
+                <th>{{ 'patientDetail.careAlert.urgency' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of alertSettingRows">
+                <td>{{ 'patientDetail.careAlert.types.' + row.alertType | translate }}</td>
+                <td>
+                  <select *ngIf="useOverride" class="urgency-select" [formControl]="row.urgencyControl">
+                    <option [value]="AlertUrgency.Red">{{ 'patientDetail.careAlert.urgencyLevels.red' | translate }}</option>
+                    <option [value]="AlertUrgency.Yellow">
+                      {{ 'patientDetail.careAlert.urgencyLevels.yellow' | translate }}
+                    </option>
+                    <option [value]="AlertUrgency.None">{{ 'patientDetail.careAlert.urgencyLevels.none' | translate }}</option>
+                  </select>
+                  <span
+                    *ngIf="!useOverride"
+                    class="urgency-badge"
+                    [class.urgency-badge--red]="row.urgencyControl.value === AlertUrgency.Red"
+                    [class.urgency-badge--yellow]="row.urgencyControl.value === AlertUrgency.Yellow"
+                  >
+                    {{ 'patientDetail.careAlert.urgencyLevels.' + (row.urgencyControl.value | lowercase) | translate }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="care-alert-actions">
+            <button type="button" class="btn btn--primary" (click)="saveAlertSettings()">
+              {{ 'patientDetail.careAlert.save' | translate }}
+            </button>
+            <span class="save-message save-message--success" *ngIf="saveSucceeded">
+              {{ 'patientDetail.careAlert.saved' | translate }}
+            </span>
+            <span class="save-message save-message--error" *ngIf="saveError">
+              {{ 'patientDetail.careAlert.saveError' | translate }}
+            </span>
+          </div>
         </ng-container>
       </section>
     </ng-container>

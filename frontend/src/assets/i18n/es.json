@@ -95,7 +95,8 @@
     "loadError": "No se pudo cargar el resumen del panel.",
     "newPatients": "Nuevos pacientes esta semana",
     "disconnectedMonitors": "Monitores desconectados",
-    "totalActivePatients": "Total de pacientes activos"
+    "totalActivePatients": "Total de pacientes activos",
+    "activeAlerts": "Alertas activas"
   },
   "patientDetail": {
     "back": "← Volver a pacientes",
@@ -103,7 +104,8 @@
     "tabs": {
       "overview": "Resumen",
       "equipment": "Equipo",
-      "history": "Historial"
+      "history": "Historial",
+      "careAlert": "Notificación CareAlert"
     },
     "overview": {
       "mrn": "N.º de historia",
@@ -130,6 +132,42 @@
       "empty": "No hay historial de transmisión disponible.",
       "heartRateChart": "Tendencia de la frecuencia cardíaca",
       "batteryChart": "Tendencia del nivel de batería"
+    },
+    "alerts": {
+      "acknowledge": "Confirmar",
+      "snooze": "Posponer (15 días)",
+      "IrregularHeartbeat": {
+        "title": "Ritmo cardíaco irregular detectado",
+        "message": "El dispositivo de este paciente ha registrado un ritmo cardíaco irregular que podría requerir revisión."
+      },
+      "LowBattery": {
+        "title": "Batería del dispositivo baja",
+        "message": "La batería del dispositivo de este paciente está baja y podría necesitar reemplazo pronto."
+      },
+      "DisconnectedMonitor": {
+        "title": "Aviso de monitor desconectado",
+        "message": "El monitor de este paciente no ha transmitido datos recientemente. Verifique la conexión."
+      }
+    },
+    "careAlert": {
+      "loading": "Cargando la configuración de alertas…",
+      "useClinicDefault": "Usar valor predeterminado de la clínica",
+      "overrideForPatient": "Anular para este paciente",
+      "alertType": "Tipo de alerta",
+      "urgency": "Urgencia",
+      "types": {
+        "IrregularHeartbeat": "Ritmo cardíaco irregular",
+        "LowBattery": "Batería baja",
+        "DisconnectedMonitor": "Monitor desconectado"
+      },
+      "urgencyLevels": {
+        "red": "Rojo",
+        "yellow": "Amarillo",
+        "none": "Ninguna"
+      },
+      "save": "Guardar",
+      "saved": "Guardado.",
+      "saveError": "No se pudo guardar la configuración de alertas."
     }
   }
 }

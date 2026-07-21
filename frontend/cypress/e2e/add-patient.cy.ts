@@ -21,6 +21,10 @@ describe('Patient list and Add Patient flow', () => {
     cy.get('#email').type('doctor@apollo.com');
     cy.get('#password').type('Test@123');
     cy.contains('button', 'Sign in').click();
+    cy.location('pathname', { timeout: 10000 }).should('eq', '/dashboard');
+
+    // Navigate to the patients page, where this test's assertions live.
+    cy.contains('a', 'Patients').click();
     cy.location('pathname', { timeout: 10000 }).should('eq', '/patients');
   });
 

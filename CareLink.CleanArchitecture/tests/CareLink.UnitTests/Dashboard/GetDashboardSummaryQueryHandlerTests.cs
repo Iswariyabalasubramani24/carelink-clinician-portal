@@ -54,7 +54,12 @@ public class GetDashboardSummaryQueryHandlerTests
         var repositoryMock = new Mock<IPatientRepository>();
         repositoryMock.Setup(r => r.GetByTenantIdAsync(1)).ReturnsAsync(patients);
 
-        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object);
+        // Active-alert counting is covered by AlertEvaluationService's own tests;
+        // here it's stubbed out to isolate the patient-count logic under test.
+        var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
+        alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(new List<Alert>());
+
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
 
@@ -69,12 +74,38 @@ public class GetDashboardSummaryQueryHandlerTests
         var repositoryMock = new Mock<IPatientRepository>();
         repositoryMock.Setup(r => r.GetByTenantIdAsync(1)).ReturnsAsync(new List<Patient>());
 
-        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object);
+        var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
+        alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(new List<Alert>());
+
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
 
         var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
 
         Assert.Equal(0, result.NewPatientsCount);
         Assert.Equal(0, result.DisconnectedMonitorsCount);
         Assert.Equal(0, result.TotalActivePatientsCount);
+        Assert.Equal(0, result.ActiveAlertsCount);
+    }
+
+    [Fact]
+    public async Task Handle_ActiveAlertsPresent_ReturnsCountFromAlertEvaluationService()
+    {
+        var repositoryMock = new Mock<IPatientRepository>();
+        repositoryMock.Setup(r => r.GetByTenantIdAsync(1)).ReturnsAsync(new List<Patient>());
+
+        var alerts = new List<Alert>
+        {
+            new() { Id = 1, PatientId = 1, TenantId = 1, AlertType = AlertType.LowBattery, Urgency = AlertUrgency.Yellow },
+            new() { Id = 2, PatientId = 2, TenantId = 1, AlertType = AlertType.DisconnectedMonitor, Urgency = AlertUrgency.Red }
+        };
+
+        var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
+        alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(alerts);
+
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
+
+        var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
+
+        Assert.Equal(2, result.ActiveAlertsCount);
     }
 }

@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using CareLink.Application.Alerts;
 using CareLink.Application.Auth.Commands;
 using CareLink.Application.Common.Exceptions;
 using CareLink.Application.Common.Interfaces;
@@ -27,6 +28,10 @@ builder.Services.AddScoped<IClinicianRepository, ClinicianRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IClinicianTenantRepository, ClinicianTenantRepository>();
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IClinicAlertSettingsRepository, ClinicAlertSettingsRepository>();
+builder.Services.AddScoped<IPatientAlertSettingsRepository, PatientAlertSettingsRepository>();
+builder.Services.AddScoped<IAlertEvaluationService, AlertEvaluationService>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
@@ -85,6 +90,11 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });
     }
     catch (PatientNotFoundException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+    }
+    catch (AlertNotFoundException ex)
     {
         context.Response.StatusCode = StatusCodes.Status404NotFound;
         await context.Response.WriteAsJsonAsync(new { error = ex.Message });
