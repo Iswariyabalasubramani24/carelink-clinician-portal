@@ -86,8 +86,12 @@ describe('A.3: Advanced Search filters and the clinic-wide Transmission Schedule
 
     cy.get('tbody tr', { timeout: 10000 }).should('have.length.greaterThan', 0);
     cy.contains('.patient-name', `${icdPatient.firstName} ${icdPatient.lastName}`).should('be.visible');
-    cy.get('tbody tr').then(($rows) => {
-      const rowTexts = $rows.toArray().map((row) => row.textContent ?? '');
+    // .should() with a callback retries until the filtered response has
+    // re-rendered the table - a plain .then() snapshots the stale, unfiltered
+    // rows and races the in-flight search request.
+    cy.get('tbody', { timeout: 10000 }).should(($tbody) => {
+      const rowTexts = $tbody.find('tr').toArray().map((row) => row.textContent ?? '');
+      expect(rowTexts.length).to.be.greaterThan(0);
       rowTexts.forEach((text) => expect(text).to.include('ICD'));
     });
   });

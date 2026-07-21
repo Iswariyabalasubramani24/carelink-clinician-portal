@@ -73,13 +73,20 @@ describe('Dashboard: Quick Links by role, Recent Alerts click-through, and Upcom
   });
 
   it('renders upcoming transmissions with a working row link and a working "View All" link', () => {
+    cy.intercept('GET', '**/api/v1/schedule/transmission-schedule*').as('transmissionSchedule');
     loginAs('doctor@apollo.com', 'Test@123');
 
     cy.contains('.panel__title', 'Upcoming Transmissions', { timeout: 10000 }).should('be.visible');
 
-    cy.get('body').then(($body) => {
-      if ($body.find('.transmission-list__item').length > 0) {
-        cy.get('.transmission-list__item').first().click();
+    // Branch on the server response rather than a DOM snapshot - a
+    // cy.get('body').then() races the in-flight request and can pick the empty
+    // branch just before the list renders. The panel shows only entries with a
+    // non-null nextScheduledDate (never-synced patients are excluded), so
+    // mirror that filter when deciding which branch to expect.
+    cy.wait('@transmissionSchedule').its('response.body').then((entries) => {
+      const upcoming = entries.filter((e: { nextScheduledDate: string | null }) => e.nextScheduledDate !== null);
+      if (upcoming.length > 0) {
+        cy.get('.transmission-list__item', { timeout: 10000 }).first().click();
         cy.location('pathname', { timeout: 10000 }).should('match', /\/patients\/\d+$/);
         cy.visit('/dashboard');
       } else {
