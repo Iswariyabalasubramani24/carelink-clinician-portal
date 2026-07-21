@@ -67,16 +67,15 @@ namespace CareLink.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            // Reasonable clinic-wide report interval default for both seeded
-            // tenants (Apollo=1, Charite=2) - clinicians can override per patient later.
-            migrationBuilder.InsertData(
-                table: "ReportSettings",
-                columns: new[] { "TenantId", "PatientId", "IntervalDays" },
-                values: new object[,]
-                {
-                    { 1, null, 30 },
-                    { 2, null, 30 }
-                });
+            // Reasonable clinic-wide report interval default for the dev-seeded
+            // tenants (Apollo=1, Charite=2). Guarded per tenant: on a fresh
+            // (e.g. production) database these tenants don't exist, and new
+            // tenants get their defaults from the hospital-provisioning flow.
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM Tenants WHERE Id = 1)
+    INSERT INTO ReportSettings (TenantId, PatientId, IntervalDays) VALUES (1, NULL, 30);
+IF EXISTS (SELECT 1 FROM Tenants WHERE Id = 2)
+    INSERT INTO ReportSettings (TenantId, PatientId, IntervalDays) VALUES (2, NULL, 30);");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reports_PatientId",

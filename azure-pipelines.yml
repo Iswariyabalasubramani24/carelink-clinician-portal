@@ -1,0 +1,186 @@
+# CareLink CI/CD (Azure DevOps)
+#
+# PRs and pushes:  build + full unit-test suites (xUnit + Jest).
+# develop/main:    additionally build & push the three Docker images to ACR.
+# main:            additionally deploy to AKS via kustomize (gated by the
+#                  "carelink-production" environment's approvals).
+#
+# One-time setup in the Azure DevOps project:
+#   - Service connection "carelink-acr"  (Docker Registry -> your ACR)
+#   - Service connection "carelink-aks"  (Kubernetes -> your AKS cluster)
+#   - Environment "carelink-production" with an approval check
+#   - Variable group "carelink-secrets" holding: MSSQL_SA_PASSWORD,
+#     JWT_SECRET, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD (all marked secret),
+#     and optionally APPINSIGHTS_CONNECTION_STRING (empty = telemetry off)
+#   - Update registryHost below to your ACR login server.
+# Cypress E2E is intentionally not run here - it needs the full live stack;
+# run it locally or in a dedicated nightly pipeline against a test environment.
+
+trigger:
+  branches:
+    include: [develop, main]
+
+pr:
+  branches:
+    include: [develop, main]
+
+variables:
+  registryHost: "carelink.azurecr.io" # CHANGE ME to your ACR login server
+  acrServiceConnection: "carelink-acr"
+  aksServiceConnection: "carelink-aks"
+  imageTag: "$(Build.BuildNumber)"
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isPushToTracked: $[and(ne(variables['Build.Reason'], 'PullRequest'), in(variables['Build.SourceBranchName'], 'develop', 'main'))]
+
+stages:
+  - stage: Test
+    displayName: Build & unit tests
+    jobs:
+      - job: Backend
+        displayName: xUnit (.NET)
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: UseDotNet@2
+            displayName: Install .NET 10 SDK
+            inputs:
+              packageType: sdk
+              version: 10.x
+          - script: dotnet test CareLink.CleanArchitecture --configuration Release --logger trx --results-directory $(Agent.TempDirectory)/test-results
+            displayName: dotnet test
+          - task: PublishTestResults@2
+            displayName: Publish xUnit results
+            condition: always()
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: "$(Agent.TempDirectory)/test-results/*.trx"
+              testRunTitle: Backend xUnit
+
+      - job: Frontend
+        displayName: Jest (Angular)
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: NodeTool@0
+            displayName: Install Node 20
+            inputs:
+              versionSpec: 20.x
+          - script: npm ci
+            displayName: npm ci
+            workingDirectory: frontend
+            env:
+              CYPRESS_INSTALL_BINARY: "0"
+          - script: npx tsc --noEmit -p tsconfig.spec.json
+            displayName: Type-check specs
+            workingDirectory: frontend
+          - script: npm test
+            displayName: ng test (Jest)
+            workingDirectory: frontend
+
+  - stage: BuildImages
+    displayName: Build & push images
+    dependsOn: Test
+    condition: and(succeeded(), eq(variables.isPushToTracked, 'true'))
+    jobs:
+      - job: Docker
+        displayName: Build & push to ACR
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: Docker@2
+            displayName: carelink-api
+            inputs:
+              command: buildAndPush
+              containerRegistry: $(acrServiceConnection)
+              repository: carelink-api
+              dockerfile: CareLink.CleanArchitecture/Dockerfile
+              buildContext: CareLink.CleanArchitecture
+              tags: |
+                $(imageTag)
+                latest
+          - task: Docker@2
+            displayName: carelink-gateway
+            inputs:
+              command: buildAndPush
+              containerRegistry: $(acrServiceConnection)
+              repository: carelink-gateway
+              dockerfile: api-gateway/Dockerfile
+              buildContext: api-gateway
+              tags: |
+                $(imageTag)
+                latest
+          - task: Docker@2
+            displayName: carelink-frontend
+            inputs:
+              command: buildAndPush
+              containerRegistry: $(acrServiceConnection)
+              repository: carelink-frontend
+              dockerfile: frontend/Dockerfile
+              buildContext: frontend
+              tags: |
+                $(imageTag)
+                latest
+
+  - stage: Deploy
+    displayName: Deploy to AKS
+    dependsOn: BuildImages
+    condition: and(succeeded(), eq(variables.isMain, 'true'))
+    jobs:
+      - deployment: AKS
+        displayName: kustomize apply
+        pool:
+          vmImage: ubuntu-latest
+        environment: carelink-production # approval gate lives on this environment
+        variables:
+          - group: carelink-secrets
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: KubectlInstaller@0
+                  displayName: Install kubectl
+                - task: Kubernetes@1
+                  displayName: Ensure namespace
+                  inputs:
+                    connectionType: Kubernetes Service Connection
+                    kubernetesServiceEndpoint: $(aksServiceConnection)
+                    command: apply
+                    arguments: -f deploy/k8s/namespace.yaml
+                - task: Kubernetes@1
+                  displayName: kubectl context sanity check
+                  inputs:
+                    connectionType: Kubernetes Service Connection
+                    kubernetesServiceEndpoint: $(aksServiceConnection)
+                    command: get
+                    arguments: nodes
+                - script: |
+                    set -euo pipefail
+                    # Recreate the runtime secret from the secure variable group.
+                    kubectl create secret generic carelink-secrets \
+                      --namespace carelink \
+                      --from-literal=ConnectionStrings__DefaultConnection="Server=sqlserver,1433;Database=CareLinkCleanArch;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True" \
+                      --from-literal=Jwt__Secret="${JWT_SECRET}" \
+                      --from-literal=SuperAdmin__Email="${SUPERADMIN_EMAIL}" \
+                      --from-literal=SuperAdmin__Password="${SUPERADMIN_PASSWORD}" \
+                      --from-literal=MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD}" \
+                      --from-literal=APPLICATIONINSIGHTS_CONNECTION_STRING="${APPINSIGHTS_CONNECTION_STRING:-}" \
+                      --dry-run=client -o yaml | kubectl apply -f -
+
+                    # Pin the images this build just pushed, then apply everything.
+                    cd deploy/k8s
+                    kustomize edit set image \
+                      carelink-api=$(registryHost)/carelink-api:$(imageTag) \
+                      carelink-gateway=$(registryHost)/carelink-gateway:$(imageTag) \
+                      carelink-frontend=$(registryHost)/carelink-frontend:$(imageTag)
+                    kubectl apply -k .
+                    kubectl rollout status -n carelink deployment/api --timeout=180s
+                    kubectl rollout status -n carelink deployment/gateway --timeout=120s
+                    kubectl rollout status -n carelink deployment/frontend --timeout=120s
+                  displayName: Deploy (secret + kustomize apply + rollout wait)
+                  env:
+                    MSSQL_SA_PASSWORD: $(MSSQL_SA_PASSWORD)
+                    JWT_SECRET: $(JWT_SECRET)
+                    SUPERADMIN_EMAIL: $(SUPERADMIN_EMAIL)
+                    SUPERADMIN_PASSWORD: $(SUPERADMIN_PASSWORD)
+                    APPINSIGHTS_CONNECTION_STRING: $(APPINSIGHTS_CONNECTION_STRING)

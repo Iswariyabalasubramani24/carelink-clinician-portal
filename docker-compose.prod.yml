@@ -1,0 +1,122 @@
+# Production stack: nginx-served SPA -> Ocelot gateway -> API -> SQL Server/Redis.
+# Kafka is deliberately absent - nothing in the codebase consumes it.
+#
+#   cp .env.example .env   (fill in real secrets)
+#   docker compose -p carelink-prod -f docker-compose.prod.yml up -d --build
+#
+# Only the frontend binds a host port; everything else is internal to the
+# network. Run under a distinct project name (-p carelink-prod) so it can
+# coexist with the local dev infra compose.
+
+name: carelink-prod
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: carelink-prod-frontend
+    ports:
+      - "${FRONTEND_PORT:-8081}:80"
+    depends_on:
+      gateway:
+        condition: service_healthy
+    healthcheck:
+      # 127.0.0.1 explicitly: busybox wget resolves localhost to ::1 first and
+      # nginx here listens on IPv4 only.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelink-prod-net
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./api-gateway
+    container_name: carelink-prod-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      OTEL_SERVICE_NAME: carelink-gateway
+      APPLICATIONINSIGHTS_CONNECTION_STRING: ${APPINSIGHTS_CONNECTION_STRING:-}
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - carelink-prod-net
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./CareLink.CleanArchitecture
+    container_name: carelink-prod-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      OTEL_SERVICE_NAME: carelink-api
+      APPLICATIONINSIGHTS_CONNECTION_STRING: ${APPINSIGHTS_CONNECTION_STRING:-}
+      Database__MigrateOnStartup: "true"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=CareLinkCleanArch;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Redis: "redis:6379"
+      Jwt__Secret: ${JWT_SECRET}
+      SuperAdmin__Email: ${SUPERADMIN_EMAIL}
+      SuperAdmin__Password: ${SUPERADMIN_PASSWORD}
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health/live || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - carelink-prod-net
+    restart: unless-stopped
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: carelink-prod-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: Express
+    volumes:
+      - prod-sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - carelink-prod-net
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: carelink-prod-redis
+    volumes:
+      - prod-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - carelink-prod-net
+    restart: unless-stopped
+
+networks:
+  carelink-prod-net:
+    driver: bridge
+
+volumes:
+  prod-sqlserver-data:
+  prod-redis-data:

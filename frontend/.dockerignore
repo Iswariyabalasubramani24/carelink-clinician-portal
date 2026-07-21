@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.angular/
+cypress/
+cypress.config.ts
+coverage/
+Dockerfile
+.dockerignore
+*.log

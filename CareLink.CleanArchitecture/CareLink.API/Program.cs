@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using CareLink.API.Middleware;
 using CareLink.Application.Alerts;
 using CareLink.Application.Auth.Commands;
@@ -20,6 +21,16 @@ using QuestPDF.Infrastructure;
 QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// OpenTelemetry -> Azure Monitor (Application Insights). The distro wires
+// ASP.NET Core, HttpClient, and SqlClient traces/metrics/logs automatically.
+// Only enabled when APPLICATIONINSIGHTS_CONNECTION_STRING is configured, so
+// local dev and test runs pay no telemetry cost. Cloud role name comes from
+// OTEL_SERVICE_NAME (set per service in compose/k8s).
+if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+{
+    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+}
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -95,12 +106,19 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Bootstrap the platform operator (all environments, idempotent) and, in
-// development only, the demo hospitals. Schema migrations are applied
-// out-of-band (dotnet ef database update / deployment pipeline), so this runs
-// against an already-migrated database.
+// development only, the demo hospitals. Locally, schema migrations are applied
+// out-of-band (dotnet ef database update); containerized deployments set
+// Database:MigrateOnStartup=true so a fresh pod/container brings its schema
+// up to date before seeding.
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
+    if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
+    {
+        await services.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
+    }
+
     await services.GetRequiredService<SuperAdminSeeder>().SeedAsync(
         builder.Configuration["SuperAdmin:Email"],
         builder.Configuration["SuperAdmin:Password"]);

@@ -86,20 +86,18 @@ namespace CareLink.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            // Reasonable clinic-wide alert defaults for both seeded tenants
+            // Reasonable clinic-wide alert defaults for the dev-seeded tenants
             // (Apollo=1, Charite=2) - clinicians can override per patient later.
-            migrationBuilder.InsertData(
-                table: "ClinicAlertSettings",
-                columns: new[] { "TenantId", "AlertType", "DefaultUrgency" },
-                values: new object[,]
-                {
-                    { 1, "DisconnectedMonitor", "Red" },
-                    { 1, "LowBattery", "Yellow" },
-                    { 1, "IrregularHeartbeat", "Yellow" },
-                    { 2, "DisconnectedMonitor", "Red" },
-                    { 2, "LowBattery", "Yellow" },
-                    { 2, "IrregularHeartbeat", "Yellow" }
-                });
+            // Guarded per tenant: on a fresh (e.g. production) database these
+            // tenants don't exist, and new tenants get their defaults from the
+            // hospital-provisioning flow instead.
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM Tenants WHERE Id = 1)
+    INSERT INTO ClinicAlertSettings (TenantId, AlertType, DefaultUrgency)
+    VALUES (1, 'DisconnectedMonitor', 'Red'), (1, 'LowBattery', 'Yellow'), (1, 'IrregularHeartbeat', 'Yellow');
+IF EXISTS (SELECT 1 FROM Tenants WHERE Id = 2)
+    INSERT INTO ClinicAlertSettings (TenantId, AlertType, DefaultUrgency)
+    VALUES (2, 'DisconnectedMonitor', 'Red'), (2, 'LowBattery', 'Yellow'), (2, 'IrregularHeartbeat', 'Yellow');");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alerts_PatientId_AlertType",

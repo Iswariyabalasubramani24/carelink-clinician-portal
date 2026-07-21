@@ -1,0 +1,29 @@
+# All traffic enters through the frontend: its nginx serves the SPA and
+# proxies /api to the gateway, keeping the browser on a single origin (which
+# the httpOnly refresh-token cookie depends on). Set your real host and TLS
+# issuer annotations (e.g. cert-manager) before applying.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: carelink
+  namespace: carelink
+  labels:
+    app.kubernetes.io/part-of: carelink
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: carelink.example.com # CHANGE ME
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+  # tls:
+  #   - hosts: [carelink.example.com]
+  #     secretName: carelink-tls

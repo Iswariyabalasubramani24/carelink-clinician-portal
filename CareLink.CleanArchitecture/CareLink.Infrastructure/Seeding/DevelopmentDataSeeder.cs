@@ -32,6 +32,27 @@ public class DevelopmentDataSeeder(
 
     public async Task SeedAsync()
     {
+        // Apollo and Charite are the original demo pair; the Cypress e2e suite
+        // logs in as doctor@apollo.com and asserts these exact patient names,
+        // so seed them first to match the historical tenant layout.
+        await SeedHospitalAsync("Apollo Hospital", "India", "en",
+            "doctor@apollo.com", "Anita", "Rao", "admin@apollo.com", "Meera", "Pillai",
+            new PatientSeed("APL-1001", "Rajesh", "Kumar", "1963-04-12", "+91-98-10012345", "rajesh.kumar@example.com", DeviceType.ICD, "Medtronic", "Evera XT", "MDT-ICD-IN001", "2022-03-15", 87.0m, 74, 1),
+            new PatientSeed("APL-1002", "Priya", "Sharma", "1971-09-02", "+91-98-10023456", "priya.sharma@example.com", DeviceType.Pacemaker, "Abbott", "Assurity MRI", "ABT-PM-IN002", "2021-11-08", 92.0m, 68, 3),
+            new PatientSeed("APL-1003", "Anil", "Verma", "1958-12-20", "+91-98-10034567", "anil.verma@example.com", DeviceType.ICM, "Medtronic", "Reveal LINQ", "MDT-ICM-IN003", "2023-05-30", 95.0m, 70, 2),
+            new PatientSeed("APL-1005", "Sunita", "Iyer", "1966-07-25", "+91-98-10045678", "sunita.iyer@example.com", DeviceType.CRT_D, "Boston Scientific", "Resonate", "BSX-CRT-IN005", "2022-10-12", 89.0m, 72, 4));
+
+        // Charite deliberately has a single patient: multi-hospital-switching.cy.ts
+        // asserts exactly one row (Klaus Weber) after switching tenants.
+        await SeedHospitalAsync("Charite Hospital", "Germany", "de",
+            "doctor@charite.de", "Greta", "Schneider", "admin@charite.de", "Stefan", "Krause",
+            new PatientSeed("CHR-2001", "Klaus", "Weber", "1960-02-18", "+49-30-45050101", "klaus.weber@example.com", DeviceType.Pacemaker, "Biotronik", "Edora 8", "BTK-PM-DE001", "2022-06-21", 90.0m, 66, 2));
+
+        // Anita Rao works across both demo hospitals - the clinic switcher (and
+        // multi-hospital-switching.cy.ts) depends on her having ClinicianTenant
+        // rows for Apollo AND Charite.
+        await GrantTenantAccessAsync("doctor@apollo.com", "Charite Hospital");
+
         await SeedHospitalAsync("Pompidou Hospital", "France", "fr",
             "doctor@pompidou.fr", "Camille", "Dubois", "admin@pompidou.fr", "Etienne", "Moreau",
             new PatientSeed("PMP-1001", "Emile", "Rousseau", "1968-06-11", "+33-1-23456789", "emile.rousseau@example.com", DeviceType.ICD, "Medtronic", "Evera XT", "MDT-ICD-FR001", "2022-09-10", 88.0m, 71, 2),
@@ -121,6 +142,28 @@ public class DevelopmentDataSeeder(
 
         await db.SaveChangesAsync(CancellationToken.None);
         logger.LogInformation("Seeded development hospital {Name} ({Region}).", name, region);
+    }
+
+    // Grants an existing clinician access to an additional tenant. Idempotent
+    // and independent of SeedHospitalAsync's region check, so the grant is
+    // applied even when both hospitals were already seeded on a previous boot.
+    private async Task GrantTenantAccessAsync(string clinicianEmail, string tenantName)
+    {
+        var clinician = await db.Clinicians.SingleOrDefaultAsync(c => c.Email == clinicianEmail);
+        var tenant = await db.Tenants.SingleOrDefaultAsync(t => t.Name == tenantName && !t.IsSystem);
+        if (clinician is null || tenant is null)
+        {
+            return;
+        }
+
+        if (await db.ClinicianTenants.AnyAsync(ct => ct.ClinicianId == clinician.Id && ct.TenantId == tenant.Id))
+        {
+            return;
+        }
+
+        db.ClinicianTenants.Add(new ClinicianTenant { ClinicianId = clinician.Id, TenantId = tenant.Id });
+        await db.SaveChangesAsync(CancellationToken.None);
+        logger.LogInformation("Granted {Email} access to {Tenant}.", clinicianEmail, tenantName);
     }
 
     private Clinician NewClinician(Tenant tenant, string email, string first, string last, ClinicianRole role, string lang, string password) => new()

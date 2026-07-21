@@ -1,0 +1,57 @@
+# Redis serves as a cache only (health-check + response caching) - losing it
+# costs warm cache, not data - so a single replica with ephemeral storage is
+# acceptable. On Azure, swap for Azure Cache for Redis by changing
+# ConnectionStrings__Redis in the ConfigMap and deleting this file.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: carelink
+  labels:
+    app: redis
+    app.kubernetes.io/part-of: carelink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 15
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis # must stay "redis" - ConnectionStrings__Redis is redis:6379
+  namespace: carelink
+  labels:
+    app: redis
+    app.kubernetes.io/part-of: carelink
+spec:
+  selector:
+    app: redis
+  ports:
+    - port: 6379
+      targetPort: 6379
