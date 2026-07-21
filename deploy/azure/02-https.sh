@@ -22,14 +22,20 @@ fi
 
 echo ">> Host: $APP_HOST | ACME email: $CERT_EMAIL"
 
-# ---- Install cert-manager (idempotent) -----------------------------------
-echo ">> Installing cert-manager..."
-helm repo add jetstack https://charts.jetstack.io >/dev/null 2>&1 || true
-helm repo update >/dev/null
-helm upgrade --install cert-manager jetstack/cert-manager \
-  --namespace cert-manager --create-namespace \
-  --set crds.enabled=true \
-  --wait --timeout 5m
+# ---- Install cert-manager -------------------------------------------------
+# Skip if already present: re-running the helm upgrade can conflict with the
+# AKS "admissions enforcer", which mutates cert-manager's webhook config.
+if kubectl get deployment cert-manager -n cert-manager >/dev/null 2>&1; then
+  echo ">> cert-manager already installed - skipping."
+else
+  echo ">> Installing cert-manager..."
+  helm repo add jetstack https://charts.jetstack.io >/dev/null 2>&1 || true
+  helm repo update >/dev/null
+  helm upgrade --install cert-manager jetstack/cert-manager \
+    --namespace cert-manager --create-namespace \
+    --set crds.enabled=true \
+    --wait --timeout 5m
+fi
 
 # ---- Let's Encrypt production issuer (HTTP-01 via ingress-nginx) ----------
 kubectl apply -f - <<EOF
