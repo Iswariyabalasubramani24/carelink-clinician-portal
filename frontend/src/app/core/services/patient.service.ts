@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Alert, PatientAlertSetting } from '../models/alert.model';
 import { Patient } from '../models/patient.model';
+import { PatientNote } from '../models/patient-note.model';
 import { PatientReportSettings, Report, ReportType } from '../models/report.model';
 import { TransmissionHistoryPoint } from '../models/transmission-history.model';
 
@@ -75,5 +76,13 @@ export class PatientService {
 
   updateReportSettings(id: number, payload: UpdatePatientReportSettingsPayload): Observable<PatientReportSettings> {
     return this.http.put<PatientReportSettings>(`${this.baseUrl}/${id}/report-settings`, payload);
+  }
+
+  getNotes(id: number): Observable<PatientNote[]> {
+    return this.http.get<PatientNote[]>(`${this.baseUrl}/${id}/notes`);
+  }
+
+  createNote(id: number, content: string): Observable<PatientNote> {
+    return this.http.post<PatientNote>(`${this.baseUrl}/${id}/notes`, { content });
   }
 }

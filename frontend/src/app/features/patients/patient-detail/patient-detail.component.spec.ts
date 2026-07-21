@@ -21,6 +21,7 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { of } from 'rxjs';
 
 import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../core/models/alert.model';
+import { PatientNote } from '../../../core/models/patient-note.model';
 import { CardiacDeviceType, Patient } from '../../../core/models/patient.model';
 import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
@@ -43,6 +44,8 @@ describe('PatientDetailComponent', () => {
     generateReport: jest.Mock;
     getReportSettings: jest.Mock;
     updateReportSettings: jest.Mock;
+    getNotes: jest.Mock;
+    createNote: jest.Mock;
   };
   let alertServiceMock: { acknowledge: jest.Mock; snooze: jest.Mock };
   let reportServiceMock: { download: jest.Mock };
@@ -92,11 +95,16 @@ describe('PatientDetailComponent', () => {
 
   const mockReportSettings: PatientReportSettings = { intervalDays: 30, isOverride: false };
 
+  const mockNotes: PatientNote[] = [
+    { id: 1, patientId: 1, clinicianName: 'Anita Rao', content: 'Patient is stable.', createdAt: '2026-07-20T10:00:00Z' }
+  ];
+
   async function setup(options?: {
     alerts?: Alert[];
     alertSettings?: PatientAlertSetting[];
     reports?: Report[];
     reportSettings?: PatientReportSettings;
+    notes?: PatientNote[];
   }): Promise<void> {
     patientServiceMock = {
       getTransmissionHistory: jest.fn().mockReturnValue(of(mockHistory)),
@@ -106,7 +114,11 @@ describe('PatientDetailComponent', () => {
       getReports: jest.fn().mockReturnValue(of(options?.reports ?? mockReports)),
       generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
       getReportSettings: jest.fn().mockReturnValue(of(options?.reportSettings ?? mockReportSettings)),
-      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings))
+      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
+      getNotes: jest.fn().mockReturnValue(of(options?.notes ?? mockNotes)),
+      createNote: jest.fn().mockReturnValue(
+        of({ id: 2, patientId: 1, clinicianName: 'Anita Rao', content: 'New note content', createdAt: '2026-07-21T00:00:00Z' })
+      )
     };
     alertServiceMock = {
       acknowledge: jest.fn().mockReturnValue(of({ ...mockAlert, isAcknowledged: true })),
@@ -194,7 +206,9 @@ describe('PatientDetailComponent', () => {
       getReports: jest.fn().mockReturnValue(of(mockReports)),
       generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
       getReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
-      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings))
+      updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
+      getNotes: jest.fn().mockReturnValue(of(mockNotes)),
+      createNote: jest.fn().mockReturnValue(of(mockNotes[0]))
     };
     alertServiceMock = { acknowledge: jest.fn(), snooze: jest.fn() };
     reportServiceMock = { download: jest.fn() };
@@ -379,5 +393,55 @@ describe('PatientDetailComponent', () => {
     fixture.detectChanges();
 
     expect(reportServiceMock.download).toHaveBeenCalledWith(mockReports[0].id);
+  });
+
+  it('renders the Comments and Notes tab with the existing notes list', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const notesTab = getTabs().find((t) => t.textContent?.includes('Comments and Notes'));
+    notesTab?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('.tab--active')?.textContent).toContain('Comments and Notes');
+    expect(el.querySelectorAll('.note-item').length).toBe(mockNotes.length);
+    expect(el.textContent).toContain('Anita Rao');
+    expect(el.textContent).toContain('Patient is stable.');
+  });
+
+  it('shows the empty-state message when the patient has no notes yet', async () => {
+    await setup({ notes: [] });
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const notesTab = getTabs().find((t) => t.textContent?.includes('Comments and Notes'));
+    notesTab?.click();
+    fixture.detectChanges();
+
+    expect(el.textContent).toContain('No notes yet.');
+  });
+
+  it('clicking Post adds the new note to the top of the list and clears the textarea', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const notesTab = getTabs().find((t) => t.textContent?.includes('Comments and Notes'));
+    notesTab?.click();
+    fixture.detectChanges();
+
+    const textarea = el.querySelector('.note-textarea') as HTMLTextAreaElement;
+    textarea.value = 'New note content';
+    textarea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const postBtn = Array.from(el.querySelectorAll('.note-composer__actions button')).find((b) =>
+      b.textContent?.includes('Post')
+    ) as HTMLButtonElement;
+    postBtn.click();
+    fixture.detectChanges();
+
+    expect(patientServiceMock.createNote).toHaveBeenCalledWith(1, 'New note content');
+    expect(el.querySelectorAll('.note-item').length).toBe(mockNotes.length + 1);
+    expect(el.textContent).toContain('New note content');
+    expect(textarea.value).toBe('');
   });
 });

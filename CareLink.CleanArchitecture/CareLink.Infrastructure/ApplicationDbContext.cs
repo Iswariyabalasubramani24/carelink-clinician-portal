@@ -26,6 +26,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ReportSettings> ReportSettings => Set<ReportSettings>();
 
+    public DbSet<PatientNote> PatientNotes => Set<PatientNote>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -178,6 +180,28 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany()
                 .HasForeignKey(s => s.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PatientNote>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+            entity.Property(n => n.Content).IsRequired();
+            entity.HasIndex(n => n.PatientId);
+
+            entity.HasOne(n => n.Patient)
+                .WithMany()
+                .HasForeignKey(n => n.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Tenant>()
+                .WithMany()
+                .HasForeignKey(n => n.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne<Clinician>()
+                .WithMany()
+                .HasForeignKey(n => n.ClinicianId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

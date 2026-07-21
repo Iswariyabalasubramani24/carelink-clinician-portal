@@ -106,7 +106,8 @@
       "equipment": "Equipment",
       "history": "History",
       "careAlert": "CareAlert Notification",
-      "reports": "Reports"
+      "reports": "Reports",
+      "notes": "Comments and Notes"
     },
     "overview": {
       "mrn": "MRN",
@@ -190,6 +191,13 @@
       "save": "Save",
       "saved": "Saved.",
       "saveError": "Failed to save report settings."
+    },
+    "notes": {
+      "placeholder": "Add a comment or note about this patient…",
+      "post": "Post",
+      "postError": "Failed to post note.",
+      "loading": "Loading…",
+      "empty": "No notes yet."
     }
   }
 }

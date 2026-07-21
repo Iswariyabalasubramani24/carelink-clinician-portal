@@ -5,6 +5,9 @@ using CareLink.Application.Alerts.Queries;
 using CareLink.Application.Patients;
 using CareLink.Application.Patients.Commands;
 using CareLink.Application.Patients.Queries;
+using CareLink.Application.PatientNotes;
+using CareLink.Application.PatientNotes.Commands;
+using CareLink.Application.PatientNotes.Queries;
 using CareLink.Application.Reports;
 using CareLink.Application.Reports.Commands;
 using CareLink.Application.Reports.Queries;
@@ -102,9 +105,35 @@ public class PatientsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}/notes")]
+    public async Task<ActionResult<IEnumerable<PatientNoteDto>>> GetNotes(int id)
+    {
+        var result = await mediator.Send(new GetPatientNotesQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpPost("{id}/notes")]
+    public async Task<ActionResult<PatientNoteDto>> CreateNote(int id, CreatePatientNoteRequest request)
+    {
+        var result = await mediator.Send(new CreatePatientNoteCommand
+        {
+            PatientId = id,
+            TenantId = GetTenantId(),
+            ClinicianId = GetClinicianId(),
+            Content = request.Content
+        });
+        return Ok(result);
+    }
+
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;
+        return int.Parse(claim!);
+    }
+
+    private int GetClinicianId()
+    {
+        var claim = User.FindFirst("clinicianId")?.Value;
         return int.Parse(claim!);
     }
 }

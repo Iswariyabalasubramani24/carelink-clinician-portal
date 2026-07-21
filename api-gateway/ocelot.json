@@ -152,6 +152,15 @@
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/patients/{id}/notes",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/patients/{id}/notes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
     }
   ],
   "GlobalConfiguration": {

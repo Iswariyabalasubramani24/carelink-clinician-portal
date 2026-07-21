@@ -106,7 +106,8 @@
       "equipment": "Equipo",
       "history": "Historial",
       "careAlert": "Notificación CareAlert",
-      "reports": "Informes"
+      "reports": "Informes",
+      "notes": "Comentarios y notas"
     },
     "overview": {
       "mrn": "N.º de historia",
@@ -190,6 +191,13 @@
       "save": "Guardar",
       "saved": "Guardado.",
       "saveError": "Error al guardar la configuración del informe."
+    },
+    "notes": {
+      "placeholder": "Añadir un comentario o nota sobre este paciente…",
+      "post": "Publicar",
+      "postError": "Error al publicar la nota.",
+      "loading": "Cargando…",
+      "empty": "Aún no hay notas."
     }
   }
 }

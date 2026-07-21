@@ -106,7 +106,8 @@
       "equipment": "Ausrüstung",
       "history": "Verlauf",
       "careAlert": "CareAlert-Benachrichtigung",
-      "reports": "Berichte"
+      "reports": "Berichte",
+      "notes": "Kommentare und Notizen"
     },
     "overview": {
       "mrn": "Aktenzeichen",
@@ -190,6 +191,13 @@
       "save": "Speichern",
       "saved": "Gespeichert.",
       "saveError": "Fehler beim Speichern der Berichtseinstellungen."
+    },
+    "notes": {
+      "placeholder": "Kommentar oder Notiz zu diesem Patienten hinzufügen…",
+      "post": "Veröffentlichen",
+      "postError": "Notiz konnte nicht veröffentlicht werden.",
+      "loading": "Wird geladen…",
+      "empty": "Noch keine Notizen."
     }
   }
 }

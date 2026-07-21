@@ -9,6 +9,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Observable } from 'rxjs';
 
 import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../core/models/alert.model';
+import { PatientNote } from '../../../core/models/patient-note.model';
 import { Patient } from '../../../core/models/patient.model';
 import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
@@ -18,7 +19,7 @@ import { ReportService } from '../../../core/services/report.service';
 import { PatientsActions } from '../../../store/patients/patients.actions';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
 
-type DetailTab = 'overview' | 'equipment' | 'history' | 'careAlert' | 'reports';
+type DetailTab = 'overview' | 'equipment' | 'history' | 'careAlert' | 'reports' | 'notes';
 
 interface AlertSettingRow {
   alertType: AlertType;
@@ -75,6 +76,12 @@ export class PatientDetailComponent implements OnInit {
 
   readonly ReportType = ReportType;
 
+  notes: PatientNote[] = [];
+  notesLoading = true;
+  newNoteControl = new FormControl<string>('', { nonNullable: true });
+  postingNote = false;
+  postNoteError = false;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly store: Store,
@@ -130,6 +137,8 @@ export class PatientDetailComponent implements OnInit {
         this.reportSettingsLoading = false;
       }
     });
+
+    this.loadNotes();
   }
 
   findPatient(patients: Patient[] | null): Patient | null {
@@ -243,6 +252,41 @@ export class PatientDetailComponent implements OnInit {
           this.reportSettingsSaveError = true;
         }
       });
+  }
+
+  loadNotes(): void {
+    this.notesLoading = true;
+    this.patientService.getNotes(this.patientId).subscribe({
+      next: (notes) => {
+        this.notes = notes;
+        this.notesLoading = false;
+      },
+      error: () => {
+        this.notesLoading = false;
+      }
+    });
+  }
+
+  postNote(): void {
+    const content = this.newNoteControl.value.trim();
+    if (!content) {
+      return;
+    }
+
+    this.postingNote = true;
+    this.postNoteError = false;
+
+    this.patientService.createNote(this.patientId, content).subscribe({
+      next: (note) => {
+        this.notes = [note, ...this.notes];
+        this.newNoteControl.setValue('');
+        this.postingNote = false;
+      },
+      error: () => {
+        this.postingNote = false;
+        this.postNoteError = true;
+      }
+    });
   }
 
   private applyReportSettings(settings: PatientReportSettings): void {

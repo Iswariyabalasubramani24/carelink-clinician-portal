@@ -106,7 +106,8 @@
       "equipment": "Équipement",
       "history": "Historique",
       "careAlert": "Notification CareAlert",
-      "reports": "Rapports"
+      "reports": "Rapports",
+      "notes": "Commentaires et notes"
     },
     "overview": {
       "mrn": "N° de dossier",
@@ -190,6 +191,13 @@
       "save": "Enregistrer",
       "saved": "Enregistré.",
       "saveError": "Échec de l'enregistrement des paramètres de rapport."
+    },
+    "notes": {
+      "placeholder": "Ajouter un commentaire ou une note sur ce patient…",
+      "post": "Publier",
+      "postError": "Échec de la publication de la note.",
+      "loading": "Chargement…",
+      "empty": "Aucune note pour le moment."
     }
   }
 }

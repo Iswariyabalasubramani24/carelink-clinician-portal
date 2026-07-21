@@ -49,6 +49,14 @@
         >
           {{ 'patientDetail.tabs.reports' | translate }}
         </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'notes'"
+          (click)="setTab('notes')"
+        >
+          {{ 'patientDetail.tabs.notes' | translate }}
+        </button>
       </div>
 
       <section class="card tab-panel" *ngIf="activeTab === 'overview'">
@@ -310,6 +318,47 @@
               {{ 'patientDetail.reports.saveError' | translate }}
             </span>
           </div>
+        </ng-container>
+      </section>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'notes'">
+        <div class="note-composer">
+          <textarea
+            class="note-textarea"
+            rows="3"
+            [formControl]="newNoteControl"
+            [placeholder]="'patientDetail.notes.placeholder' | translate"
+          ></textarea>
+          <div class="note-composer__actions">
+            <button
+              type="button"
+              class="btn btn--primary"
+              [disabled]="postingNote || !newNoteControl.value.trim()"
+              (click)="postNote()"
+            >
+              {{ 'patientDetail.notes.post' | translate }}
+            </button>
+            <span class="save-message save-message--error" *ngIf="postNoteError">
+              {{ 'patientDetail.notes.postError' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <p class="state-message" *ngIf="notesLoading">{{ 'patientDetail.notes.loading' | translate }}</p>
+
+        <ng-container *ngIf="!notesLoading">
+          <ul class="note-list" *ngIf="notes.length; else noNotes">
+            <li class="note-item" *ngFor="let note of notes">
+              <div class="note-item__header">
+                <strong>{{ note.clinicianName }}</strong>
+                <span class="note-item__timestamp">{{ note.createdAt | date: 'medium' }}</span>
+              </div>
+              <p class="note-item__content">{{ note.content }}</p>
+            </li>
+          </ul>
+          <ng-template #noNotes>
+            <p class="state-message">{{ 'patientDetail.notes.empty' | translate }}</p>
+          </ng-template>
         </ng-container>
       </section>
     </ng-container>
