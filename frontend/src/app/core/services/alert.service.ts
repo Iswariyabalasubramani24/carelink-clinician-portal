@@ -11,6 +11,10 @@ export class AlertService {
 
   constructor(private readonly http: HttpClient) {}
 
+  getActive(): Observable<Alert[]> {
+    return this.http.get<Alert[]>(this.baseUrl);
+  }
+
   acknowledge(alertId: number): Observable<Alert> {
     return this.http.post<Alert>(`${this.baseUrl}/${alertId}/acknowledge`, {});
   }

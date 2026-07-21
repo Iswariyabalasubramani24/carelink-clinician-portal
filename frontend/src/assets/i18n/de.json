@@ -130,7 +130,25 @@
     "newPatients": "Neue Patienten diese Woche",
     "disconnectedMonitors": "Getrennte Monitore",
     "totalActivePatients": "Aktive Patienten insgesamt",
-    "activeAlerts": "Aktive Warnungen"
+    "activeAlerts": "Aktive Warnungen",
+    "quickLinks": {
+      "patients": "Patienten",
+      "transmissionSchedule": "Übertragungsplan",
+      "clinicManagement": "Klinikverwaltung",
+      "auditLog": "Prüfprotokoll"
+    },
+    "recentAlerts": {
+      "title": "Aktuelle Warnungen",
+      "loading": "Wird geladen…",
+      "empty": "Keine aktiven Warnungen.",
+      "unknownPatient": "Unbekannter Patient"
+    },
+    "upcomingTransmissions": {
+      "title": "Anstehende Übertragungen",
+      "viewAll": "Alle anzeigen",
+      "loading": "Wird geladen…",
+      "empty": "Keine anstehenden Übertragungen."
+    }
   },
   "patientDetail": {
     "back": "← Zurück zu Patienten",

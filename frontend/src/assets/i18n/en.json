@@ -130,7 +130,25 @@
     "newPatients": "New Patients This Week",
     "disconnectedMonitors": "Disconnected Monitors",
     "totalActivePatients": "Total Active Patients",
-    "activeAlerts": "Active Alerts"
+    "activeAlerts": "Active Alerts",
+    "quickLinks": {
+      "patients": "Patients",
+      "transmissionSchedule": "Transmission Schedule",
+      "clinicManagement": "Clinic Management",
+      "auditLog": "Audit Log"
+    },
+    "recentAlerts": {
+      "title": "Recent Alerts",
+      "loading": "Loading…",
+      "empty": "No active alerts.",
+      "unknownPatient": "Unknown patient"
+    },
+    "upcomingTransmissions": {
+      "title": "Upcoming Transmissions",
+      "viewAll": "View All",
+      "loading": "Loading…",
+      "empty": "No upcoming transmissions."
+    }
   },
   "patientDetail": {
     "back": "← Back to Patients",
