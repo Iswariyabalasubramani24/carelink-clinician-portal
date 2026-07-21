@@ -501,6 +501,11 @@ namespace CareLink.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSystem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("LanguageCode")
                         .IsRequired()
                         .HasMaxLength(10)

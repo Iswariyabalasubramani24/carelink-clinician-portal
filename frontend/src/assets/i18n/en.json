@@ -105,7 +105,50 @@
     "patients": "Patients",
     "transmissionSchedule": "Transmission Schedule",
     "clinicManagement": "Clinic Management",
-    "auditLog": "Audit Log"
+    "auditLog": "Audit Log",
+    "hospitals": "Hospitals"
+  },
+  "hospitals": {
+    "title": "Hospitals",
+    "subtitle": "Onboard and manage the hospitals on this platform",
+    "newHospital": "+ New Hospital",
+    "loading": "Loading…",
+    "loadError": "Failed to load hospitals.",
+    "empty": "No hospitals yet.",
+    "close": "Close",
+    "createError": "Failed to provision the hospital. Check that the admin email is not already in use.",
+    "tempPasswordTitle": "Hospital provisioned — temporary admin password created",
+    "tempPasswordNote": "Share it with {{email}} securely. It won't be shown again.",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "table": {
+      "name": "Hospital",
+      "region": "Country / Region",
+      "language": "Language",
+      "clinicians": "Clinicians",
+      "status": "Status"
+    },
+    "form": {
+      "hospitalSection": "Hospital",
+      "name": "Hospital Name",
+      "nameRequired": "Hospital name is required.",
+      "region": "Country / Region",
+      "regionRequired": "Country/region is required.",
+      "language": "Default Language",
+      "adminSection": "First Administrator",
+      "adminFirstName": "First Name",
+      "adminFirstNameRequired": "First name is required.",
+      "adminLastName": "Last Name",
+      "adminLastNameRequired": "Last name is required.",
+      "adminEmail": "Email",
+      "adminEmailRequired": "Email is required.",
+      "adminEmailInvalid": "Enter a valid email address.",
+      "cancel": "Cancel",
+      "submit": "Provision Hospital",
+      "saving": "Provisioning…"
+    }
   },
   "transmissionSchedule": {
     "title": "Transmission Schedule",

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
+import { superAdminGuard } from './core/guards/super-admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -50,5 +51,11 @@ export const routes: Routes = [
     canActivate: [authGuard, adminGuard],
     loadComponent: () =>
       import('./features/audit-log/audit-log.component').then((m) => m.AuditLogComponent)
+  },
+  {
+    path: 'hospitals',
+    canActivate: [authGuard, superAdminGuard],
+    loadComponent: () =>
+      import('./features/hospitals/hospitals.component').then((m) => m.HospitalsComponent)
   }
 ];

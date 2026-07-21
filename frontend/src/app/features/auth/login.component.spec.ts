@@ -12,7 +12,7 @@ import { LoginComponent } from './login.component';
 describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
-  let authServiceMock: { login: jest.Mock };
+  let authServiceMock: { login: jest.Mock; getCurrentClinician: jest.Mock };
   let routerMock: { navigateByUrl: jest.Mock };
   let tenantServiceMock: { getAll: jest.Mock };
 
@@ -22,7 +22,7 @@ describe('LoginComponent', () => {
   }
 
   beforeEach(async () => {
-    authServiceMock = { login: jest.fn() };
+    authServiceMock = { login: jest.fn(), getCurrentClinician: jest.fn().mockReturnValue(null) };
     routerMock = { navigateByUrl: jest.fn() };
     tenantServiceMock = { getAll: jest.fn().mockReturnValue(of([])) };
 
@@ -87,6 +87,34 @@ describe('LoginComponent', () => {
 
     expect(authServiceMock.login).toHaveBeenCalledWith('doctor@apollo.com', 'Test@123');
     expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/dashboard');
+  });
+
+  it('navigates a SuperAdmin to /hospitals instead of the clinical dashboard', () => {
+    authServiceMock.login.mockReturnValue(
+      of({
+        accessToken: 'token',
+        accessTokenExpiresAt: new Date().toISOString(),
+        clinicianId: 99,
+        email: 'platform@carelink.local',
+        firstName: 'Platform',
+        lastName: 'Administrator',
+        role: 'SuperAdmin',
+        tenantId: 1000
+      })
+    );
+    authServiceMock.getCurrentClinician.mockReturnValue({
+      id: 99,
+      email: 'platform@carelink.local',
+      firstName: 'Platform',
+      lastName: 'Administrator',
+      role: 'SuperAdmin',
+      tenantId: 1000
+    });
+
+    component.form.setValue({ email: 'platform@carelink.local', password: 'Platform@123' });
+    submitForm();
+
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/hospitals');
   });
 
   it('shows a clear, localized error message and does not navigate when login fails', () => {

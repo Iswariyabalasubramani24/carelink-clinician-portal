@@ -105,7 +105,50 @@
     "patients": "Pacientes",
     "transmissionSchedule": "Calendario de transmisión",
     "clinicManagement": "Gestión de la clínica",
-    "auditLog": "Registro de auditoría"
+    "auditLog": "Registro de auditoría",
+    "hospitals": "Hospitales"
+  },
+  "hospitals": {
+    "title": "Hospitales",
+    "subtitle": "Incorporar y gestionar los hospitales de esta plataforma",
+    "newHospital": "+ Nuevo hospital",
+    "loading": "Cargando…",
+    "loadError": "No se pudieron cargar los hospitales.",
+    "empty": "Aún no hay hospitales.",
+    "close": "Cerrar",
+    "createError": "No se pudo crear el hospital. Compruebe que el correo del administrador no esté ya en uso.",
+    "tempPasswordTitle": "Hospital creado — contraseña temporal de administrador generada",
+    "tempPasswordNote": "Compártala con {{email}} de forma segura. No se mostrará de nuevo.",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "table": {
+      "name": "Hospital",
+      "region": "País / Región",
+      "language": "Idioma",
+      "clinicians": "Clínicos",
+      "status": "Estado"
+    },
+    "form": {
+      "hospitalSection": "Hospital",
+      "name": "Nombre del hospital",
+      "nameRequired": "El nombre del hospital es obligatorio.",
+      "region": "País / Región",
+      "regionRequired": "El país/la región es obligatorio.",
+      "language": "Idioma predeterminado",
+      "adminSection": "Primer administrador",
+      "adminFirstName": "Nombre",
+      "adminFirstNameRequired": "El nombre es obligatorio.",
+      "adminLastName": "Apellidos",
+      "adminLastNameRequired": "Los apellidos son obligatorios.",
+      "adminEmail": "Correo electrónico",
+      "adminEmailRequired": "El correo electrónico es obligatorio.",
+      "adminEmailInvalid": "Introduzca una dirección de correo válida.",
+      "cancel": "Cancelar",
+      "submit": "Crear hospital",
+      "saving": "Creando…"
+    }
   },
   "transmissionSchedule": {
     "title": "Calendario de transmisión",

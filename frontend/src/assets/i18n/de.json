@@ -105,7 +105,50 @@
     "patients": "Patienten",
     "transmissionSchedule": "Übertragungsplan",
     "clinicManagement": "Klinikverwaltung",
-    "auditLog": "Prüfprotokoll"
+    "auditLog": "Prüfprotokoll",
+    "hospitals": "Krankenhäuser"
+  },
+  "hospitals": {
+    "title": "Krankenhäuser",
+    "subtitle": "Krankenhäuser dieser Plattform aufnehmen und verwalten",
+    "newHospital": "+ Neues Krankenhaus",
+    "loading": "Wird geladen…",
+    "loadError": "Krankenhäuser konnten nicht geladen werden.",
+    "empty": "Noch keine Krankenhäuser.",
+    "close": "Schließen",
+    "createError": "Krankenhaus konnte nicht angelegt werden. Prüfen Sie, ob die Admin-E-Mail bereits verwendet wird.",
+    "tempPasswordTitle": "Krankenhaus angelegt — temporäres Admin-Passwort erstellt",
+    "tempPasswordNote": "Teilen Sie es sicher mit {{email}}. Es wird nicht erneut angezeigt.",
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "table": {
+      "name": "Krankenhaus",
+      "region": "Land / Region",
+      "language": "Sprache",
+      "clinicians": "Kliniker",
+      "status": "Status"
+    },
+    "form": {
+      "hospitalSection": "Krankenhaus",
+      "name": "Name des Krankenhauses",
+      "nameRequired": "Der Name des Krankenhauses ist erforderlich.",
+      "region": "Land / Region",
+      "regionRequired": "Land/Region ist erforderlich.",
+      "language": "Standardsprache",
+      "adminSection": "Erster Administrator",
+      "adminFirstName": "Vorname",
+      "adminFirstNameRequired": "Der Vorname ist erforderlich.",
+      "adminLastName": "Nachname",
+      "adminLastNameRequired": "Der Nachname ist erforderlich.",
+      "adminEmail": "E-Mail",
+      "adminEmailRequired": "Die E-Mail ist erforderlich.",
+      "adminEmailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "cancel": "Abbrechen",
+      "submit": "Krankenhaus anlegen",
+      "saving": "Wird angelegt…"
+    }
   },
   "transmissionSchedule": {
     "title": "Übertragungsplan",

@@ -226,6 +226,15 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/v1/hospitals",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/v1/hospitals",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/health/live",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/health/live",

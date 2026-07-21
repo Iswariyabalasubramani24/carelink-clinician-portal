@@ -105,7 +105,50 @@
     "patients": "Patients",
     "transmissionSchedule": "Calendrier de transmission",
     "clinicManagement": "Gestion de la clinique",
-    "auditLog": "Journal d'audit"
+    "auditLog": "Journal d'audit",
+    "hospitals": "Hôpitaux"
+  },
+  "hospitals": {
+    "title": "Hôpitaux",
+    "subtitle": "Intégrer et gérer les hôpitaux de cette plateforme",
+    "newHospital": "+ Nouvel hôpital",
+    "loading": "Chargement…",
+    "loadError": "Échec du chargement des hôpitaux.",
+    "empty": "Aucun hôpital pour le moment.",
+    "close": "Fermer",
+    "createError": "Échec de la création de l'hôpital. Vérifiez que l'e-mail de l'administrateur n'est pas déjà utilisé.",
+    "tempPasswordTitle": "Hôpital créé — mot de passe administrateur temporaire généré",
+    "tempPasswordNote": "Partagez-le avec {{email}} de manière sécurisée. Il ne sera plus affiché.",
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "table": {
+      "name": "Hôpital",
+      "region": "Pays / Région",
+      "language": "Langue",
+      "clinicians": "Cliniciens",
+      "status": "Statut"
+    },
+    "form": {
+      "hospitalSection": "Hôpital",
+      "name": "Nom de l'hôpital",
+      "nameRequired": "Le nom de l'hôpital est requis.",
+      "region": "Pays / Région",
+      "regionRequired": "Le pays/la région est requis.",
+      "language": "Langue par défaut",
+      "adminSection": "Premier administrateur",
+      "adminFirstName": "Prénom",
+      "adminFirstNameRequired": "Le prénom est requis.",
+      "adminLastName": "Nom",
+      "adminLastNameRequired": "Le nom est requis.",
+      "adminEmail": "E-mail",
+      "adminEmailRequired": "L'e-mail est requis.",
+      "adminEmailInvalid": "Saisissez une adresse e-mail valide.",
+      "cancel": "Annuler",
+      "submit": "Créer l'hôpital",
+      "saving": "Création…"
+    }
   },
   "transmissionSchedule": {
     "title": "Calendrier de transmission",

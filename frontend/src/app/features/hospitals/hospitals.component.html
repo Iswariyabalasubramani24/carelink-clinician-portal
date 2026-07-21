@@ -1,0 +1,173 @@
+<div class="hospitals-page">
+  <header class="hospitals-page__header">
+    <div>
+      <h1>{{ 'hospitals.title' | translate }}</h1>
+      <p class="subtitle">{{ 'hospitals.subtitle' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn--primary" (click)="openCreateForm()">
+      {{ 'hospitals.newHospital' | translate }}
+    </button>
+  </header>
+
+  <div class="banner banner--success temp-password-banner" *ngIf="createdResult">
+    <div>
+      <strong>{{ 'hospitals.tempPasswordTitle' | translate }}</strong>
+      <p>{{ 'hospitals.tempPasswordNote' | translate: { email: createdResult.adminEmail } }}</p>
+      <code class="temp-password">{{ createdResult.temporaryPassword }}</code>
+    </div>
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="dismissTempPassword()"
+      [attr.aria-label]="'hospitals.close' | translate"
+    >
+      &times;
+    </button>
+  </div>
+
+  <section class="card">
+    <p class="state-message" *ngIf="loading">{{ 'hospitals.loading' | translate }}</p>
+    <p class="state-message state-message--error" *ngIf="error">{{ 'hospitals.loadError' | translate }}</p>
+
+    <table *ngIf="!loading && !error && hospitals.length">
+      <thead>
+        <tr>
+          <th>{{ 'hospitals.table.name' | translate }}</th>
+          <th>{{ 'hospitals.table.region' | translate }}</th>
+          <th>{{ 'hospitals.table.language' | translate }}</th>
+          <th>{{ 'hospitals.table.clinicians' | translate }}</th>
+          <th>{{ 'hospitals.table.status' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hospital of hospitals">
+          <td class="hospital-name">{{ hospital.name }}</td>
+          <td>{{ hospital.region }}</td>
+          <td class="mono">{{ hospital.languageCode }}</td>
+          <td>{{ hospital.clinicianCount }}</td>
+          <td>
+            <span
+              class="status-badge"
+              [class.status-badge--active]="hospital.isActive"
+              [class.status-badge--suspended]="!hospital.isActive"
+            >
+              {{ (hospital.isActive ? 'hospitals.status.active' : 'hospitals.status.inactive') | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="state-message" *ngIf="!loading && !error && hospitals.length === 0">
+      {{ 'hospitals.empty' | translate }}
+    </p>
+  </section>
+</div>
+
+<div class="modal-backdrop" *ngIf="showCreateForm" (click)="closeCreateForm()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="create-hospital-form">
+      <header class="create-hospital-form__header">
+        <h2>{{ 'hospitals.newHospital' | translate }}</h2>
+        <button
+          type="button"
+          class="icon-btn"
+          (click)="closeCreateForm()"
+          [attr.aria-label]="'hospitals.close' | translate"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="banner banner--error" *ngIf="createError">{{ 'hospitals.createError' | translate }}</div>
+
+      <form [formGroup]="createForm" (ngSubmit)="onSubmitCreate()" novalidate>
+        <h3 class="form-section-title">{{ 'hospitals.form.hospitalSection' | translate }}</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="hospitalName">{{ 'hospitals.form.name' | translate }}</label>
+            <input id="hospitalName" type="text" formControlName="name" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('name')?.touched && createForm.get('name')?.hasError('required')"
+            >
+              {{ 'hospitals.form.nameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="hospitalRegion">{{ 'hospitals.form.region' | translate }}</label>
+            <input id="hospitalRegion" type="text" formControlName="region" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('region')?.touched && createForm.get('region')?.hasError('required')"
+            >
+              {{ 'hospitals.form.regionRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="hospitalLanguage">{{ 'hospitals.form.language' | translate }}</label>
+            <select id="hospitalLanguage" formControlName="languageCode">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+        </div>
+
+        <h3 class="form-section-title">{{ 'hospitals.form.adminSection' | translate }}</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="adminFirstName">{{ 'hospitals.form.adminFirstName' | translate }}</label>
+            <input id="adminFirstName" type="text" formControlName="adminFirstName" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('adminFirstName')?.touched && createForm.get('adminFirstName')?.hasError('required')"
+            >
+              {{ 'hospitals.form.adminFirstNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="adminLastName">{{ 'hospitals.form.adminLastName' | translate }}</label>
+            <input id="adminLastName" type="text" formControlName="adminLastName" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('adminLastName')?.touched && createForm.get('adminLastName')?.hasError('required')"
+            >
+              {{ 'hospitals.form.adminLastNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="adminEmail">{{ 'hospitals.form.adminEmail' | translate }}</label>
+            <input id="adminEmail" type="email" formControlName="adminEmail" />
+            <span
+              class="field-error"
+              *ngIf="createForm.get('adminEmail')?.touched && createForm.get('adminEmail')?.hasError('required')"
+            >
+              {{ 'hospitals.form.adminEmailRequired' | translate }}
+            </span>
+            <span
+              class="field-error"
+              *ngIf="createForm.get('adminEmail')?.touched && createForm.get('adminEmail')?.hasError('email')"
+            >
+              {{ 'hospitals.form.adminEmailInvalid' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <footer class="form-actions">
+          <button type="button" class="btn btn--secondary" (click)="closeCreateForm()" [disabled]="creating">
+            {{ 'hospitals.form.cancel' | translate }}
+          </button>
+          <button type="submit" class="btn btn--primary" [disabled]="creating">
+            {{ creating ? ('hospitals.form.saving' | translate) : ('hospitals.form.submit' | translate) }}
+          </button>
+        </footer>
+      </form>
+    </div>
+  </div>
+</div>

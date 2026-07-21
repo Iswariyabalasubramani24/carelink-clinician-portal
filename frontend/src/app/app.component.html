@@ -1,41 +1,57 @@
 <header class="app-header">
   <h1>{{ 'app.title' | translate }}</h1>
   <nav class="app-header__nav" *ngIf="currentClinician$ | async as clinician">
-    <a routerLink="/dashboard" routerLinkActive="app-header__nav-link--active" class="app-header__nav-link">
-      {{ 'nav.dashboard' | translate }}
-    </a>
-    <a routerLink="/patients" routerLinkActive="app-header__nav-link--active" class="app-header__nav-link">
-      {{ 'nav.patients' | translate }}
-    </a>
+    <!-- A SuperAdmin is a platform operator: they see only Hospitals, never the
+         clinical pages (their hidden system tenant has no clinical data). -->
+    <ng-container *ngIf="clinician.role !== 'SuperAdmin'">
+      <a routerLink="/dashboard" routerLinkActive="app-header__nav-link--active" class="app-header__nav-link">
+        {{ 'nav.dashboard' | translate }}
+      </a>
+      <a routerLink="/patients" routerLinkActive="app-header__nav-link--active" class="app-header__nav-link">
+        {{ 'nav.patients' | translate }}
+      </a>
+      <a
+        routerLink="/transmission-schedule"
+        routerLinkActive="app-header__nav-link--active"
+        class="app-header__nav-link"
+      >
+        {{ 'nav.transmissionSchedule' | translate }}
+      </a>
+      <a
+        *ngIf="clinician.role === 'Admin'"
+        routerLink="/clinic-management"
+        routerLinkActive="app-header__nav-link--active"
+        class="app-header__nav-link"
+      >
+        {{ 'nav.clinicManagement' | translate }}
+      </a>
+      <a
+        *ngIf="clinician.role === 'Admin'"
+        routerLink="/audit-log"
+        routerLinkActive="app-header__nav-link--active"
+        class="app-header__nav-link"
+      >
+        {{ 'nav.auditLog' | translate }}
+      </a>
+    </ng-container>
     <a
-      routerLink="/transmission-schedule"
+      *ngIf="clinician.role === 'SuperAdmin'"
+      routerLink="/hospitals"
       routerLinkActive="app-header__nav-link--active"
       class="app-header__nav-link"
     >
-      {{ 'nav.transmissionSchedule' | translate }}
-    </a>
-    <a
-      *ngIf="clinician.role === 'Admin'"
-      routerLink="/clinic-management"
-      routerLinkActive="app-header__nav-link--active"
-      class="app-header__nav-link"
-    >
-      {{ 'nav.clinicManagement' | translate }}
-    </a>
-    <a
-      *ngIf="clinician.role === 'Admin'"
-      routerLink="/audit-log"
-      routerLinkActive="app-header__nav-link--active"
-      class="app-header__nav-link"
-    >
-      {{ 'nav.auditLog' | translate }}
+      {{ 'nav.hospitals' | translate }}
     </a>
   </nav>
   <div class="app-header__actions">
     <app-language-switcher *ngIf="!(isLoginRoute$ | async)"></app-language-switcher>
     <div class="app-header__session" *ngIf="currentClinician$ | async as clinician">
-      <app-clinic-switcher></app-clinic-switcher>
-      <span class="app-header__divider" aria-hidden="true"></span>
+      <!-- SuperAdmins belong to the hidden system tenant only, so the clinic
+           switcher would render an empty hospital list for them. -->
+      <ng-container *ngIf="clinician.role !== 'SuperAdmin'">
+        <app-clinic-switcher></app-clinic-switcher>
+        <span class="app-header__divider" aria-hidden="true"></span>
+      </ng-container>
       <div class="app-header__profile">
         <span class="app-header__avatar" aria-hidden="true">{{ clinician.firstName.charAt(0) }}{{ clinician.lastName.charAt(0) }}</span>
         <span class="app-header__clinician">{{ clinician.firstName }} {{ clinician.lastName }}</span>

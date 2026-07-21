@@ -10,6 +10,7 @@ using CareLink.Infrastructure.Auditing;
 using CareLink.Infrastructure.Repositories;
 using CareLink.Infrastructure.Reports;
 using CareLink.Infrastructure.Security;
+using CareLink.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,8 @@ builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<ITemporaryPasswordGenerator, TemporaryPasswordGenerator>();
+builder.Services.AddScoped<SuperAdminSeeder>();
+builder.Services.AddScoped<DevelopmentDataSeeder>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -90,6 +93,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Bootstrap the platform operator (all environments, idempotent) and, in
+// development only, the demo hospitals. Schema migrations are applied
+// out-of-band (dotnet ef database update / deployment pipeline), so this runs
+// against an already-migrated database.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await services.GetRequiredService<SuperAdminSeeder>().SeedAsync(
+        builder.Configuration["SuperAdmin:Email"],
+        builder.Configuration["SuperAdmin:Password"]);
+
+    if (app.Environment.IsDevelopment())
+    {
+        await services.GetRequiredService<DevelopmentDataSeeder>().SeedAsync();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {

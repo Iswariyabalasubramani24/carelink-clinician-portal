@@ -44,7 +44,10 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigateByUrl('/dashboard');
+        // A SuperAdmin is a platform operator with no clinical data of their
+        // own - their home is hospital management, not the clinical dashboard.
+        const isSuperAdmin = this.authService.getCurrentClinician()?.role === 'SuperAdmin';
+        this.router.navigateByUrl(isSuperAdmin ? '/hospitals' : '/dashboard');
       },
       error: (err: HttpErrorResponse) => {
         this.loading = false;

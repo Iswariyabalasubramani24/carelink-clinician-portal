@@ -40,6 +40,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(t => t.Name).IsRequired().HasMaxLength(200);
             entity.Property(t => t.Region).IsRequired().HasMaxLength(100);
             entity.Property(t => t.LanguageCode).IsRequired().HasMaxLength(10);
+            entity.Property(t => t.IsSystem).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<Patient>(entity =>
