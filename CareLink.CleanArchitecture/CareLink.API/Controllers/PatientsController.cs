@@ -15,6 +15,7 @@ using CareLink.Application.Reports.Queries;
 using CareLink.Application.Schedule;
 using CareLink.Application.Schedule.Commands;
 using CareLink.Application.Schedule.Queries;
+using CareLink.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,9 +38,21 @@ public class PatientsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PatientDto>>> GetByTenant()
+    public async Task<ActionResult<IEnumerable<PatientDto>>> GetByTenant(
+        [FromQuery] DeviceType? deviceType,
+        [FromQuery] DateTime? implantDateFrom,
+        [FromQuery] DateTime? implantDateTo,
+        [FromQuery] bool? isActive,
+        [FromQuery] string? keyword)
     {
-        var result = await mediator.Send(new GetPatientsQuery(GetTenantId()));
+        var result = await mediator.Send(new GetPatientsQuery(GetTenantId())
+        {
+            DeviceType = deviceType,
+            ImplantDateFrom = implantDateFrom,
+            ImplantDateTo = implantDateTo,
+            IsActive = isActive,
+            Keyword = keyword
+        });
         return Ok(result);
     }
 

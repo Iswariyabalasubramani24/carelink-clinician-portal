@@ -30,6 +30,21 @@
       "device": "Dispositivo",
       "serialNumber": "Número de serie",
       "implantDate": "Fecha de implante"
+    },
+    "advancedSearch": {
+      "title": "Búsqueda avanzada",
+      "deviceType": "Tipo de dispositivo",
+      "anyDeviceType": "Cualquier tipo de dispositivo",
+      "status": "Estado",
+      "anyStatus": "Cualquier estado",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "implantDateFrom": "Fecha de implante desde",
+      "implantDateTo": "Fecha de implante hasta",
+      "keyword": "Palabra clave",
+      "keywordPlaceholder": "Buscar por nombre o n.º de historia…",
+      "search": "Buscar",
+      "clearFilters": "Borrar filtros"
     }
   },
   "addPatientForm": {
@@ -88,8 +103,24 @@
   "nav": {
     "dashboard": "Panel",
     "patients": "Pacientes",
+    "transmissionSchedule": "Calendario de transmisión",
     "clinicManagement": "Gestión de la clínica",
     "auditLog": "Registro de auditoría"
+  },
+  "transmissionSchedule": {
+    "title": "Calendario de transmisión",
+    "subtitle": "Próxima transmisión programada del dispositivo de cada paciente",
+    "loading": "Cargando el calendario de transmisión…",
+    "loadError": "Error al cargar el calendario de transmisión.",
+    "empty": "No se encontraron pacientes.",
+    "never": "Nunca",
+    "table": {
+      "patient": "Paciente",
+      "lastSynced": "Última sincronización",
+      "interval": "Intervalo",
+      "intervalDays": "{{days}} días",
+      "nextScheduled": "Próxima transmisión"
+    }
   },
   "dashboard": {
     "title": "Panel de inicio",

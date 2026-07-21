@@ -34,6 +34,13 @@ public class ScheduleController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("transmission-schedule")]
+    public async Task<ActionResult<List<TransmissionScheduleEntryDto>>> GetTransmissionSchedule()
+    {
+        var result = await mediator.Send(new GetTransmissionScheduleQuery(GetTenantId()));
+        return Ok(result);
+    }
+
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;

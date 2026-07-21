@@ -25,6 +25,7 @@ export const patientsFeature = createFeature({
   reducer: createReducer(
     initialState,
     on(PatientsActions.loadPatients, (state) => ({ ...state, loading: true, error: null })),
+    on(PatientsActions.searchPatients, (state) => ({ ...state, loading: true, error: null })),
     on(PatientsActions.loadPatientsSuccess, (state, { patients }) =>
       patientsAdapter.setAll(patients, { ...state, loading: false })
     ),

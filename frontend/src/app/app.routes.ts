@@ -30,6 +30,14 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'transmission-schedule',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/transmission-schedule/transmission-schedule.component').then(
+        (m) => m.TransmissionScheduleComponent
+      )
+  },
+  {
     path: 'clinic-management',
     canActivate: [authGuard, adminGuard],
     loadComponent: () =>

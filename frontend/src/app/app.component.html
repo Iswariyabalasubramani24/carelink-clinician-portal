@@ -8,6 +8,13 @@
       {{ 'nav.patients' | translate }}
     </a>
     <a
+      routerLink="/transmission-schedule"
+      routerLinkActive="app-header__nav-link--active"
+      class="app-header__nav-link"
+    >
+      {{ 'nav.transmissionSchedule' | translate }}
+    </a>
+    <a
       *ngIf="clinician.role === 'Admin'"
       routerLink="/clinic-management"
       routerLinkActive="app-header__nav-link--active"

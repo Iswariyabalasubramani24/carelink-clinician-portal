@@ -20,6 +20,14 @@ public class ScheduleSettingsRepository(ApplicationDbContext db) : IScheduleSett
             .FirstOrDefaultAsync(s => s.PatientId == patientId);
     }
 
+    public async Task<List<PatientScheduleSettings>> GetByPatientIdsAsync(IEnumerable<int> patientIds)
+    {
+        return await db.PatientScheduleSettings
+            .AsNoTracking()
+            .Where(s => s.PatientId != null && patientIds.Contains(s.PatientId.Value))
+            .ToListAsync();
+    }
+
     public async Task UpsertTenantSettingsAsync(int tenantId, int intervalDays)
     {
         var existing = await db.PatientScheduleSettings

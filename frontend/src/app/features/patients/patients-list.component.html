@@ -9,6 +9,63 @@
     </button>
   </header>
 
+  <section class="card advanced-search">
+    <button type="button" class="advanced-search__toggle" (click)="toggleAdvancedSearch()">
+      <span>{{ 'patients.advancedSearch.title' | translate }}</span>
+      <span class="advanced-search__chevron" [class.advanced-search__chevron--open]="showAdvancedSearch">&rsaquo;</span>
+    </button>
+
+    <form *ngIf="showAdvancedSearch" [formGroup]="searchForm" (ngSubmit)="search()" class="advanced-search__form">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="searchDeviceType">{{ 'patients.advancedSearch.deviceType' | translate }}</label>
+          <select id="searchDeviceType" formControlName="deviceType">
+            <option value="">{{ 'patients.advancedSearch.anyDeviceType' | translate }}</option>
+            <option *ngFor="let device of deviceTypes" [value]="device.value">
+              {{ device.labelKey | translate }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="searchStatus">{{ 'patients.advancedSearch.status' | translate }}</label>
+          <select id="searchStatus" formControlName="status">
+            <option value="">{{ 'patients.advancedSearch.anyStatus' | translate }}</option>
+            <option value="active">{{ 'patients.advancedSearch.active' | translate }}</option>
+            <option value="inactive">{{ 'patients.advancedSearch.inactive' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="searchImplantDateFrom">{{ 'patients.advancedSearch.implantDateFrom' | translate }}</label>
+          <input id="searchImplantDateFrom" type="date" formControlName="implantDateFrom" />
+        </div>
+
+        <div class="form-field">
+          <label for="searchImplantDateTo">{{ 'patients.advancedSearch.implantDateTo' | translate }}</label>
+          <input id="searchImplantDateTo" type="date" formControlName="implantDateTo" />
+        </div>
+
+        <div class="form-field form-field--wide">
+          <label for="searchKeyword">{{ 'patients.advancedSearch.keyword' | translate }}</label>
+          <input
+            id="searchKeyword"
+            type="text"
+            formControlName="keyword"
+            [placeholder]="'patients.advancedSearch.keywordPlaceholder' | translate"
+          />
+        </div>
+      </div>
+
+      <div class="advanced-search__actions">
+        <button type="submit" class="btn btn--primary">{{ 'patients.advancedSearch.search' | translate }}</button>
+        <button type="button" class="btn btn--secondary" (click)="clearFilters()">
+          {{ 'patients.advancedSearch.clearFilters' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+
   <section class="card">
     <p class="state-message" *ngIf="loading$ | async">{{ 'patients.loading' | translate }}</p>
     <p class="state-message state-message--error" *ngIf="error$ | async as error">{{ error }}</p>

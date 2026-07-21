@@ -30,6 +30,21 @@
       "device": "Device",
       "serialNumber": "Serial Number",
       "implantDate": "Implant Date"
+    },
+    "advancedSearch": {
+      "title": "Advanced Search",
+      "deviceType": "Device Type",
+      "anyDeviceType": "Any device type",
+      "status": "Status",
+      "anyStatus": "Any status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "implantDateFrom": "Implant Date From",
+      "implantDateTo": "Implant Date To",
+      "keyword": "Keyword",
+      "keywordPlaceholder": "Search by name or MRN…",
+      "search": "Search",
+      "clearFilters": "Clear Filters"
     }
   },
   "addPatientForm": {
@@ -88,8 +103,24 @@
   "nav": {
     "dashboard": "Dashboard",
     "patients": "Patients",
+    "transmissionSchedule": "Transmission Schedule",
     "clinicManagement": "Clinic Management",
     "auditLog": "Audit Log"
+  },
+  "transmissionSchedule": {
+    "title": "Transmission Schedule",
+    "subtitle": "Next scheduled device transmission for every patient",
+    "loading": "Loading transmission schedule…",
+    "loadError": "Failed to load the transmission schedule.",
+    "empty": "No patients found.",
+    "never": "Never",
+    "table": {
+      "patient": "Patient",
+      "lastSynced": "Last Synced",
+      "interval": "Interval",
+      "intervalDays": "{{days}} days",
+      "nextScheduled": "Next Scheduled"
+    }
   },
   "dashboard": {
     "title": "Home Dashboard",

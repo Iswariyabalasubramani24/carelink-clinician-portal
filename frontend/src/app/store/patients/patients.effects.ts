@@ -21,6 +21,20 @@ export class PatientsEffects {
     )
   );
 
+  searchPatients$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PatientsActions.searchPatients),
+      switchMap(({ filters }) =>
+        this.patientService.getAll(filters).pipe(
+          map((patients) => PatientsActions.loadPatientsSuccess({ patients })),
+          catchError((error) =>
+            of(PatientsActions.loadPatientsFailure({ error: error.message ?? 'Unknown error' }))
+          )
+        )
+      )
+    )
+  );
+
   createPatient$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PatientsActions.createPatient),

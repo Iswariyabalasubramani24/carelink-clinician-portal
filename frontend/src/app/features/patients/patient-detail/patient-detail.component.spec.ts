@@ -24,6 +24,7 @@ import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../co
 import { PatientNote } from '../../../core/models/patient-note.model';
 import { CardiacDeviceType, Patient } from '../../../core/models/patient.model';
 import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
+import { PatientScheduleSettings } from '../../../core/models/schedule.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
 import { AlertService } from '../../../core/services/alert.service';
 import { PatientService } from '../../../core/services/patient.service';
@@ -44,6 +45,8 @@ describe('PatientDetailComponent', () => {
     generateReport: jest.Mock;
     getReportSettings: jest.Mock;
     updateReportSettings: jest.Mock;
+    getScheduleSettings: jest.Mock;
+    updateScheduleSettings: jest.Mock;
     getNotes: jest.Mock;
     createNote: jest.Mock;
   };
@@ -95,6 +98,8 @@ describe('PatientDetailComponent', () => {
 
   const mockReportSettings: PatientReportSettings = { intervalDays: 30, isOverride: false };
 
+  const mockScheduleSettings: PatientScheduleSettings = { intervalDays: 30, isOverride: false };
+
   const mockNotes: PatientNote[] = [
     { id: 1, patientId: 1, clinicianName: 'Anita Rao', content: 'Patient is stable.', createdAt: '2026-07-20T10:00:00Z' }
   ];
@@ -104,6 +109,7 @@ describe('PatientDetailComponent', () => {
     alertSettings?: PatientAlertSetting[];
     reports?: Report[];
     reportSettings?: PatientReportSettings;
+    scheduleSettings?: PatientScheduleSettings;
     notes?: PatientNote[];
   }): Promise<void> {
     patientServiceMock = {
@@ -115,6 +121,8 @@ describe('PatientDetailComponent', () => {
       generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
       getReportSettings: jest.fn().mockReturnValue(of(options?.reportSettings ?? mockReportSettings)),
       updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
+      getScheduleSettings: jest.fn().mockReturnValue(of(options?.scheduleSettings ?? mockScheduleSettings)),
+      updateScheduleSettings: jest.fn().mockReturnValue(of(mockScheduleSettings)),
       getNotes: jest.fn().mockReturnValue(of(options?.notes ?? mockNotes)),
       createNote: jest.fn().mockReturnValue(
         of({ id: 2, patientId: 1, clinicianName: 'Anita Rao', content: 'New note content', createdAt: '2026-07-21T00:00:00Z' })
@@ -207,6 +215,8 @@ describe('PatientDetailComponent', () => {
       generateReport: jest.fn().mockReturnValue(of(mockReports[0])),
       getReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
       updateReportSettings: jest.fn().mockReturnValue(of(mockReportSettings)),
+      getScheduleSettings: jest.fn().mockReturnValue(of(mockScheduleSettings)),
+      updateScheduleSettings: jest.fn().mockReturnValue(of(mockScheduleSettings)),
       getNotes: jest.fn().mockReturnValue(of(mockNotes)),
       createNote: jest.fn().mockReturnValue(of(mockNotes[0]))
     };

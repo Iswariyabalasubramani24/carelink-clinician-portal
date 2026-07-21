@@ -1,0 +1,37 @@
+<div class="transmission-schedule-page">
+  <header class="transmission-schedule-page__header">
+    <h1>{{ 'transmissionSchedule.title' | translate }}</h1>
+    <p class="subtitle">{{ 'transmissionSchedule.subtitle' | translate }}</p>
+  </header>
+
+  <section class="card">
+    <p class="state-message" *ngIf="loading">{{ 'transmissionSchedule.loading' | translate }}</p>
+    <p class="state-message state-message--error" *ngIf="error">{{ 'transmissionSchedule.loadError' | translate }}</p>
+
+    <table *ngIf="!loading && !error && entries.length">
+      <thead>
+        <tr>
+          <th>{{ 'transmissionSchedule.table.patient' | translate }}</th>
+          <th>{{ 'transmissionSchedule.table.lastSynced' | translate }}</th>
+          <th>{{ 'transmissionSchedule.table.interval' | translate }}</th>
+          <th class="sortable-header" (click)="toggleSortByNextScheduledDate()">
+            {{ 'transmissionSchedule.table.nextScheduled' | translate }}
+            <span class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries">
+          <td class="patient-name">{{ entry.patientName }}</td>
+          <td class="mono">{{ entry.lastSyncedAt ? (entry.lastSyncedAt | date) : ('transmissionSchedule.never' | translate) }}</td>
+          <td>{{ 'transmissionSchedule.table.intervalDays' | translate: { days: entry.intervalDays } }}</td>
+          <td class="mono">{{ entry.nextScheduledDate ? (entry.nextScheduledDate | date) : '—' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="state-message" *ngIf="!loading && !error && entries.length === 0">
+      {{ 'transmissionSchedule.empty' | translate }}
+    </p>
+  </section>
+</div>

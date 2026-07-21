@@ -27,3 +27,13 @@ export interface Patient {
   createdAt: string;
   updatedAt?: string;
 }
+
+// All fields optional and combinable (AND logic) - mirrors the backend's
+// PatientSearchFilters. Date fields are yyyy-MM-dd strings from <input type="date">.
+export interface PatientSearchFilters {
+  deviceType?: CardiacDeviceType;
+  implantDateFrom?: string;
+  implantDateTo?: string;
+  isActive?: boolean;
+  keyword?: string;
+}

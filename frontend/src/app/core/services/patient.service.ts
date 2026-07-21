@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { Alert, PatientAlertSetting } from '../models/alert.model';
-import { Patient } from '../models/patient.model';
+import { Patient, PatientSearchFilters } from '../models/patient.model';
 import { PatientNote } from '../models/patient-note.model';
 import { PatientReportSettings, Report, ReportType } from '../models/report.model';
 import { PatientScheduleSettings } from '../models/schedule.model';
@@ -32,8 +32,25 @@ export class PatientService {
   constructor(private readonly http: HttpClient) {}
 
   // tenantId is derived server-side from the JWT access token - no longer sent by the client.
-  getAll(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.baseUrl);
+  getAll(filters?: PatientSearchFilters): Observable<Patient[]> {
+    let params = new HttpParams();
+    if (filters?.deviceType) {
+      params = params.set('deviceType', filters.deviceType);
+    }
+    if (filters?.implantDateFrom) {
+      params = params.set('implantDateFrom', filters.implantDateFrom);
+    }
+    if (filters?.implantDateTo) {
+      params = params.set('implantDateTo', filters.implantDateTo);
+    }
+    if (filters?.isActive !== undefined) {
+      params = params.set('isActive', String(filters.isActive));
+    }
+    if (filters?.keyword) {
+      params = params.set('keyword', filters.keyword);
+    }
+
+    return this.http.get<Patient[]>(this.baseUrl, { params });
   }
 
   getById(id: number): Observable<Patient> {

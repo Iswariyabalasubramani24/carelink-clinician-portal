@@ -30,6 +30,21 @@
       "device": "Gerät",
       "serialNumber": "Seriennummer",
       "implantDate": "Implantationsdatum"
+    },
+    "advancedSearch": {
+      "title": "Erweiterte Suche",
+      "deviceType": "Gerätetyp",
+      "anyDeviceType": "Alle Gerätetypen",
+      "status": "Status",
+      "anyStatus": "Alle Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "implantDateFrom": "Implantationsdatum von",
+      "implantDateTo": "Implantationsdatum bis",
+      "keyword": "Stichwort",
+      "keywordPlaceholder": "Suche nach Name oder Aktenzeichen…",
+      "search": "Suchen",
+      "clearFilters": "Filter zurücksetzen"
     }
   },
   "addPatientForm": {
@@ -88,8 +103,24 @@
   "nav": {
     "dashboard": "Dashboard",
     "patients": "Patienten",
+    "transmissionSchedule": "Übertragungsplan",
     "clinicManagement": "Klinikverwaltung",
     "auditLog": "Prüfprotokoll"
+  },
+  "transmissionSchedule": {
+    "title": "Übertragungsplan",
+    "subtitle": "Nächste geplante Geräteübertragung für jeden Patienten",
+    "loading": "Übertragungsplan wird geladen…",
+    "loadError": "Fehler beim Laden des Übertragungsplans.",
+    "empty": "Keine Patienten gefunden.",
+    "never": "Nie",
+    "table": {
+      "patient": "Patient",
+      "lastSynced": "Zuletzt synchronisiert",
+      "interval": "Intervall",
+      "intervalDays": "{{days}} Tage",
+      "nextScheduled": "Nächste Übertragung"
+    }
   },
   "dashboard": {
     "title": "Startseite",

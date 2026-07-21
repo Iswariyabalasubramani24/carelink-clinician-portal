@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { ScheduleSettings } from '../models/schedule.model';
+import { TransmissionScheduleEntry } from '../models/transmission-schedule.model';
 
 @Injectable({ providedIn: 'root' })
 export class ScheduleService {
@@ -17,5 +18,9 @@ export class ScheduleService {
 
   updateClinicSettings(intervalDays: number): Observable<ScheduleSettings> {
     return this.http.put<ScheduleSettings>(`${this.baseUrl}/clinic-settings`, { intervalDays });
+  }
+
+  getTransmissionSchedule(): Observable<TransmissionScheduleEntry[]> {
+    return this.http.get<TransmissionScheduleEntry[]>(`${this.baseUrl}/transmission-schedule`);
   }
 }

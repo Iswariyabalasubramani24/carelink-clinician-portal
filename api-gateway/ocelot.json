@@ -181,6 +181,15 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/v1/schedule/transmission-schedule",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/v1/schedule/transmission-schedule",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/v1/clinic-users",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "DownstreamPathTemplate": "/api/v1/clinic-users",
