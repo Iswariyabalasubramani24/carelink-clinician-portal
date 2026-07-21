@@ -28,6 +28,9 @@ source "$ENV_FILE"
 : "${SUPERADMIN_PASSWORD:?export SUPERADMIN_PASSWORD before running}"
 
 IMAGE_TAG="${IMAGE_TAG:-$(date +%Y%m%d%H%M%S)}"
+# 1 replica per service fits comfortably on a single-node free-trial cluster.
+# Set REPLICAS=2 (with 2+ nodes) for a highly-available production deploy.
+REPLICAS="${REPLICAS:-1}"
 
 # ---- Build & push the three images directly in ACR -----------------------
 echo ">> Building images in ACR (tag $IMAGE_TAG)..."
@@ -74,6 +77,15 @@ cp -r "$REPO_ROOT/deploy/k8s/." "$STAGE/"
     "carelink-api=${ACR_LOGIN_SERVER}/carelink-api:${IMAGE_TAG}" \
     "carelink-gateway=${ACR_LOGIN_SERVER}/carelink-gateway:${IMAGE_TAG}" \
     "carelink-frontend=${ACR_LOGIN_SERVER}/carelink-frontend:${IMAGE_TAG}"
+  cat >> kustomization.yaml <<EOF
+replicas:
+  - name: api
+    count: ${REPLICAS}
+  - name: gateway
+    count: ${REPLICAS}
+  - name: frontend
+    count: ${REPLICAS}
+EOF
 )
 kubectl apply -k "$STAGE"
 

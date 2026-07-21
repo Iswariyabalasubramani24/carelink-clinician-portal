@@ -13,9 +13,27 @@ which is gitignored.
 
 ---
 
+## Deploying on a free trial (interview demo)
+
+The defaults are tuned for a **fresh Azure free account** ($200 credit, 30 days):
+**1 AKS node** (Standard_B2s, 2 vCPU) and **1 replica** per service, which fits
+the typical **4 vCPU regional quota** with headroom — no quota-increase request
+needed. Azure SQL Basic + ACR Basic + 1 small node run comfortably inside the
+credit, so the demo is **effectively free for the interview window**.
+
+Check your quota before starting (look for `Total Regional vCPUs`, want ≥ 2 free):
+
+```bash
+az vm list-usage --location eastus -o table | grep -i "Total Regional vCPUs"
+```
+
+If it's 0, pick another region via `LOCATION=...`, or request an increase in the
+portal (Subscription → Usage + quotas). **Remember to `az group delete` when the
+interview is over** so the credit isn't consumed after the trial converts.
+
 ## Prerequisites
 
-- An Azure subscription you can create resources in.
+- An Azure subscription you can create resources in (a free trial is fine).
 - **Azure Cloud Shell is the easiest option** — it already has `az`, `kubectl`,
   `helm`, and `kustomize`. Otherwise install all four locally.
   - `kustomize` here means the **standalone** binary (the scripts use
@@ -41,10 +59,10 @@ export SQL_ADMIN_PASSWORD='<strong-sql-admin-password>'
 ```
 
 Optional overrides (defaults in parentheses): `LOCATION` (eastus),
-`RESOURCE_GROUP` (carelink-rg), `AKS_NODE_COUNT` (2), `AKS_NODE_SIZE`
-(Standard_B2s), `SQL_DB_SKU` (Basic). ACR and SQL server names are given a
-random suffix so they're globally unique; pass `ACR_NAME` / `SQL_SERVER` to pin
-them.
+`RESOURCE_GROUP` (carelink-rg), `AKS_NODE_COUNT` (1 — free-trial-friendly;
+use 2+ for production HA), `AKS_NODE_SIZE` (Standard_B2s), `SQL_DB_SKU` (Basic).
+ACR and SQL server names are given a random suffix so they're globally unique;
+pass `ACR_NAME` / `SQL_SERVER` to pin them.
 
 This takes ~10 minutes (AKS creation dominates). It writes `.deploy.env`.
 
@@ -128,14 +146,16 @@ workspace). Cloud role names are `carelink-api` and `carelink-gateway`.
 
 | Resource | SKU | ~USD/mo |
 |----------|-----|---------|
-| AKS nodes | 2 × Standard_B2s | ~60 |
+| AKS node | 1 × Standard_B2s (default) | ~30 |
 | Azure SQL | Basic | ~5 |
 | ACR | Basic | ~5 |
 | Log Analytics + App Insights | pay-as-you-go | a few $ at low volume |
 | Load balancer + egress | | a few $ |
 
-Roughly **$75–100/month**. To trim: drop to 1 node (`AKS_NODE_COUNT=1`), or use
-the AKS **Stop/Start** feature when idle (`az aks stop`).
+Roughly **$45–55/month** at the free-trial-friendly defaults — **covered by the
+$200 trial credit** for a demo. A production HA setup (`AKS_NODE_COUNT=2
+REPLICAS=2`) is ~$75–100/mo. To pause spend between demo sessions, use AKS
+**Stop/Start** (`az aks stop --name carelink-aks -g carelink-rg`).
 
 ## Teardown
 

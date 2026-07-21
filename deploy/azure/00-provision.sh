@@ -19,7 +19,10 @@ RESOURCE_GROUP="${RESOURCE_GROUP:-carelink-rg}"
 # ACR name must be globally unique, 5-50 chars, lowercase alphanumeric only.
 ACR_NAME="${ACR_NAME:-carelinkacr$RANDOM}"
 AKS_NAME="${AKS_NAME:-carelink-aks}"
-AKS_NODE_COUNT="${AKS_NODE_COUNT:-2}"
+# Default 1 node (2 vCPU) so a fresh Azure free trial - which typically has a
+# 4 vCPU regional quota - can deploy without a quota-increase request. Bump to
+# 2+ for a real production cluster.
+AKS_NODE_COUNT="${AKS_NODE_COUNT:-1}"
 AKS_NODE_SIZE="${AKS_NODE_SIZE:-Standard_B2s}"
 LOG_WORKSPACE="${LOG_WORKSPACE:-carelink-logs}"
 APPINSIGHTS_NAME="${APPINSIGHTS_NAME:-carelink-ai}"
