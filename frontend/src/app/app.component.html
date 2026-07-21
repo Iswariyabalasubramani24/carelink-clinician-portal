@@ -15,6 +15,14 @@
     >
       {{ 'nav.clinicManagement' | translate }}
     </a>
+    <a
+      *ngIf="clinician.role === 'Admin'"
+      routerLink="/audit-log"
+      routerLinkActive="app-header__nav-link--active"
+      class="app-header__nav-link"
+    >
+      {{ 'nav.auditLog' | translate }}
+    </a>
   </nav>
   <div class="app-header__actions">
     <app-language-switcher *ngIf="!(isLoginRoute$ | async)"></app-language-switcher>

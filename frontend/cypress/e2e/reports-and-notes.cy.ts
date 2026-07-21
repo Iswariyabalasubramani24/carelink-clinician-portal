@@ -48,7 +48,7 @@ describe('Sprint 6 + 7: Report generation/download and Comments and Notes', () =
     cy.contains('button', 'Generate Report').click();
     cy.contains('td', 'Full Report', { timeout: 10000 }).should('be.visible');
 
-    cy.intercept('GET', '**/api/reports/*/download').as('downloadReport');
+    cy.intercept('GET', '**/api/v1/reports/*/download').as('downloadReport');
     cy.contains('button', 'Download').click();
     cy.wait('@downloadReport').its('response').then((response) => {
       expect(response?.statusCode).to.eq(200);

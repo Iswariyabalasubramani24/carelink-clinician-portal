@@ -88,7 +88,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "patients": "Patients",
-    "clinicManagement": "Clinic Management"
+    "clinicManagement": "Clinic Management",
+    "auditLog": "Audit Log"
   },
   "dashboard": {
     "title": "Home Dashboard",
@@ -248,6 +249,37 @@
       "cancel": "Cancel",
       "saving": "Creating…",
       "submit": "Create User"
+    }
+  },
+  "auditLog": {
+    "title": "Audit Log",
+    "subtitle": "A record of key actions taken across your hospital's account",
+    "loading": "Loading…",
+    "loadError": "Failed to load the audit log.",
+    "empty": "No audit log entries found.",
+    "filters": {
+      "all": "All"
+    },
+    "actions": {
+      "PatientCreated": "Patient Created",
+      "AlertAcknowledged": "Alert Acknowledged",
+      "AlertSnoozed": "Alert Snoozed",
+      "ClinicUserCreated": "Clinic User Created",
+      "ClinicUserSuspended": "Clinic User Suspended",
+      "ClinicUserActivated": "Clinic User Activated",
+      "ReportGenerated": "Report Generated"
+    },
+    "table": {
+      "timestamp": "Timestamp",
+      "action": "Action",
+      "entity": "Entity",
+      "clinicianId": "Clinician ID",
+      "details": "Details"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} of {{totalPages}}"
     }
   }
 }

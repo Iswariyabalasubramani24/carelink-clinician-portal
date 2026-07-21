@@ -9,6 +9,9 @@ public class CreateClinicUserCommand : IRequest<CreateClinicUserResultDto>
 {
     public int TenantId { get; set; }
 
+    // The admin performing the action (from JWT), not the user being created.
+    public int ActingClinicianId { get; set; }
+
     public string FirstName { get; set; } = string.Empty;
 
     public string LastName { get; set; } = string.Empty;
@@ -23,7 +26,8 @@ public class CreateClinicUserCommand : IRequest<CreateClinicUserResultDto>
 public class CreateClinicUserCommandHandler(
     IClinicianRepository clinicianRepository,
     ITemporaryPasswordGenerator temporaryPasswordGenerator,
-    IPasswordHasher passwordHasher)
+    IPasswordHasher passwordHasher,
+    IAuditLogger auditLogger)
     : IRequestHandler<CreateClinicUserCommand, CreateClinicUserResultDto>
 {
     public async Task<CreateClinicUserResultDto> Handle(CreateClinicUserCommand request, CancellationToken cancellationToken)
@@ -50,6 +54,12 @@ public class CreateClinicUserCommandHandler(
         };
 
         var created = await clinicianRepository.AddAsync(clinician);
+
+        // Details deliberately exclude the temporary password - it must never
+        // be persisted anywhere, including audit logs.
+        await auditLogger.LogAsync(
+            request.ActingClinicianId, request.TenantId, "ClinicUserCreated", "Clinician", created.Id,
+            $"{created.Email} ({created.Role})");
 
         return new CreateClinicUserResultDto(ClinicUserDto.FromEntity(created), temporaryPassword);
     }

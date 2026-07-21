@@ -1,6 +1,7 @@
 using CareLink.Application.Common.Interfaces;
 using CareLink.Application.Patients.Commands;
 using CareLink.Domain.Entities;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 
 namespace CareLink.UnitTests.Patients;
@@ -37,7 +38,8 @@ public class CreatePatientCommandHandlerTests
                 return Task.FromResult(patient);
             });
 
-        var handler = new CreatePatientCommandHandler(repositoryMock.Object);
+        var auditLoggerMock = new Mock<IAuditLogger>();
+        var handler = new CreatePatientCommandHandler(repositoryMock.Object, auditLoggerMock.Object, new Mock<IDistributedCache>().Object);
         var command = ValidCommand();
 
         var result = await handler.Handle(command, CancellationToken.None);
@@ -73,12 +75,38 @@ public class CreatePatientCommandHandlerTests
                 return Task.FromResult(patient);
             });
 
-        var handler = new CreatePatientCommandHandler(repositoryMock.Object);
+        var auditLoggerMock = new Mock<IAuditLogger>();
+        var handler = new CreatePatientCommandHandler(repositoryMock.Object, auditLoggerMock.Object, new Mock<IDistributedCache>().Object);
         var command = ValidCommand(tenantId: 99);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.Equal(99, result.TenantId);
         repositoryMock.Verify(r => r.AddAsync(It.Is<Patient>(p => p.TenantId == 99)), Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_ValidCommand_LogsAuditEntryWithClinicianTenantAndEntityDetails()
+    {
+        var repositoryMock = new Mock<IPatientRepository>();
+        repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Patient>()))
+            .Returns((Patient patient) =>
+            {
+                patient.Id = 55;
+                return Task.FromResult(patient);
+            });
+
+        var auditLoggerMock = new Mock<IAuditLogger>();
+        var handler = new CreatePatientCommandHandler(repositoryMock.Object, auditLoggerMock.Object, new Mock<IDistributedCache>().Object);
+        var command = ValidCommand(tenantId: 3);
+        command.ClinicianId = 7;
+
+        await handler.Handle(command, CancellationToken.None);
+
+        auditLoggerMock.Verify(a => a.LogAsync(
+            7, 3, "PatientCreated", "Patient", 55,
+            It.Is<string?>(details => details != null && details.Contains(command.MedicalRecordNumber))),
+            Times.Once);
     }
 }

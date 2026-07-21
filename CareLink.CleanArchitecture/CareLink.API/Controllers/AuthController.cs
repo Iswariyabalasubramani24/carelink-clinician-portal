@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.API.Contracts;
 using CareLink.Application.Auth.Commands;
 using MediatR;
@@ -7,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CareLink.API.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/auth")]
 public class AuthController(IMediator mediator, IWebHostEnvironment environment) : ControllerBase
 {
     private const string RefreshTokenCookieName = "refreshToken";
@@ -59,7 +61,7 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
             await mediator.Send(new LogoutCommand { RefreshToken = refreshToken });
         }
 
-        Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path = "/api/auth" });
+        Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path = "/api/v1/auth" });
 
         return NoContent();
     }
@@ -77,7 +79,7 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
             HttpOnly = true,
             Secure = !environment.IsDevelopment(),
             SameSite = SameSiteMode.Lax,
-            Path = "/api/auth",
+            Path = "/api/v1/auth",
             Expires = expiresAt
         });
     }

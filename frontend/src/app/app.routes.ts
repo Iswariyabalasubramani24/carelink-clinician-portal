@@ -36,5 +36,11 @@ export const routes: Routes = [
       import('./features/clinic-management/clinic-management.component').then(
         (m) => m.ClinicManagementComponent
       )
+  },
+  {
+    path: 'audit-log',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./features/audit-log/audit-log.component').then((m) => m.AuditLogComponent)
   }
 ];

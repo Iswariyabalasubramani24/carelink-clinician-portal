@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.API.Contracts;
 using CareLink.Application.ClinicUsers;
 using CareLink.Application.ClinicUsers.Commands;
@@ -10,7 +11,8 @@ namespace CareLink.API.Controllers;
 
 [Authorize(Roles = "Admin")]
 [ApiController]
-[Route("api/clinic-users")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/clinic-users")]
 public class ClinicUsersController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -26,6 +28,7 @@ public class ClinicUsersController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new CreateClinicUserCommand
         {
             TenantId = GetTenantId(),
+            ActingClinicianId = GetClinicianId(),
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
@@ -38,20 +41,26 @@ public class ClinicUsersController(IMediator mediator) : ControllerBase
     [HttpPut("{id}/suspend")]
     public async Task<ActionResult<ClinicUserDto>> Suspend(int id)
     {
-        var result = await mediator.Send(new SuspendClinicUserCommand(id, GetTenantId()));
+        var result = await mediator.Send(new SuspendClinicUserCommand(id, GetTenantId(), GetClinicianId()));
         return Ok(result);
     }
 
     [HttpPut("{id}/activate")]
     public async Task<ActionResult<ClinicUserDto>> Activate(int id)
     {
-        var result = await mediator.Send(new ActivateClinicUserCommand(id, GetTenantId()));
+        var result = await mediator.Send(new ActivateClinicUserCommand(id, GetTenantId(), GetClinicianId()));
         return Ok(result);
     }
 
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;
+        return int.Parse(claim!);
+    }
+
+    private int GetClinicianId()
+    {
+        var claim = User.FindFirst("clinicianId")?.Value;
         return int.Parse(claim!);
     }
 }

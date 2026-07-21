@@ -1,0 +1,70 @@
+<div class="audit-log-page">
+  <header class="audit-log-page__header">
+    <div>
+      <h1>{{ 'auditLog.title' | translate }}</h1>
+      <p class="subtitle">{{ 'auditLog.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="filter-toggle">
+      <button
+        type="button"
+        class="toggle-option"
+        [class.toggle-option--active]="actionFilter === ''"
+        (click)="setActionFilter('')"
+      >
+        {{ 'auditLog.filters.all' | translate }}
+      </button>
+      <button
+        type="button"
+        class="toggle-option"
+        *ngFor="let action of knownActions"
+        [class.toggle-option--active]="actionFilter === action"
+        (click)="setActionFilter(action)"
+      >
+        {{ 'auditLog.actions.' + action | translate }}
+      </button>
+    </div>
+
+    <p class="state-message" *ngIf="loading">{{ 'auditLog.loading' | translate }}</p>
+    <p class="state-message state-message--error" *ngIf="error">{{ 'auditLog.loadError' | translate }}</p>
+
+    <table *ngIf="!loading && !error && entries.length">
+      <thead>
+        <tr>
+          <th>{{ 'auditLog.table.timestamp' | translate }}</th>
+          <th>{{ 'auditLog.table.action' | translate }}</th>
+          <th>{{ 'auditLog.table.entity' | translate }}</th>
+          <th>{{ 'auditLog.table.clinicianId' | translate }}</th>
+          <th>{{ 'auditLog.table.details' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries">
+          <td class="mono">{{ entry.timestamp | date: 'medium' }}</td>
+          <td>{{ 'auditLog.actions.' + entry.action | translate }}</td>
+          <td>{{ entry.entityType }} #{{ entry.entityId }}</td>
+          <td class="mono">{{ entry.clinicianId }}</td>
+          <td>{{ entry.details }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="state-message" *ngIf="!loading && !error && entries.length === 0">
+      {{ 'auditLog.empty' | translate }}
+    </p>
+
+    <footer class="pagination" *ngIf="!loading && !error && totalCount > 0">
+      <button type="button" class="btn btn--secondary" [disabled]="page <= 1" (click)="goToPage(page - 1)">
+        {{ 'auditLog.pagination.previous' | translate }}
+      </button>
+      <span class="pagination__label">
+        {{ 'auditLog.pagination.pageOf' | translate: { page, totalPages } }}
+      </span>
+      <button type="button" class="btn btn--secondary" [disabled]="page >= totalPages" (click)="goToPage(page + 1)">
+        {{ 'auditLog.pagination.next' | translate }}
+      </button>
+    </footer>
+  </section>
+</div>

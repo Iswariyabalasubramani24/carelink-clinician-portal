@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.Application.Dashboard;
 using CareLink.Application.Dashboard.Queries;
 using MediatR;
@@ -8,7 +9,8 @@ namespace CareLink.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/dashboard")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/dashboard")]
 public class DashboardController(IMediator mediator) : ControllerBase
 {
     [HttpGet("summary")]

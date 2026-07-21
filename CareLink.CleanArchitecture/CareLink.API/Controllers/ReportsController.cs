@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.API.Contracts;
 using CareLink.Application.Reports;
 using CareLink.Application.Reports.Commands;
@@ -10,7 +11,8 @@ namespace CareLink.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/reports")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/reports")]
 public class ReportsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{id}/download")]

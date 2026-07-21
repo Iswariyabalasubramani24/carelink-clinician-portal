@@ -29,7 +29,7 @@ public class SuspendActivateClinicUserCommandHandlerTests
         var clinicianRepo = new Mock<IClinicianRepository>();
         clinicianRepo.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync(clinician);
 
-        var handler = new SuspendClinicUserCommandHandler(clinicianRepo.Object);
+        var handler = new SuspendClinicUserCommandHandler(clinicianRepo.Object, new Mock<IAuditLogger>().Object);
 
         var result = await handler.Handle(new SuspendClinicUserCommand(1, 1), CancellationToken.None);
 
@@ -45,7 +45,7 @@ public class SuspendActivateClinicUserCommandHandlerTests
         var clinicianRepo = new Mock<IClinicianRepository>();
         clinicianRepo.Setup(r => r.GetByIdAsync(1, 2)).ReturnsAsync((Clinician?)null);
 
-        var handler = new SuspendClinicUserCommandHandler(clinicianRepo.Object);
+        var handler = new SuspendClinicUserCommandHandler(clinicianRepo.Object, new Mock<IAuditLogger>().Object);
 
         await Assert.ThrowsAsync<ClinicianNotFoundException>(
             () => handler.Handle(new SuspendClinicUserCommand(1, 2), CancellationToken.None));
@@ -61,7 +61,7 @@ public class SuspendActivateClinicUserCommandHandlerTests
         var clinicianRepo = new Mock<IClinicianRepository>();
         clinicianRepo.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync(clinician);
 
-        var handler = new ActivateClinicUserCommandHandler(clinicianRepo.Object);
+        var handler = new ActivateClinicUserCommandHandler(clinicianRepo.Object, new Mock<IAuditLogger>().Object);
 
         var result = await handler.Handle(new ActivateClinicUserCommand(1, 1), CancellationToken.None);
 
@@ -75,7 +75,7 @@ public class SuspendActivateClinicUserCommandHandlerTests
         var clinicianRepo = new Mock<IClinicianRepository>();
         clinicianRepo.Setup(r => r.GetByIdAsync(1, 2)).ReturnsAsync((Clinician?)null);
 
-        var handler = new ActivateClinicUserCommandHandler(clinicianRepo.Object);
+        var handler = new ActivateClinicUserCommandHandler(clinicianRepo.Object, new Mock<IAuditLogger>().Object);
 
         await Assert.ThrowsAsync<ClinicianNotFoundException>(
             () => handler.Handle(new ActivateClinicUserCommand(1, 2), CancellationToken.None));

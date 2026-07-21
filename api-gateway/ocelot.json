@@ -1,189 +1,216 @@
 {
   "Routes": [
     {
-      "UpstreamPathTemplate": "/api/auth/{endpoint}",
+      "UpstreamPathTemplate": "/api/v1/auth/{endpoint}",
       "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/auth/{endpoint}",
+      "DownstreamPathTemplate": "/api/v1/auth/{endpoint}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/tenants",
+      "UpstreamPathTemplate": "/api/v1/tenants",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/tenants",
+      "DownstreamPathTemplate": "/api/v1/tenants",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/tenants/mine",
+      "UpstreamPathTemplate": "/api/v1/tenants/mine",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/tenants/mine",
+      "DownstreamPathTemplate": "/api/v1/tenants/mine",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients",
+      "UpstreamPathTemplate": "/api/v1/patients",
       "UpstreamHttpMethod": [ "GET", "POST" ],
-      "DownstreamPathTemplate": "/api/patients",
+      "DownstreamPathTemplate": "/api/v1/patients",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
-      "DownstreamPathTemplate": "/api/patients/{id}",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/transmissions",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/transmissions",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/transmissions",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/transmissions",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/alerts",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/alerts",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/alerts",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/alerts",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/alert-settings",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/alert-settings",
       "UpstreamHttpMethod": [ "GET", "PUT" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/alert-settings",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/alert-settings",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/dashboard/summary",
+      "UpstreamPathTemplate": "/api/v1/dashboard/summary",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/dashboard/summary",
+      "DownstreamPathTemplate": "/api/v1/dashboard/summary",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/alerts",
+      "UpstreamPathTemplate": "/api/v1/alerts",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/alerts",
+      "DownstreamPathTemplate": "/api/v1/alerts",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/alerts/{id}/acknowledge",
+      "UpstreamPathTemplate": "/api/v1/alerts/{id}/acknowledge",
       "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/alerts/{id}/acknowledge",
+      "DownstreamPathTemplate": "/api/v1/alerts/{id}/acknowledge",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/alerts/{id}/snooze",
+      "UpstreamPathTemplate": "/api/v1/alerts/{id}/snooze",
       "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/alerts/{id}/snooze",
+      "DownstreamPathTemplate": "/api/v1/alerts/{id}/snooze",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/alerts/clinic-settings",
+      "UpstreamPathTemplate": "/api/v1/alerts/clinic-settings",
       "UpstreamHttpMethod": [ "GET", "PUT" ],
-      "DownstreamPathTemplate": "/api/alerts/clinic-settings",
+      "DownstreamPathTemplate": "/api/v1/alerts/clinic-settings",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/reports",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/reports",
       "UpstreamHttpMethod": [ "GET", "POST" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/reports",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/reports",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/report-settings",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/report-settings",
       "UpstreamHttpMethod": [ "GET", "PUT" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/report-settings",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/report-settings",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/reports/{id}/download",
+      "UpstreamPathTemplate": "/api/v1/reports/{id}/download",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/reports/{id}/download",
+      "DownstreamPathTemplate": "/api/v1/reports/{id}/download",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/reports/clinic-settings",
+      "UpstreamPathTemplate": "/api/v1/reports/clinic-settings",
       "UpstreamHttpMethod": [ "GET", "PUT" ],
-      "DownstreamPathTemplate": "/api/reports/clinic-settings",
+      "DownstreamPathTemplate": "/api/v1/reports/clinic-settings",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/patients/{id}/notes",
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/notes",
       "UpstreamHttpMethod": [ "GET", "POST" ],
-      "DownstreamPathTemplate": "/api/patients/{id}/notes",
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/notes",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/clinic-users",
+      "UpstreamPathTemplate": "/api/v1/clinic-users",
       "UpstreamHttpMethod": [ "GET", "POST" ],
-      "DownstreamPathTemplate": "/api/clinic-users",
+      "DownstreamPathTemplate": "/api/v1/clinic-users",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/clinic-users/{id}/suspend",
+      "UpstreamPathTemplate": "/api/v1/clinic-users/{id}/suspend",
       "UpstreamHttpMethod": [ "PUT" ],
-      "DownstreamPathTemplate": "/api/clinic-users/{id}/suspend",
+      "DownstreamPathTemplate": "/api/v1/clinic-users/{id}/suspend",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }
       ]
     },
     {
-      "UpstreamPathTemplate": "/api/clinic-users/{id}/activate",
+      "UpstreamPathTemplate": "/api/v1/clinic-users/{id}/activate",
       "UpstreamHttpMethod": [ "PUT" ],
-      "DownstreamPathTemplate": "/api/clinic-users/{id}/activate",
+      "DownstreamPathTemplate": "/api/v1/clinic-users/{id}/activate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/audit-logs",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/v1/audit-logs",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/health/live",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/health/live",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/health/ready",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/health/ready",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "localhost", "Port": 5010 }

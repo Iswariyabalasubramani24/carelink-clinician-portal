@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.API.Contracts;
 using CareLink.Application.Alerts;
 using CareLink.Application.Alerts.Commands;
@@ -19,13 +20,15 @@ namespace CareLink.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/patients")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/patients")]
 public class PatientsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<PatientDto>> Create(CreatePatientCommand command)
     {
         command.TenantId = GetTenantId();
+        command.ClinicianId = GetClinicianId();
         var result = await mediator.Send(command);
         return CreatedAtAction(nameof(GetByTenant), result);
     }
@@ -81,7 +84,7 @@ public class PatientsController(IMediator mediator) : ControllerBase
     [HttpPost("{id}/reports")]
     public async Task<ActionResult<ReportDto>> GenerateReport(int id, GenerateReportRequest request)
     {
-        var result = await mediator.Send(new GenerateReportCommand(id, GetTenantId(), request.ReportType));
+        var result = await mediator.Send(new GenerateReportCommand(id, GetTenantId(), request.ReportType, GetClinicianId()));
         return Ok(result);
     }
 

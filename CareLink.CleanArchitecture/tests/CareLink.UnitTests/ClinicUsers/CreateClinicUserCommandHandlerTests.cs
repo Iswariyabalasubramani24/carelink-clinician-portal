@@ -42,7 +42,7 @@ public class CreateClinicUserCommandHandlerTests
         var passwordHasher = new Mock<IPasswordHasher>();
         passwordHasher.Setup(h => h.Hash("Tmp#Passw0rd")).Returns("hashed-temp-password");
 
-        var handler = new CreateClinicUserCommandHandler(clinicianRepo.Object, tempPasswordGenerator.Object, passwordHasher.Object);
+        var handler = new CreateClinicUserCommandHandler(clinicianRepo.Object, tempPasswordGenerator.Object, passwordHasher.Object, new Mock<IAuditLogger>().Object);
 
         var result = await handler.Handle(ValidCommand(), CancellationToken.None);
 
@@ -69,7 +69,7 @@ public class CreateClinicUserCommandHandlerTests
         var tempPasswordGenerator = new Mock<ITemporaryPasswordGenerator>();
         var passwordHasher = new Mock<IPasswordHasher>();
 
-        var handler = new CreateClinicUserCommandHandler(clinicianRepo.Object, tempPasswordGenerator.Object, passwordHasher.Object);
+        var handler = new CreateClinicUserCommandHandler(clinicianRepo.Object, tempPasswordGenerator.Object, passwordHasher.Object, new Mock<IAuditLogger>().Object);
 
         await Assert.ThrowsAsync<EmailAlreadyInUseException>(
             () => handler.Handle(ValidCommand(), CancellationToken.None));

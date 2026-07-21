@@ -13,15 +13,18 @@ public class GenerateReportCommand : IRequest<ReportDto>
 
     public int TenantId { get; set; }
 
+    public int ClinicianId { get; set; }
+
     public ReportType ReportType { get; set; }
 
     public GenerateReportCommand() { }
 
-    public GenerateReportCommand(int patientId, int tenantId, ReportType reportType)
+    public GenerateReportCommand(int patientId, int tenantId, ReportType reportType, int clinicianId = 0)
     {
         PatientId = patientId;
         TenantId = tenantId;
         ReportType = reportType;
+        ClinicianId = clinicianId;
     }
 }
 
@@ -31,6 +34,7 @@ public class GenerateReportCommandHandler(
     IAlertRepository alertRepository,
     IAlertEvaluationService alertEvaluationService,
     IReportRepository reportRepository,
+    IAuditLogger auditLogger,
     IMediator mediator)
     : IRequestHandler<GenerateReportCommand, ReportDto>
 {
@@ -86,6 +90,11 @@ public class GenerateReportCommandHandler(
         };
 
         var created = await reportRepository.AddAsync(report);
+
+        await auditLogger.LogAsync(
+            request.ClinicianId, request.TenantId, "ReportGenerated", "Report", created.Id,
+            $"{request.ReportType} for patient {request.PatientId}");
+
         return ReportDto.FromEntity(created);
     }
 }

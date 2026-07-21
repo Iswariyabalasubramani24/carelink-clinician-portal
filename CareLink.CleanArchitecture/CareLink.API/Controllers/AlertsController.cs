@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.API.Contracts;
 using CareLink.Application.Alerts;
 using CareLink.Application.Alerts.Commands;
@@ -10,7 +11,8 @@ namespace CareLink.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/alerts")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/alerts")]
 public class AlertsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -27,6 +29,7 @@ public class AlertsController(IMediator mediator) : ControllerBase
         {
             AlertId = id,
             TenantId = GetTenantId(),
+            ClinicianId = GetClinicianId(),
             Action = AlertAcknowledgeAction.Acknowledge
         });
         return Ok(result);
@@ -39,6 +42,7 @@ public class AlertsController(IMediator mediator) : ControllerBase
         {
             AlertId = id,
             TenantId = GetTenantId(),
+            ClinicianId = GetClinicianId(),
             Action = AlertAcknowledgeAction.Snooze
         });
         return Ok(result);
@@ -66,6 +70,12 @@ public class AlertsController(IMediator mediator) : ControllerBase
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;
+        return int.Parse(claim!);
+    }
+
+    private int GetClinicianId()
+    {
+        var claim = User.FindFirst("clinicianId")?.Value;
         return int.Parse(claim!);
     }
 }

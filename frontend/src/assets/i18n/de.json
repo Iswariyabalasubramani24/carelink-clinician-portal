@@ -88,7 +88,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "patients": "Patienten",
-    "clinicManagement": "Klinikverwaltung"
+    "clinicManagement": "Klinikverwaltung",
+    "auditLog": "Prüfprotokoll"
   },
   "dashboard": {
     "title": "Startseite",
@@ -248,6 +249,37 @@
       "cancel": "Abbrechen",
       "saving": "Wird erstellt…",
       "submit": "Benutzer erstellen"
+    }
+  },
+  "auditLog": {
+    "title": "Prüfprotokoll",
+    "subtitle": "Ein Protokoll wichtiger Aktionen im Konto Ihres Krankenhauses",
+    "loading": "Wird geladen…",
+    "loadError": "Fehler beim Laden des Prüfprotokolls.",
+    "empty": "Keine Einträge im Prüfprotokoll gefunden.",
+    "filters": {
+      "all": "Alle"
+    },
+    "actions": {
+      "PatientCreated": "Patient erstellt",
+      "AlertAcknowledged": "Alarm bestätigt",
+      "AlertSnoozed": "Alarm zurückgestellt",
+      "ClinicUserCreated": "Klinikbenutzer erstellt",
+      "ClinicUserSuspended": "Klinikbenutzer gesperrt",
+      "ClinicUserActivated": "Klinikbenutzer aktiviert",
+      "ReportGenerated": "Bericht erstellt"
+    },
+    "table": {
+      "timestamp": "Zeitstempel",
+      "action": "Aktion",
+      "entity": "Objekt",
+      "clinicianId": "Kliniker-ID",
+      "details": "Details"
+    },
+    "pagination": {
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pageOf": "Seite {{page}} von {{totalPages}}"
     }
   }
 }

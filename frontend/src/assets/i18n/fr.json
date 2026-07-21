@@ -88,7 +88,8 @@
   "nav": {
     "dashboard": "Tableau de bord",
     "patients": "Patients",
-    "clinicManagement": "Gestion de la clinique"
+    "clinicManagement": "Gestion de la clinique",
+    "auditLog": "Journal d'audit"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -248,6 +249,37 @@
       "cancel": "Annuler",
       "saving": "Création…",
       "submit": "Créer l'utilisateur"
+    }
+  },
+  "auditLog": {
+    "title": "Journal d'audit",
+    "subtitle": "Un historique des actions clés effectuées sur le compte de votre hôpital",
+    "loading": "Chargement…",
+    "loadError": "Échec du chargement du journal d'audit.",
+    "empty": "Aucune entrée trouvée dans le journal d'audit.",
+    "filters": {
+      "all": "Tous"
+    },
+    "actions": {
+      "PatientCreated": "Patient créé",
+      "AlertAcknowledged": "Alerte acquittée",
+      "AlertSnoozed": "Alerte reportée",
+      "ClinicUserCreated": "Utilisateur clinique créé",
+      "ClinicUserSuspended": "Utilisateur clinique suspendu",
+      "ClinicUserActivated": "Utilisateur clinique activé",
+      "ReportGenerated": "Rapport généré"
+    },
+    "table": {
+      "timestamp": "Horodatage",
+      "action": "Action",
+      "entity": "Entité",
+      "clinicianId": "ID clinicien",
+      "details": "Détails"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pageOf": "Page {{page}} sur {{totalPages}}"
     }
   }
 }

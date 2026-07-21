@@ -88,7 +88,8 @@
   "nav": {
     "dashboard": "Panel",
     "patients": "Pacientes",
-    "clinicManagement": "Gestión de la clínica"
+    "clinicManagement": "Gestión de la clínica",
+    "auditLog": "Registro de auditoría"
   },
   "dashboard": {
     "title": "Panel de inicio",
@@ -248,6 +249,37 @@
       "cancel": "Cancelar",
       "saving": "Creando…",
       "submit": "Crear usuario"
+    }
+  },
+  "auditLog": {
+    "title": "Registro de auditoría",
+    "subtitle": "Un registro de las acciones clave realizadas en la cuenta de su hospital",
+    "loading": "Cargando…",
+    "loadError": "Error al cargar el registro de auditoría.",
+    "empty": "No se encontraron entradas en el registro de auditoría.",
+    "filters": {
+      "all": "Todos"
+    },
+    "actions": {
+      "PatientCreated": "Paciente creado",
+      "AlertAcknowledged": "Alerta confirmada",
+      "AlertSnoozed": "Alerta pospuesta",
+      "ClinicUserCreated": "Usuario de clínica creado",
+      "ClinicUserSuspended": "Usuario de clínica suspendido",
+      "ClinicUserActivated": "Usuario de clínica activado",
+      "ReportGenerated": "Informe generado"
+    },
+    "table": {
+      "timestamp": "Fecha y hora",
+      "action": "Acción",
+      "entity": "Entidad",
+      "clinicianId": "ID del clínico",
+      "details": "Detalles"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {{page}} de {{totalPages}}"
     }
   }
 }

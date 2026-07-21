@@ -2,6 +2,7 @@ using CareLink.Application.Alerts.Commands;
 using CareLink.Application.Common.Exceptions;
 using CareLink.Application.Common.Interfaces;
 using CareLink.Domain.Entities;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 
 namespace CareLink.UnitTests.Alerts;
@@ -27,7 +28,7 @@ public class AcknowledgeAlertCommandHandlerTests
         var repositoryMock = new Mock<IAlertRepository>();
         repositoryMock.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync(alert);
 
-        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object);
+        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object, new Mock<IAuditLogger>().Object, new Mock<IDistributedCache>().Object);
 
         var result = await handler.Handle(
             new AcknowledgeAlertCommand { AlertId = 1, TenantId = 1, Action = AlertAcknowledgeAction.Acknowledge },
@@ -47,7 +48,7 @@ public class AcknowledgeAlertCommandHandlerTests
         var repositoryMock = new Mock<IAlertRepository>();
         repositoryMock.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync(alert);
 
-        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object);
+        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object, new Mock<IAuditLogger>().Object, new Mock<IDistributedCache>().Object);
 
         var before = DateTime.UtcNow;
         var result = await handler.Handle(
@@ -67,7 +68,7 @@ public class AcknowledgeAlertCommandHandlerTests
         var repositoryMock = new Mock<IAlertRepository>();
         repositoryMock.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync((Alert?)null);
 
-        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object);
+        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object, new Mock<IAuditLogger>().Object, new Mock<IDistributedCache>().Object);
 
         await Assert.ThrowsAsync<AlertNotFoundException>(() => handler.Handle(
             new AcknowledgeAlertCommand { AlertId = 1, TenantId = 1, Action = AlertAcknowledgeAction.Acknowledge },
@@ -82,7 +83,7 @@ public class AcknowledgeAlertCommandHandlerTests
         var repositoryMock = new Mock<IAlertRepository>();
         repositoryMock.Setup(r => r.GetByIdAsync(1, 2)).ReturnsAsync((Alert?)null);
 
-        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object);
+        var handler = new AcknowledgeAlertCommandHandler(repositoryMock.Object, new Mock<IAuditLogger>().Object, new Mock<IDistributedCache>().Object);
 
         await Assert.ThrowsAsync<AlertNotFoundException>(() => handler.Handle(
             new AcknowledgeAlertCommand { AlertId = 1, TenantId = 2, Action = AlertAcknowledgeAction.Acknowledge },

@@ -50,10 +50,11 @@ public class GenerateReportCommandHandlerTests
         Mock<IAlertRepository> alertRepo,
         Mock<IAlertEvaluationService> alertEvaluationService,
         Mock<IReportRepository> reportRepo,
+        Mock<IAuditLogger> auditLogger,
         Mock<IMediator> mediator) MakeMocks()
     {
         return (new Mock<IPatientRepository>(), new Mock<ITenantRepository>(), new Mock<IAlertRepository>(),
-            new Mock<IAlertEvaluationService>(), new Mock<IReportRepository>(), new Mock<IMediator>());
+            new Mock<IAlertEvaluationService>(), new Mock<IReportRepository>(), new Mock<IAuditLogger>(), new Mock<IMediator>());
     }
 
     [Theory]
@@ -71,7 +72,7 @@ public class GenerateReportCommandHandlerTests
         };
         var alerts = new List<Alert> { MakeAlert(patient.Id, patient.TenantId) };
 
-        var (patientRepo, tenantRepo, alertRepo, alertEvaluationService, reportRepo, mediator) = MakeMocks();
+        var (patientRepo, tenantRepo, alertRepo, alertEvaluationService, reportRepo, auditLogger, mediator) = MakeMocks();
         patientRepo.Setup(r => r.GetByIdAsync(patient.Id, patient.TenantId)).ReturnsAsync(patient);
         tenantRepo.Setup(r => r.GetByIdAsync(patient.TenantId)).ReturnsAsync(tenant);
         mediator.Setup(m => m.Send(It.IsAny<GetPatientTransmissionHistoryQuery>(), It.IsAny<CancellationToken>()))
@@ -85,7 +86,7 @@ public class GenerateReportCommandHandlerTests
             .ReturnsAsync((Report r) => r);
 
         var handler = new GenerateReportCommandHandler(
-            patientRepo.Object, tenantRepo.Object, alertRepo.Object, alertEvaluationService.Object, reportRepo.Object, mediator.Object);
+            patientRepo.Object, tenantRepo.Object, alertRepo.Object, alertEvaluationService.Object, reportRepo.Object, auditLogger.Object, mediator.Object);
 
         var result = await handler.Handle(new GenerateReportCommand(patient.Id, patient.TenantId, reportType), CancellationToken.None);
 
@@ -109,11 +110,11 @@ public class GenerateReportCommandHandlerTests
     [Fact]
     public async Task Handle_PatientNotFoundForTenant_ThrowsPatientNotFoundException()
     {
-        var (patientRepo, tenantRepo, alertRepo, alertEvaluationService, reportRepo, mediator) = MakeMocks();
+        var (patientRepo, tenantRepo, alertRepo, alertEvaluationService, reportRepo, auditLogger, mediator) = MakeMocks();
         patientRepo.Setup(r => r.GetByIdAsync(1, 1)).ReturnsAsync((Patient?)null);
 
         var handler = new GenerateReportCommandHandler(
-            patientRepo.Object, tenantRepo.Object, alertRepo.Object, alertEvaluationService.Object, reportRepo.Object, mediator.Object);
+            patientRepo.Object, tenantRepo.Object, alertRepo.Object, alertEvaluationService.Object, reportRepo.Object, auditLogger.Object, mediator.Object);
 
         await Assert.ThrowsAsync<PatientNotFoundException>(
             () => handler.Handle(new GenerateReportCommand(1, 1, ReportType.FullReport), CancellationToken.None));

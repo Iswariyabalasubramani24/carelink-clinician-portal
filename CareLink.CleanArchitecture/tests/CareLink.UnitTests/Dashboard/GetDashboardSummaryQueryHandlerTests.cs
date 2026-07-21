@@ -1,12 +1,23 @@
 using CareLink.Application.Common.Interfaces;
 using CareLink.Application.Dashboard.Queries;
 using CareLink.Domain.Entities;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 
 namespace CareLink.UnitTests.Dashboard;
 
 public class GetDashboardSummaryQueryHandlerTests
 {
+    // A cache that always misses, so these tests exercise the DB-read path
+    // in isolation. Cache hit/miss behavior itself is covered separately in
+    // CareLink.UnitTests.Dashboard.GetDashboardSummaryQueryHandlerCachingTests.
+    private static Mock<IDistributedCache> MakeAlwaysMissCache()
+    {
+        var cacheMock = new Mock<IDistributedCache>();
+        cacheMock.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync((byte[]?)null);
+        return cacheMock;
+    }
+
     private static Patient MakePatient(
         int id,
         DateTime createdAt,
@@ -59,7 +70,7 @@ public class GetDashboardSummaryQueryHandlerTests
         var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
         alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(new List<Alert>());
 
-        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object, MakeAlwaysMissCache().Object);
 
         var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
 
@@ -77,7 +88,7 @@ public class GetDashboardSummaryQueryHandlerTests
         var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
         alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(new List<Alert>());
 
-        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object, MakeAlwaysMissCache().Object);
 
         var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
 
@@ -102,7 +113,7 @@ public class GetDashboardSummaryQueryHandlerTests
         var alertEvaluationServiceMock = new Mock<IAlertEvaluationService>();
         alertEvaluationServiceMock.Setup(a => a.GetActiveAlertsForTenantAsync(1)).ReturnsAsync(alerts);
 
-        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object);
+        var handler = new GetDashboardSummaryQueryHandler(repositoryMock.Object, alertEvaluationServiceMock.Object, MakeAlwaysMissCache().Object);
 
         var result = await handler.Handle(new GetDashboardSummaryQuery(1), CancellationToken.None);
 

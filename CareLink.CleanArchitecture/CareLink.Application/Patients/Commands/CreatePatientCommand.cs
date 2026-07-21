@@ -1,12 +1,15 @@
 using CareLink.Application.Common.Interfaces;
+using CareLink.Application.Dashboard.Queries;
 using CareLink.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace CareLink.Application.Patients.Commands;
 
 public class CreatePatientCommand : IRequest<PatientDto>
 {
     public int TenantId { get; set; }
+    public int ClinicianId { get; set; }
     public string MedicalRecordNumber { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
@@ -22,7 +25,8 @@ public class CreatePatientCommand : IRequest<PatientDto>
     public int? LastHeartRate { get; set; }
 }
 
-public class CreatePatientCommandHandler(IPatientRepository patientRepository) : IRequestHandler<CreatePatientCommand, PatientDto>
+public class CreatePatientCommandHandler(IPatientRepository patientRepository, IAuditLogger auditLogger, IDistributedCache cache)
+    : IRequestHandler<CreatePatientCommand, PatientDto>
 {
     public async Task<PatientDto> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
     {
@@ -46,6 +50,14 @@ public class CreatePatientCommandHandler(IPatientRepository patientRepository) :
         };
 
         var created = await patientRepository.AddAsync(patient);
+
+        await auditLogger.LogAsync(
+            request.ClinicianId, request.TenantId, "PatientCreated", "Patient", created.Id,
+            $"MRN {created.MedicalRecordNumber}");
+
+        // The dashboard's New Patients / Total Active Patients counts are now
+        // stale - drop the cached summary rather than waiting out the TTL.
+        await cache.RemoveAsync(GetDashboardSummaryQueryHandler.CacheKey(request.TenantId), cancellationToken);
 
         return PatientDto.FromEntity(created);
     }

@@ -1,14 +1,17 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
+using CareLink.API.Middleware;
 using CareLink.Application.Alerts;
 using CareLink.Application.Auth.Commands;
-using CareLink.Application.Common.Exceptions;
 using CareLink.Application.Common.Interfaces;
 using CareLink.Infrastructure;
+using CareLink.Infrastructure.Auditing;
 using CareLink.Infrastructure.Repositories;
 using CareLink.Infrastructure.Reports;
 using CareLink.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
@@ -21,6 +24,23 @@ builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "CareLink:";
+});
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!, name: "sqlserver", tags: ["ready"])
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!, name: "redis", tags: ["ready"]);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly));
 
@@ -40,6 +60,8 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportSettingsRepository, ReportSettingsRepository>();
 builder.Services.AddScoped<IReportPdfGenerator, QuestPdfReportGenerator>();
 builder.Services.AddScoped<IPatientNoteRepository, PatientNoteRepository>();
+builder.Services.AddScoped<IAuditLogger, AuditLogger>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<ITemporaryPasswordGenerator, TemporaryPasswordGenerator>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
@@ -77,63 +99,25 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (InvalidCredentialsException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (AccountSuspendedException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (InvalidRefreshTokenException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (TenantAccessDeniedException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (PatientNotFoundException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (AlertNotFoundException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (ReportNotFoundException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (ClinicianNotFoundException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (EmailAlreadyInUseException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status409Conflict;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-});
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/health", () => Results.Ok(new { status = "healthy", service = "clean-architecture-api" }));
+// Liveness: is the process up and able to handle requests at all? No
+// dependency checks - a slow/down DB or Redis must not fail this, or an
+// orchestrator would kill and restart a perfectly healthy API instance.
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
+});
+
+// Readiness: can this instance actually serve traffic right now? Checks the
+// dependencies the API cannot function without.
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 app.MapControllers();
 

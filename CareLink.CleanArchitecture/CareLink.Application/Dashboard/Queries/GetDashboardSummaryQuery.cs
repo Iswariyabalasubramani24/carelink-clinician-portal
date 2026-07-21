@@ -1,5 +1,7 @@
+using System.Text.Json;
 using CareLink.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace CareLink.Application.Dashboard.Queries;
 
@@ -15,14 +17,25 @@ public class GetDashboardSummaryQuery : IRequest<DashboardSummaryDto>
     }
 }
 
-public class GetDashboardSummaryQueryHandler(IPatientRepository patientRepository, IAlertEvaluationService alertEvaluationService)
+public class GetDashboardSummaryQueryHandler(
+    IPatientRepository patientRepository, IAlertEvaluationService alertEvaluationService, IDistributedCache cache)
     : IRequestHandler<GetDashboardSummaryQuery, DashboardSummaryDto>
 {
     private const int NewPatientWindowDays = 7;
     private const int DisconnectedThresholdDays = 7;
+    private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(3);
+
+    public static string CacheKey(int tenantId) => $"dashboard-summary:{tenantId}";
 
     public async Task<DashboardSummaryDto> Handle(GetDashboardSummaryQuery request, CancellationToken cancellationToken)
     {
+        var cacheKey = CacheKey(request.TenantId);
+        var cached = await cache.GetStringAsync(cacheKey, cancellationToken);
+        if (cached is not null)
+        {
+            return JsonSerializer.Deserialize<DashboardSummaryDto>(cached)!;
+        }
+
         var patients = await patientRepository.GetByTenantIdAsync(request.TenantId);
         var activePatients = patients.Where(p => p.IsActive).ToList();
 
@@ -36,6 +49,13 @@ public class GetDashboardSummaryQueryHandler(IPatientRepository patientRepositor
 
         var activeAlerts = await alertEvaluationService.GetActiveAlertsForTenantAsync(request.TenantId);
 
-        return new DashboardSummaryDto(newPatientsCount, disconnectedMonitorsCount, totalActivePatientsCount, activeAlerts.Count);
+        var summary = new DashboardSummaryDto(newPatientsCount, disconnectedMonitorsCount, totalActivePatientsCount, activeAlerts.Count);
+
+        await cache.SetStringAsync(
+            cacheKey, JsonSerializer.Serialize(summary),
+            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = CacheTtl },
+            cancellationToken);
+
+        return summary;
     }
 }

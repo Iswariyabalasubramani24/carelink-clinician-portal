@@ -28,6 +28,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PatientNote> PatientNotes => Set<PatientNote>();
 
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tenant>(entity =>
@@ -203,6 +205,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany()
                 .HasForeignKey(n => n.ClinicianId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<AuditLog>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.Action).IsRequired().HasMaxLength(100);
+            entity.Property(a => a.EntityType).IsRequired().HasMaxLength(100);
+            entity.Property(a => a.Details).HasMaxLength(1000);
+            // Audit queries are always tenant-scoped and time-ordered.
+            entity.HasIndex(a => new { a.TenantId, a.Timestamp });
+
+            // Deliberately no FK constraints: audit rows must survive even if
+            // the referenced clinician or entity is ever hard-deleted.
         });
     }
 }

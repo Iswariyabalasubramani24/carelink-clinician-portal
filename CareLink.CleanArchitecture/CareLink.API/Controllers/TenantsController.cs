@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using CareLink.Application.Tenants;
 using CareLink.Application.Tenants.Queries;
 using MediatR;
@@ -7,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CareLink.API.Controllers;
 
 [ApiController]
-[Route("api/tenants")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/tenants")]
 public class TenantsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

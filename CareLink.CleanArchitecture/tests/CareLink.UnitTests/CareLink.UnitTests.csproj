@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CareLink.API\CareLink.API.csproj" />
     <ProjectReference Include="..\..\CareLink.Application\CareLink.Application.csproj" />
     <ProjectReference Include="..\..\CareLink.Domain\CareLink.Domain.csproj" />
     <ProjectReference Include="..\..\CareLink.Infrastructure\CareLink.Infrastructure.csproj" />
