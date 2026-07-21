@@ -73,18 +73,34 @@ kubectl create secret generic carelink-secrets --namespace carelink \
   --dry-run=client -o yaml | kubectl apply -f -
 
 # ---- Render manifests: Azure SQL replaces the in-cluster StatefulSet ------
-# Work on a throwaway copy so the committed kustomization is never mutated,
-# and drop sqlserver.yaml since Azure SQL is the database here.
+# Work on a throwaway copy so the committed base is never mutated. Generate a
+# self-contained kustomization there (omitting sqlserver.yaml, since Azure SQL
+# is the database) and apply with `kubectl -k` - which uses kubectl's built-in
+# kustomize, so no standalone kustomize binary is required.
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 cp -r "$REPO_ROOT/deploy/k8s/." "$STAGE/"
-( cd "$STAGE"
-  kustomize edit remove resource sqlserver.yaml
-  kustomize edit set image \
-    "carelink-api=${ACR_LOGIN_SERVER}/carelink-api:${IMAGE_TAG}" \
-    "carelink-gateway=${ACR_LOGIN_SERVER}/carelink-gateway:${IMAGE_TAG}" \
-    "carelink-frontend=${ACR_LOGIN_SERVER}/carelink-frontend:${IMAGE_TAG}"
-  cat >> kustomization.yaml <<EOF
+cat > "$STAGE/kustomization.yaml" <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - redis.yaml
+  - api.yaml
+  - gateway.yaml
+  - frontend.yaml
+  - ingress.yaml
+images:
+  - name: carelink-api
+    newName: ${ACR_LOGIN_SERVER}/carelink-api
+    newTag: ${IMAGE_TAG}
+  - name: carelink-gateway
+    newName: ${ACR_LOGIN_SERVER}/carelink-gateway
+    newTag: ${IMAGE_TAG}
+  - name: carelink-frontend
+    newName: ${ACR_LOGIN_SERVER}/carelink-frontend
+    newTag: ${IMAGE_TAG}
 replicas:
   - name: api
     count: ${REPLICAS}
@@ -93,7 +109,6 @@ replicas:
   - name: frontend
     count: ${REPLICAS}
 EOF
-)
 kubectl apply -k "$STAGE"
 
 # ---- Wait for the ingress public IP, then bind a hostname ----------------
