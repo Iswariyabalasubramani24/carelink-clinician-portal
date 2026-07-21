@@ -106,7 +106,9 @@
     "notFound": "Patient nicht gefunden.",
     "tabs": {
       "overview": "Übersicht",
+      "profile": "Profil",
       "equipment": "Ausrüstung",
+      "schedule": "Zeitplan",
       "history": "Verlauf",
       "careAlert": "CareAlert-Benachrichtigung",
       "reports": "Berichte",
@@ -121,12 +123,27 @@
       "active": "Aktiv",
       "inactive": "Inaktiv"
     },
+    "profile": {
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "createdAt": "Patientenakte erstellt am"
+    },
     "equipment": {
       "deviceType": "Gerätetyp",
       "manufacturer": "Hersteller",
       "model": "Modell",
       "serialNumber": "Seriennummer",
       "implantDate": "Implantationsdatum"
+    },
+    "schedule": {
+      "description": "Wie oft das Gerät dieses Patienten Daten übertragen soll.",
+      "loading": "Zeitplaneinstellungen werden geladen…",
+      "useClinicDefault": "Klinik-Standard verwenden",
+      "overrideForPatient": "Für diesen Patienten überschreiben",
+      "intervalDays": "Intervall (Tage)",
+      "save": "Speichern",
+      "saved": "Gespeichert.",
+      "saveError": "Fehler beim Speichern der Zeitplaneinstellungen."
     },
     "history": {
       "date": "Datum",

@@ -106,7 +106,9 @@
     "notFound": "Patient introuvable.",
     "tabs": {
       "overview": "Aperçu",
+      "profile": "Profil",
       "equipment": "Équipement",
+      "schedule": "Programme",
       "history": "Historique",
       "careAlert": "Notification CareAlert",
       "reports": "Rapports",
@@ -121,12 +123,27 @@
       "active": "Actif",
       "inactive": "Inactif"
     },
+    "profile": {
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "createdAt": "Dossier patient créé le"
+    },
     "equipment": {
       "deviceType": "Type de dispositif",
       "manufacturer": "Fabricant",
       "model": "Modèle",
       "serialNumber": "Numéro de série",
       "implantDate": "Date d'implantation"
+    },
+    "schedule": {
+      "description": "Fréquence à laquelle l'appareil de ce patient doit transmettre des données.",
+      "loading": "Chargement des paramètres du programme…",
+      "useClinicDefault": "Utiliser le paramètre par défaut de la clinique",
+      "overrideForPatient": "Remplacer pour ce patient",
+      "intervalDays": "Intervalle (jours)",
+      "save": "Enregistrer",
+      "saved": "Enregistré.",
+      "saveError": "Échec de l'enregistrement des paramètres du programme."
     },
     "history": {
       "date": "Date",

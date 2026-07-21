@@ -12,6 +12,7 @@ import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../co
 import { PatientNote } from '../../../core/models/patient-note.model';
 import { Patient } from '../../../core/models/patient.model';
 import { PatientReportSettings, Report, ReportType } from '../../../core/models/report.model';
+import { PatientScheduleSettings } from '../../../core/models/schedule.model';
 import { TransmissionHistoryPoint } from '../../../core/models/transmission-history.model';
 import { AlertService } from '../../../core/services/alert.service';
 import { PatientService } from '../../../core/services/patient.service';
@@ -19,7 +20,7 @@ import { ReportService } from '../../../core/services/report.service';
 import { PatientsActions } from '../../../store/patients/patients.actions';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
 
-type DetailTab = 'overview' | 'equipment' | 'history' | 'careAlert' | 'reports' | 'notes';
+type DetailTab = 'overview' | 'profile' | 'equipment' | 'schedule' | 'history' | 'careAlert' | 'reports' | 'notes';
 
 interface AlertSettingRow {
   alertType: AlertType;
@@ -75,6 +76,12 @@ export class PatientDetailComponent implements OnInit {
   reportSettingsSaveError = false;
 
   readonly ReportType = ReportType;
+
+  scheduleSettingsLoading = true;
+  scheduleUseOverride = false;
+  scheduleIntervalControl = new FormControl<number>(30, { nonNullable: true });
+  scheduleSettingsSaveSucceeded = false;
+  scheduleSettingsSaveError = false;
 
   notes: PatientNote[] = [];
   notesLoading = true;
@@ -135,6 +142,16 @@ export class PatientDetailComponent implements OnInit {
       },
       error: () => {
         this.reportSettingsLoading = false;
+      }
+    });
+
+    this.patientService.getScheduleSettings(this.patientId).subscribe({
+      next: (settings) => {
+        this.applyScheduleSettings(settings);
+        this.scheduleSettingsLoading = false;
+      },
+      error: () => {
+        this.scheduleSettingsLoading = false;
       }
     });
 
@@ -254,6 +271,30 @@ export class PatientDetailComponent implements OnInit {
       });
   }
 
+  setScheduleUseOverride(useOverride: boolean): void {
+    this.scheduleUseOverride = useOverride;
+  }
+
+  saveScheduleSettings(): void {
+    this.scheduleSettingsSaveSucceeded = false;
+    this.scheduleSettingsSaveError = false;
+
+    this.patientService
+      .updateScheduleSettings(this.patientId, {
+        useOverride: this.scheduleUseOverride,
+        intervalDays: this.scheduleIntervalControl.value
+      })
+      .subscribe({
+        next: (settings) => {
+          this.applyScheduleSettings(settings);
+          this.scheduleSettingsSaveSucceeded = true;
+        },
+        error: () => {
+          this.scheduleSettingsSaveError = true;
+        }
+      });
+  }
+
   loadNotes(): void {
     this.notesLoading = true;
     this.patientService.getNotes(this.patientId).subscribe({
@@ -292,6 +333,11 @@ export class PatientDetailComponent implements OnInit {
   private applyReportSettings(settings: PatientReportSettings): void {
     this.reportUseOverride = settings.isOverride;
     this.reportIntervalControl.setValue(settings.intervalDays);
+  }
+
+  private applyScheduleSettings(settings: PatientScheduleSettings): void {
+    this.scheduleUseOverride = settings.isOverride;
+    this.scheduleIntervalControl.setValue(settings.intervalDays);
   }
 
   private applyAlertSettings(settings: PatientAlertSetting[]): void {

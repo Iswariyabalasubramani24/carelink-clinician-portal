@@ -20,10 +20,26 @@
         <button
           type="button"
           class="tab"
+          [class.tab--active]="activeTab === 'profile'"
+          (click)="setTab('profile')"
+        >
+          {{ 'patientDetail.tabs.profile' | translate }}
+        </button>
+        <button
+          type="button"
+          class="tab"
           [class.tab--active]="activeTab === 'equipment'"
           (click)="setTab('equipment')"
         >
           {{ 'patientDetail.tabs.equipment' | translate }}
+        </button>
+        <button
+          type="button"
+          class="tab"
+          [class.tab--active]="activeTab === 'schedule'"
+          (click)="setTab('schedule')"
+        >
+          {{ 'patientDetail.tabs.schedule' | translate }}
         </button>
         <button
           type="button"
@@ -99,6 +115,32 @@
         </dl>
       </section>
 
+      <section class="card tab-panel" *ngIf="activeTab === 'profile'">
+        <dl class="detail-list">
+          <dt>{{ 'patientDetail.profile.firstName' | translate }}</dt>
+          <dd>{{ patient.firstName }}</dd>
+          <dt>{{ 'patientDetail.profile.lastName' | translate }}</dt>
+          <dd>{{ patient.lastName }}</dd>
+          <dt>{{ 'patientDetail.overview.mrn' | translate }}</dt>
+          <dd>{{ patient.medicalRecordNumber }}</dd>
+          <dt>{{ 'patientDetail.overview.dob' | translate }}</dt>
+          <dd>{{ patient.dateOfBirth | date }}</dd>
+          <dt>{{ 'patientDetail.overview.phone' | translate }}</dt>
+          <dd>{{ patient.phoneNumber || '—' }}</dd>
+          <dt>{{ 'patientDetail.overview.email' | translate }}</dt>
+          <dd>{{ patient.email || '—' }}</dd>
+          <dt>{{ 'patientDetail.overview.status' | translate }}</dt>
+          <dd>
+            {{
+              (patient.isActive ? 'patientDetail.overview.active' : 'patientDetail.overview.inactive')
+                | translate
+            }}
+          </dd>
+          <dt>{{ 'patientDetail.profile.createdAt' | translate }}</dt>
+          <dd>{{ patient.createdAt | date }}</dd>
+        </dl>
+      </section>
+
       <section class="card tab-panel" *ngIf="activeTab === 'equipment'">
         <dl class="detail-list">
           <dt>{{ 'patientDetail.equipment.deviceType' | translate }}</dt>
@@ -112,6 +154,56 @@
           <dt>{{ 'patientDetail.equipment.implantDate' | translate }}</dt>
           <dd>{{ patient.implantDate | date }}</dd>
         </dl>
+      </section>
+
+      <section class="card tab-panel" *ngIf="activeTab === 'schedule'">
+        <p class="tab-panel__description">{{ 'patientDetail.schedule.description' | translate }}</p>
+        <p class="state-message" *ngIf="scheduleSettingsLoading">{{ 'patientDetail.schedule.loading' | translate }}</p>
+
+        <ng-container *ngIf="!scheduleSettingsLoading">
+          <div class="override-toggle">
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="!scheduleUseOverride"
+              (click)="setScheduleUseOverride(false)"
+            >
+              {{ 'patientDetail.schedule.useClinicDefault' | translate }}
+            </button>
+            <button
+              type="button"
+              class="toggle-option"
+              [class.toggle-option--active]="scheduleUseOverride"
+              (click)="setScheduleUseOverride(true)"
+            >
+              {{ 'patientDetail.schedule.overrideForPatient' | translate }}
+            </button>
+          </div>
+
+          <div class="report-interval-input">
+            <label for="scheduleIntervalDays">{{ 'patientDetail.schedule.intervalDays' | translate }}</label>
+            <input
+              id="scheduleIntervalDays"
+              type="number"
+              min="1"
+              class="urgency-select"
+              [formControl]="scheduleIntervalControl"
+              [readonly]="!scheduleUseOverride"
+            />
+          </div>
+
+          <div class="care-alert-actions">
+            <button type="button" class="btn btn--primary" (click)="saveScheduleSettings()">
+              {{ 'patientDetail.schedule.save' | translate }}
+            </button>
+            <span class="save-message save-message--success" *ngIf="scheduleSettingsSaveSucceeded">
+              {{ 'patientDetail.schedule.saved' | translate }}
+            </span>
+            <span class="save-message save-message--error" *ngIf="scheduleSettingsSaveError">
+              {{ 'patientDetail.schedule.saveError' | translate }}
+            </span>
+          </div>
+        </ng-container>
       </section>
 
       <section class="tab-panel" *ngIf="activeTab === 'history'">

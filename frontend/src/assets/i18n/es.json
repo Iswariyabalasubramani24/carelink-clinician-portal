@@ -106,7 +106,9 @@
     "notFound": "Paciente no encontrado.",
     "tabs": {
       "overview": "Resumen",
+      "profile": "Perfil",
       "equipment": "Equipo",
+      "schedule": "Programación",
       "history": "Historial",
       "careAlert": "Notificación CareAlert",
       "reports": "Informes",
@@ -121,12 +123,27 @@
       "active": "Activo",
       "inactive": "Inactivo"
     },
+    "profile": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "createdAt": "Historia clínica creada el"
+    },
     "equipment": {
       "deviceType": "Tipo de dispositivo",
       "manufacturer": "Fabricante",
       "model": "Modelo",
       "serialNumber": "Número de serie",
       "implantDate": "Fecha de implante"
+    },
+    "schedule": {
+      "description": "Con qué frecuencia debe transmitir datos el dispositivo de este paciente.",
+      "loading": "Cargando la configuración de programación…",
+      "useClinicDefault": "Usar valor predeterminado de la clínica",
+      "overrideForPatient": "Anular para este paciente",
+      "intervalDays": "Intervalo (días)",
+      "save": "Guardar",
+      "saved": "Guardado.",
+      "saveError": "Error al guardar la configuración de programación."
     },
     "history": {
       "date": "Fecha",

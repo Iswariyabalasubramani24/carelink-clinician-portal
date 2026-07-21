@@ -12,6 +12,9 @@ using CareLink.Application.PatientNotes.Queries;
 using CareLink.Application.Reports;
 using CareLink.Application.Reports.Commands;
 using CareLink.Application.Reports.Queries;
+using CareLink.Application.Schedule;
+using CareLink.Application.Schedule.Commands;
+using CareLink.Application.Schedule.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -99,6 +102,26 @@ public class PatientsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<PatientReportSettingsDto>> UpdateReportSettings(int id, UpdatePatientReportSettingsRequest request)
     {
         var result = await mediator.Send(new UpdatePatientReportSettingsCommand
+        {
+            PatientId = id,
+            TenantId = GetTenantId(),
+            UseOverride = request.UseOverride,
+            IntervalDays = request.IntervalDays
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/schedule-settings")]
+    public async Task<ActionResult<PatientScheduleSettingsDto>> GetScheduleSettings(int id)
+    {
+        var result = await mediator.Send(new GetPatientScheduleSettingsQuery(id, GetTenantId()));
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/schedule-settings")]
+    public async Task<ActionResult<PatientScheduleSettingsDto>> UpdateScheduleSettings(int id, UpdatePatientScheduleSettingsRequest request)
+    {
+        var result = await mediator.Send(new UpdatePatientScheduleSettingsCommand
         {
             PatientId = id,
             TenantId = GetTenantId(),

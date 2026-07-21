@@ -58,6 +58,7 @@ builder.Services.AddScoped<IPatientAlertSettingsRepository, PatientAlertSettings
 builder.Services.AddScoped<IAlertEvaluationService, AlertEvaluationService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportSettingsRepository, ReportSettingsRepository>();
+builder.Services.AddScoped<IScheduleSettingsRepository, ScheduleSettingsRepository>();
 builder.Services.AddScoped<IReportPdfGenerator, QuestPdfReportGenerator>();
 builder.Services.AddScoped<IPatientNoteRepository, PatientNoteRepository>();
 builder.Services.AddScoped<IAuditLogger, AuditLogger>();

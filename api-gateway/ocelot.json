@@ -163,6 +163,24 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/schedule-settings",
+      "UpstreamHttpMethod": [ "GET", "PUT" ],
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/schedule-settings",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/schedule/clinic-settings",
+      "UpstreamHttpMethod": [ "GET", "PUT" ],
+      "DownstreamPathTemplate": "/api/v1/schedule/clinic-settings",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5010 }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/v1/clinic-users",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "DownstreamPathTemplate": "/api/v1/clinic-users",

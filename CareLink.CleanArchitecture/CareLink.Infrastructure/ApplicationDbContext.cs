@@ -26,6 +26,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ReportSettings> ReportSettings => Set<ReportSettings>();
 
+    public DbSet<PatientScheduleSettings> PatientScheduleSettings => Set<PatientScheduleSettings>();
+
     public DbSet<PatientNote> PatientNotes => Set<PatientNote>();
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
@@ -169,6 +171,23 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         });
 
         modelBuilder.Entity<ReportSettings>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.HasIndex(s => s.TenantId).IsUnique().HasFilter("[TenantId] IS NOT NULL");
+            entity.HasIndex(s => s.PatientId).IsUnique().HasFilter("[PatientId] IS NOT NULL");
+
+            entity.HasOne(s => s.Tenant)
+                .WithMany()
+                .HasForeignKey(s => s.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(s => s.Patient)
+                .WithMany()
+                .HasForeignKey(s => s.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PatientScheduleSettings>(entity =>
         {
             entity.HasKey(s => s.Id);
             entity.HasIndex(s => s.TenantId).IsUnique().HasFilter("[TenantId] IS NOT NULL");

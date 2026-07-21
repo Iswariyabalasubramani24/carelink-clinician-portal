@@ -106,7 +106,9 @@
     "notFound": "Patient not found.",
     "tabs": {
       "overview": "Overview",
+      "profile": "Profile",
       "equipment": "Equipment",
+      "schedule": "Schedule",
       "history": "History",
       "careAlert": "CareAlert Notification",
       "reports": "Reports",
@@ -121,12 +123,27 @@
       "active": "Active",
       "inactive": "Inactive"
     },
+    "profile": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "createdAt": "Patient Record Created"
+    },
     "equipment": {
       "deviceType": "Device Type",
       "manufacturer": "Manufacturer",
       "model": "Model",
       "serialNumber": "Serial Number",
       "implantDate": "Implant Date"
+    },
+    "schedule": {
+      "description": "How often this patient's device should transmit data.",
+      "loading": "Loading schedule settings…",
+      "useClinicDefault": "Use clinic default",
+      "overrideForPatient": "Override for this patient",
+      "intervalDays": "Interval (days)",
+      "save": "Save",
+      "saved": "Saved.",
+      "saveError": "Failed to save schedule settings."
     },
     "history": {
       "date": "Date",

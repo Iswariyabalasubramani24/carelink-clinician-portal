@@ -7,6 +7,7 @@ import { Alert, PatientAlertSetting } from '../models/alert.model';
 import { Patient } from '../models/patient.model';
 import { PatientNote } from '../models/patient-note.model';
 import { PatientReportSettings, Report, ReportType } from '../models/report.model';
+import { PatientScheduleSettings } from '../models/schedule.model';
 import { TransmissionHistoryPoint } from '../models/transmission-history.model';
 
 export interface UpdatePatientAlertSettingsPayload {
@@ -15,6 +16,11 @@ export interface UpdatePatientAlertSettingsPayload {
 }
 
 export interface UpdatePatientReportSettingsPayload {
+  useOverride: boolean;
+  intervalDays: number;
+}
+
+export interface UpdatePatientScheduleSettingsPayload {
   useOverride: boolean;
   intervalDays: number;
 }
@@ -76,6 +82,14 @@ export class PatientService {
 
   updateReportSettings(id: number, payload: UpdatePatientReportSettingsPayload): Observable<PatientReportSettings> {
     return this.http.put<PatientReportSettings>(`${this.baseUrl}/${id}/report-settings`, payload);
+  }
+
+  getScheduleSettings(id: number): Observable<PatientScheduleSettings> {
+    return this.http.get<PatientScheduleSettings>(`${this.baseUrl}/${id}/schedule-settings`);
+  }
+
+  updateScheduleSettings(id: number, payload: UpdatePatientScheduleSettingsPayload): Observable<PatientScheduleSettings> {
+    return this.http.put<PatientScheduleSettings>(`${this.baseUrl}/${id}/schedule-settings`, payload);
   }
 
   getNotes(id: number): Observable<PatientNote[]> {

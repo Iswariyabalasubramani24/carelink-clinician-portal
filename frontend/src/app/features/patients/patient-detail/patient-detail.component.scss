@@ -69,6 +69,12 @@
 
 .tab-panel {
   padding: var(--space-5);
+
+  &__description {
+    margin: 0 0 var(--space-5);
+    color: var(--color-text-secondary);
+    font-size: 0.88rem;
+  }
 }
 
 .detail-list {
