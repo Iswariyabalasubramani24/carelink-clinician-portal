@@ -28,7 +28,11 @@
     <app-language-switcher *ngIf="!(isLoginRoute$ | async)"></app-language-switcher>
     <div class="app-header__session" *ngIf="currentClinician$ | async as clinician">
       <app-clinic-switcher></app-clinic-switcher>
-      <span class="app-header__clinician">{{ clinician.firstName }} {{ clinician.lastName }}</span>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <div class="app-header__profile">
+        <span class="app-header__avatar" aria-hidden="true">{{ clinician.firstName.charAt(0) }}{{ clinician.lastName.charAt(0) }}</span>
+        <span class="app-header__clinician">{{ clinician.firstName }} {{ clinician.lastName }}</span>
+      </div>
       <button type="button" class="logout-btn" (click)="onLogout()">{{ 'app.logout' | translate }}</button>
     </div>
   </div>
