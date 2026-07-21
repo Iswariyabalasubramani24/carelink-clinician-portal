@@ -33,13 +33,20 @@ IMAGE_TAG="${IMAGE_TAG:-$(date +%Y%m%d%H%M%S)}"
 REPLICAS="${REPLICAS:-1}"
 
 # ---- Build & push the three images directly in ACR -----------------------
-echo ">> Building images in ACR (tag $IMAGE_TAG)..."
-az acr build --registry "$ACR_NAME" --image "carelink-api:$IMAGE_TAG" \
-  --file "$REPO_ROOT/CareLink.CleanArchitecture/Dockerfile" "$REPO_ROOT/CareLink.CleanArchitecture"
-az acr build --registry "$ACR_NAME" --image "carelink-gateway:$IMAGE_TAG" \
-  --file "$REPO_ROOT/api-gateway/Dockerfile" "$REPO_ROOT/api-gateway"
-az acr build --registry "$ACR_NAME" --image "carelink-frontend:$IMAGE_TAG" \
-  --file "$REPO_ROOT/frontend/Dockerfile" "$REPO_ROOT/frontend"
+# ACR Tasks (az acr build) is blocked on free/trial subscriptions. On those,
+# build the images locally and push them, then run this script with
+# SKIP_ACR_BUILD=1 IMAGE_TAG=<the tag you pushed>.
+if [ -z "${SKIP_ACR_BUILD:-}" ]; then
+  echo ">> Building images in ACR (tag $IMAGE_TAG)..."
+  az acr build --registry "$ACR_NAME" --image "carelink-api:$IMAGE_TAG" \
+    --file "$REPO_ROOT/CareLink.CleanArchitecture/Dockerfile" "$REPO_ROOT/CareLink.CleanArchitecture"
+  az acr build --registry "$ACR_NAME" --image "carelink-gateway:$IMAGE_TAG" \
+    --file "$REPO_ROOT/api-gateway/Dockerfile" "$REPO_ROOT/api-gateway"
+  az acr build --registry "$ACR_NAME" --image "carelink-frontend:$IMAGE_TAG" \
+    --file "$REPO_ROOT/frontend/Dockerfile" "$REPO_ROOT/frontend"
+else
+  echo ">> SKIP_ACR_BUILD set - using pre-pushed images at tag $IMAGE_TAG."
+fi
 
 # ---- Cluster credentials -------------------------------------------------
 az aks get-credentials --name "$AKS_NAME" --resource-group "$RESOURCE_GROUP" --overwrite-existing
