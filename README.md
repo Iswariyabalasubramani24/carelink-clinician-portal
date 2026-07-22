@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🫀 Med Clinician Portal - To Present to Hiring Team
+# 🫀 Med Clinician Portal
 
 ### A production-grade, multi-tenant remote cardiac-monitoring platform for clinicians
 
