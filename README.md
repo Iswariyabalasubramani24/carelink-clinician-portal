@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🫀 CareLink — Clinician Portal
+# 🫀 Med Clinician Portal - To Present to Hiring Team
 
 ### A production-grade, multi-tenant remote cardiac-monitoring platform for clinicians
 
@@ -23,7 +23,7 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 > **Live demo:** https://carelink.20.241.145.139.nip.io/ — deployed on Azure Kubernetes Service with a trusted HTTPS certificate.
 > Demo credentials are listed under [Live Demo](#-live-demo) below.
 
-> 🎥 **See it in action:** open the **[live demo](https://carelink.20.241.145.139.nip.io/)**, or add a short walkthrough GIF to `docs/screenshots/demo.gif` — see the [shot list](docs/screenshots/README.md) for a 30-second recipe.
+> 🎥 **See it in action:** open the **[live demo](https://carelink.20.241.145.139.nip.io/)**
 
 ---
 
@@ -169,7 +169,7 @@ cd frontend && npx cypress run
 
 ### Prerequisites
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [.NET 10 SDK](https://dotnet.microsoft.com/download) and [Node.js 20+](https://nodejs.org/) (for running outside containers)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
 ### Run the whole stack with Docker
 
@@ -234,7 +234,7 @@ export SQL_ADMIN_PASSWORD='...'
 ./02-https.sh              # trusted TLS via cert-manager + Let's Encrypt
 ```
 
-📖 **Full runbook:** [`deploy/azure/README.md`](deploy/azure/README.md) — prerequisites, cost (~$45–55/mo, free on the Azure trial credit), custom domains, and teardown.
+📖 **Full runbook:** [`deploy/azure/README.md`](deploy/azure/README.md)
 
 Kubernetes manifests live in [`deploy/k8s/`](deploy/k8s/); an **Azure DevOps CI/CD pipeline** ([`azure-pipelines.yml`](azure-pipelines.yml)) runs tests, builds images, and deploys to AKS behind an approval gate.
 
