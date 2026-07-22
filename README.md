@@ -61,26 +61,13 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 
 ## 📸 Screenshots
 
-> **Add your own captures** — log into the app, screenshot these four screens, and drop them into [`docs/screenshots/`](docs/screenshots/README.md) with the filenames below. The easiest way: open `README.md` on GitHub, click ✏️ edit, and **drag-and-drop** each image into the table — GitHub uploads and links it automatically. Then uncomment the table below.
-
-<!-- Once the PNGs exist in docs/screenshots/, delete this comment and the block above's note, then keep the table:
-
 | Dashboard | Patient Detail |
 |:---:|:---:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Patient detail](docs/screenshots/patient-detail.png) |
+| ![Dashboard](https://github.com/user-attachments/assets/b8d7ebec-7352-47ca-b062-5b3634446aa8) | ![Patient detail](https://github.com/user-attachments/assets/00fad5bb-1229-4cc1-8a28-8cfcf4824c09) |
 
-| Advanced Search | Multi-language (Français) |
+| Advanced Search | Multi-language (Español) |
 |:---:|:---:|
-| ![Patients](docs/screenshots/patients-list.png) | ![i18n](docs/screenshots/i18n-french.png) |
-
--->
-
-| Screen | Filename to add | Where to capture |
-|---|---|---|
-| Home dashboard | `dashboard.png` | after login → `/dashboard` |
-| Patient detail (charts) | `patient-detail.png` | a patient → **History** tab |
-| Advanced search | `patients-list.png` | Patients → expand **Advanced Search** |
-| French UI | `i18n-french.png` | login page → set language to Français |
+| ![Advanced search](https://github.com/user-attachments/assets/05b394d7-31c7-4a95-b676-58c752c169f9) | ![Spanish UI](https://github.com/user-attachments/assets/485cda99-cc34-4e50-8e83-e95f90c862a1) |
 
 ---
 
