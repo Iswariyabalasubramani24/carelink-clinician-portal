@@ -378,7 +378,8 @@
       "ClinicUserSuspended": "Clinic User Suspended",
       "ClinicUserActivated": "Clinic User Activated",
       "ReportGenerated": "Report Generated",
-      "PasswordChanged": "Password Changed"
+      "PasswordChanged": "Password Changed",
+      "TenantProvisioned": "Hospital Provisioned"
     },
     "table": {
       "timestamp": "Timestamp",

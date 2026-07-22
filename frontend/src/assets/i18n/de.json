@@ -378,7 +378,8 @@
       "ClinicUserSuspended": "Klinikbenutzer gesperrt",
       "ClinicUserActivated": "Klinikbenutzer aktiviert",
       "ReportGenerated": "Bericht erstellt",
-      "PasswordChanged": "Passwort geändert"
+      "PasswordChanged": "Passwort geändert",
+      "TenantProvisioned": "Krankenhaus bereitgestellt"
     },
     "table": {
       "timestamp": "Zeitstempel",

@@ -378,7 +378,8 @@
       "ClinicUserSuspended": "Usuario de clínica suspendido",
       "ClinicUserActivated": "Usuario de clínica activado",
       "ReportGenerated": "Informe generado",
-      "PasswordChanged": "Contraseña cambiada"
+      "PasswordChanged": "Contraseña cambiada",
+      "TenantProvisioned": "Hospital aprovisionado"
     },
     "table": {
       "timestamp": "Fecha y hora",

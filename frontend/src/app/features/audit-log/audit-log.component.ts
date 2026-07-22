@@ -15,7 +15,8 @@ const KNOWN_ACTIONS = [
   'ClinicUserSuspended',
   'ClinicUserActivated',
   'ReportGenerated',
-  'PasswordChanged'
+  'PasswordChanged',
+  'TenantProvisioned'
 ];
 
 @Component({
