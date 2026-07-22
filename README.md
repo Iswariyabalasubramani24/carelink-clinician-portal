@@ -23,7 +23,7 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 > **Live demo:** https://carelink.20.241.145.139.nip.io/ — deployed on Azure Kubernetes Service with a trusted HTTPS certificate.
 > Demo credentials are listed under [Live Demo](#-live-demo) below.
 
-> 🎥 **See it in action:** open the **[live demo](https://carelink.20.241.145.139.nip.io/)**, or add a short walkthrough GIF to `docs/screenshots/demo.gif` — see the [shot list](docs/screenshots/README.md) for a 30-second recipe.
+> 🎥 **See it in action:** open the **[live demo](https://carelink.20.241.145.139.nip.io/)**.
 
 ---
 
