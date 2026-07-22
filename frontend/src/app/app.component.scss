@@ -67,6 +67,16 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    // Rendered as a link to the change-password page; keep the header look.
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    padding: var(--space-1);
+
+    &:hover {
+      background: var(--color-surface-hover, rgba(0, 0, 0, 0.04));
+    }
   }
 
   &__avatar {

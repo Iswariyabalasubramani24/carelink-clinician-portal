@@ -55,6 +55,20 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
         return Ok(LoginResponse.FromRefreshResult(result));
     }
 
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+    {
+        await mediator.Send(new ChangePasswordCommand
+        {
+            ClinicianId = GetClinicianId(),
+            TenantId = GetTenantId(),
+            CurrentPassword = request.CurrentPassword,
+            NewPassword = request.NewPassword
+        });
+        return NoContent();
+    }
+
     [HttpPost("logout")]
     [AllowAnonymous]
     public async Task<IActionResult> Logout()
@@ -74,6 +88,12 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
     private int GetClinicianId()
     {
         var claim = User.FindFirst("clinicianId")?.Value;
+        return int.Parse(claim!);
+    }
+
+    private int GetTenantId()
+    {
+        var claim = User.FindFirst("tenantId")?.Value;
         return int.Parse(claim!);
     }
 

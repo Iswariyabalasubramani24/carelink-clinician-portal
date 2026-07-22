@@ -377,7 +377,8 @@
       "ClinicUserCreated": "Usuario de clínica creado",
       "ClinicUserSuspended": "Usuario de clínica suspendido",
       "ClinicUserActivated": "Usuario de clínica activado",
-      "ReportGenerated": "Informe generado"
+      "ReportGenerated": "Informe generado",
+      "PasswordChanged": "Contraseña cambiada"
     },
     "table": {
       "timestamp": "Fecha y hora",
@@ -391,5 +392,22 @@
       "next": "Siguiente",
       "pageOf": "Página {{page}} de {{totalPages}}"
     }
+  },
+  "changePassword": {
+    "title": "Cambiar contraseña",
+    "subtitle": "Elija una nueva contraseña para su cuenta",
+    "currentPassword": "Contraseña actual",
+    "currentPasswordRequired": "La contraseña actual es obligatoria.",
+    "newPassword": "Nueva contraseña",
+    "newPasswordRequired": "La nueva contraseña es obligatoria.",
+    "newPasswordTooShort": "La nueva contraseña debe tener al menos 8 caracteres.",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordsMismatch": "Las contraseñas no coinciden.",
+    "save": "Cambiar contraseña",
+    "saving": "Cambiando…",
+    "back": "Volver",
+    "success": "Su contraseña ha sido cambiada.",
+    "wrongCurrentPassword": "La contraseña actual es incorrecta.",
+    "genericError": "No se pudo cambiar la contraseña. Por favor, inténtelo de nuevo."
   }
 }

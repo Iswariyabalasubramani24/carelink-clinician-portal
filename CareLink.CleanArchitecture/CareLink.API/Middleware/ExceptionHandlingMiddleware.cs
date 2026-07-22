@@ -10,6 +10,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
     {
         [typeof(InvalidCredentialsException)] = StatusCodes.Status401Unauthorized,
         [typeof(InvalidRefreshTokenException)] = StatusCodes.Status401Unauthorized,
+        [typeof(InvalidCurrentPasswordException)] = StatusCodes.Status400BadRequest,
+        [typeof(ArgumentException)] = StatusCodes.Status400BadRequest,
         [typeof(AccountSuspendedException)] = StatusCodes.Status403Forbidden,
         [typeof(TenantAccessDeniedException)] = StatusCodes.Status403Forbidden,
         [typeof(PatientNotFoundException)] = StatusCodes.Status404NotFound,

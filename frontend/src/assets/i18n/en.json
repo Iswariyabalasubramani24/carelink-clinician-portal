@@ -377,7 +377,8 @@
       "ClinicUserCreated": "Clinic User Created",
       "ClinicUserSuspended": "Clinic User Suspended",
       "ClinicUserActivated": "Clinic User Activated",
-      "ReportGenerated": "Report Generated"
+      "ReportGenerated": "Report Generated",
+      "PasswordChanged": "Password Changed"
     },
     "table": {
       "timestamp": "Timestamp",
@@ -391,5 +392,22 @@
       "next": "Next",
       "pageOf": "Page {{page}} of {{totalPages}}"
     }
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "subtitle": "Choose a new password for your account",
+    "currentPassword": "Current Password",
+    "currentPasswordRequired": "Current password is required.",
+    "newPassword": "New Password",
+    "newPasswordRequired": "New password is required.",
+    "newPasswordTooShort": "The new password must be at least 8 characters long.",
+    "confirmPassword": "Confirm New Password",
+    "passwordsMismatch": "Passwords do not match.",
+    "save": "Change password",
+    "saving": "Changing…",
+    "back": "Back",
+    "success": "Your password has been changed.",
+    "wrongCurrentPassword": "The current password is incorrect.",
+    "genericError": "Could not change the password. Please try again."
   }
 }

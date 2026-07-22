@@ -40,6 +40,14 @@ export class AuthService {
       .pipe(finalize(() => this.clearSession()));
   }
 
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.baseUrl}/change-password`,
+      { currentPassword, newPassword },
+      { withCredentials: true }
+    );
+  }
+
   getMyTenants(): Observable<Tenant[]> {
     return this.http.get<Tenant[]>(`${environment.apiUrl}/tenants/mine`);
   }

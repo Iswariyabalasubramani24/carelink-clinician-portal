@@ -52,10 +52,14 @@
         <app-clinic-switcher></app-clinic-switcher>
         <span class="app-header__divider" aria-hidden="true"></span>
       </ng-container>
-      <div class="app-header__profile">
+      <a
+        class="app-header__profile"
+        routerLink="/change-password"
+        [title]="'changePassword.title' | translate"
+      >
         <span class="app-header__avatar" aria-hidden="true">{{ clinician.firstName.charAt(0) }}{{ clinician.lastName.charAt(0) }}</span>
         <span class="app-header__clinician">{{ clinician.firstName }} {{ clinician.lastName }}</span>
-      </div>
+      </a>
       <button type="button" class="logout-btn" (click)="onLogout()">{{ 'app.logout' | translate }}</button>
     </div>
   </div>
