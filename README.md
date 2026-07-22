@@ -17,6 +17,10 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 
 </div>
 
+
+<img width="1536" height="639" alt="carelink-demo" src="https://github.com/user-attachments/assets/1e420aa2-78c2-434a-8e17-e6c42ebeee21" />
+
+
 ---
 
 > [!NOTE]
@@ -245,12 +249,13 @@ Kubernetes manifests live in [`deploy/k8s/`](deploy/k8s/); an **Azure DevOps CI/
 **https://carelink.20.241.145.139.nip.io/**
 
 > [!IMPORTANT]
-> For a public link, sign in with a **limited clinician account**, not the SuperAdmin.
-> Provision a demo hospital + clinician via the SuperAdmin (Hospitals page), then list that clinician's credentials here:
+> Live Demo App Credentials
 
 | Role | Email | Password |
 |---|---|---|
-| Clinician | `_your demo clinician_` | `_password_` |
+| Platform Admin | `superadmin@test.com` | `SuperAdmin@123` |
+| Hospital Admin | `hospitaladmin@test.com` | `Admin@123` |
+| Clinician | `sarah@abbott.com` | `Sarah@123` |
 
 ---
 
