@@ -77,16 +77,16 @@ A **.NET Clean Architecture** backend behind an **Ocelot API gateway**, with an 
 
 ```mermaid
 flowchart LR
-    U([Clinician]) -->|HTTPS| ING[Ingress-NGINX<br/>+ Let's Encrypt TLS]
-    ING --> FE[Angular SPA<br/>nginx]
-    FE -->|/api| GW[Ocelot<br/>API Gateway]
-    GW --> API[.NET 10 API<br/>Clean Architecture]
-    API --> DB[(Azure SQL<br/>EF Core)]
-    API --> REDIS[(Redis<br/>cache)]
-    API -.traces.-> AI[Application Insights]
+    U([Clinician]) -->|HTTPS| ING["Ingress-NGINX<br/>HTTPS / TLS"]
+    ING --> FE["Angular SPA<br/>nginx"]
+    FE -->|/api| GW["Ocelot<br/>API Gateway"]
+    GW --> API[".NET 10 API<br/>Clean Architecture"]
+    API --> DB[("Azure SQL<br/>EF Core")]
+    API --> REDIS[("Redis<br/>cache")]
+    API -.traces.-> AI["Application Insights"]
     GW -.traces.-> AI
 
-    subgraph Kubernetes [Azure Kubernetes Service]
+    subgraph AKS["Azure Kubernetes Service"]
         ING
         FE
         GW
@@ -99,10 +99,10 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    API[CareLink.API<br/>controllers · auth · middleware] --> APP
-    INFRA[CareLink.Infrastructure<br/>EF Core · repositories · JWT · PDF · seeding] --> APP
-    APP[CareLink.Application<br/>CQRS commands/queries · MediatR · interfaces] --> DOM
-    DOM[CareLink.Domain<br/>entities · enums · business rules]
+    API["CareLink.API<br/>controllers, auth, middleware"] --> APP
+    INFRA["CareLink.Infrastructure<br/>EF Core, repositories, JWT, PDF"] --> APP
+    APP["CareLink.Application<br/>CQRS, MediatR, interfaces"] --> DOM
+    DOM["CareLink.Domain<br/>entities, enums, business rules"]
     API -.->|DI| INFRA
 ```
 
@@ -112,16 +112,16 @@ The **Domain** has no dependencies; **Application** defines interfaces that **In
 
 ```mermaid
 sequenceDiagram
-    participant C as Clinician (SPA)
+    participant C as Clinician SPA
     participant G as Ocelot Gateway
-    participant A as .NET API
+    participant A as API
     participant D as Azure SQL
 
-    C->>G: GET /api/v1/patients (Bearer JWT)
+    C->>G: GET /api/v1/patients + Bearer JWT
     G->>A: forward
     A->>A: extract tenantId from JWT claims
-    A->>D: SELECT ... WHERE TenantId = @tenantId
-    D-->>A: patients (this hospital only)
+    A->>D: query patients WHERE TenantId = tenant
+    D-->>A: patients for this hospital only
     A-->>C: 200 OK
 ```
 
@@ -212,18 +212,18 @@ Fully scripted deployment to **Azure Kubernetes Service** with Azure SQL, ACR, A
 
 ```mermaid
 flowchart LR
-    subgraph azure [Azure]
-      ACR[Container Registry]
-      AKS[AKS Cluster]
-      SQL[(Azure SQL)]
-      AI[App Insights]
+    subgraph azure["Azure"]
+      ACR["Container Registry"]
+      AKS["AKS Cluster"]
+      SQL[("Azure SQL")]
+      AI["App Insights"]
     end
-    DEV[deploy/azure/*.sh] -->|provision| azure
-    DEV -->|build & push| ACR
+    DEV["deploy/azure scripts"] -->|provision| azure
+    DEV -->|build and push| ACR
     ACR --> AKS
     AKS --> SQL
     AKS -.-> AI
-    CERT[cert-manager<br/>Let's Encrypt] --> AKS
+    CERT["cert-manager<br/>TLS certs"] --> AKS
 ```
 
 ```bash
