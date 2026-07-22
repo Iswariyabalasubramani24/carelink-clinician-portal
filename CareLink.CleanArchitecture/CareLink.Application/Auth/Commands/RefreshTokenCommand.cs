@@ -1,5 +1,6 @@
 using CareLink.Application.Common.Exceptions;
 using CareLink.Application.Common.Interfaces;
+using CareLink.Domain.Entities;
 using MediatR;
 
 namespace CareLink.Application.Auth.Commands;
@@ -12,7 +13,9 @@ public record RefreshAccessTokenResult(
     string FirstName,
     string LastName,
     string Role,
-    int TenantId);
+    int TenantId,
+    string RefreshToken,
+    DateTime RefreshTokenExpiresAt);
 
 public class RefreshTokenCommand : IRequest<RefreshAccessTokenResult>
 {
@@ -35,6 +38,21 @@ public class RefreshTokenCommandHandler(
         var clinician = storedToken.Clinician;
         var accessToken = tokenGenerator.GenerateAccessToken(clinician, storedToken.TenantId);
 
+        // Rotate: every refresh revokes the presented token and issues a new
+        // one with a fresh idle-window expiry. Active use slides the session
+        // forward indefinitely; inactivity past the window (or replay of an
+        // already-rotated token) forces a fresh sign-in.
+        var newRefreshToken = tokenGenerator.GenerateRefreshToken();
+        await refreshTokenRepository.RevokeAsync(storedToken);
+        await refreshTokenRepository.AddAsync(new RefreshToken
+        {
+            ClinicianId = clinician.Id,
+            TenantId = storedToken.TenantId,
+            Token = newRefreshToken.Token,
+            ExpiresAt = newRefreshToken.ExpiresAt,
+            IsRevoked = false
+        });
+
         return new RefreshAccessTokenResult(
             accessToken.Token,
             accessToken.ExpiresAt,
@@ -43,6 +61,8 @@ public class RefreshTokenCommandHandler(
             clinician.FirstName,
             clinician.LastName,
             clinician.Role.ToString(),
-            storedToken.TenantId);
+            storedToken.TenantId,
+            newRefreshToken.Token,
+            newRefreshToken.ExpiresAt);
     }
 }

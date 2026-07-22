@@ -16,7 +16,8 @@
     "emailInvalid": "Saisissez une adresse e-mail valide.",
     "passwordRequired": "Le mot de passe est requis.",
     "invalidCredentials": "E-mail ou mot de passe invalide.",
-    "accountSuspended": "Votre compte a été suspendu. Veuillez contacter l'administrateur de votre clinique."
+    "accountSuspended": "Votre compte a été suspendu. Veuillez contacter l'administrateur de votre clinique.",
+    "idleSignedOut": "Vous avez été déconnecté pour cause d'inactivité. Veuillez vous reconnecter."
   },
   "patients": {
     "title": "Patients",

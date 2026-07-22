@@ -16,7 +16,8 @@
     "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
     "passwordRequired": "Passwort ist erforderlich.",
     "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
-    "accountSuspended": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an Ihren Klinikadministrator."
+    "accountSuspended": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an Ihren Klinikadministrator.",
+    "idleSignedOut": "Sie wurden wegen Inaktivität abgemeldet. Bitte melden Sie sich erneut an."
   },
   "patients": {
     "title": "Patienten",

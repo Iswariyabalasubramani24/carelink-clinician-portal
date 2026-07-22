@@ -7,6 +7,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 
 import { Clinician } from './core/models/auth.model';
 import { AuthService } from './core/services/auth.service';
+import { IdleTimeoutService } from './core/services/idle-timeout.service';
 import { LanguageSwitcherComponent } from './core/components/language-switcher/language-switcher.component';
 import { ClinicSwitcherComponent } from './core/components/clinic-switcher/clinic-switcher.component';
 
@@ -40,8 +41,13 @@ export class AppComponent {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    idleTimeout: IdleTimeoutService
+  ) {
+    // Auto-logout after inactivity, HIPAA-style: the service watches
+    // authentication state itself and only runs while signed in.
+    idleTimeout.start();
+  }
 
   onLogout(): void {
     this.authService.logout().subscribe({

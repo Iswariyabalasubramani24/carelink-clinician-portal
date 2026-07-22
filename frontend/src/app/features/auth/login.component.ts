@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../core/services/auth.service';
@@ -24,12 +24,19 @@ export class LoginComponent {
   loading = false;
   errorMessage: string | null = null;
 
+  // Set when the idle-timeout service redirected here (?reason=idle), so the
+  // clinician knows why their session ended rather than suspecting an error.
+  readonly idleSignedOut: boolean;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly translate: TranslateService
-  ) {}
+    private readonly translate: TranslateService,
+    route: ActivatedRoute
+  ) {
+    this.idleSignedOut = route.snapshot.queryParamMap.get('reason') === 'idle';
+  }
 
   onSubmit(): void {
     if (this.form.invalid) {

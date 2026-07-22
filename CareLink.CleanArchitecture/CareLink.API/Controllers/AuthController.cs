@@ -43,11 +43,16 @@ public class AuthController(IMediator mediator, IWebHostEnvironment environment)
 
     [HttpPost("refresh")]
     [AllowAnonymous]
-    public async Task<ActionResult<RefreshAccessTokenResult>> Refresh()
+    public async Task<ActionResult<LoginResponse>> Refresh()
     {
         var refreshToken = Request.Cookies[RefreshTokenCookieName];
         var result = await mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken ?? string.Empty });
-        return Ok(result);
+
+        // Sliding session: each successful refresh rotates the token, so
+        // re-issue the cookie with the new value and extended expiry.
+        SetRefreshTokenCookie(result.RefreshToken, result.RefreshTokenExpiresAt);
+
+        return Ok(LoginResponse.FromRefreshResult(result));
     }
 
     [HttpPost("logout")]

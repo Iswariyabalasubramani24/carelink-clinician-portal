@@ -16,7 +16,8 @@
     "emailInvalid": "Introduzca una dirección de correo electrónico válida.",
     "passwordRequired": "La contraseña es obligatoria.",
     "invalidCredentials": "Correo electrónico o contraseña no válidos.",
-    "accountSuspended": "Su cuenta ha sido suspendida. Póngase en contacto con el administrador de su clínica."
+    "accountSuspended": "Su cuenta ha sido suspendida. Póngase en contacto con el administrador de su clínica.",
+    "idleSignedOut": "Su sesión se cerró por inactividad. Por favor, inicie sesión de nuevo."
   },
   "patients": {
     "title": "Pacientes",

@@ -16,7 +16,8 @@
     "emailInvalid": "Enter a valid email address.",
     "passwordRequired": "Password is required.",
     "invalidCredentials": "Invalid email or password.",
-    "accountSuspended": "Your account has been suspended. Please contact your clinic administrator."
+    "accountSuspended": "Your account has been suspended. Please contact your clinic administrator.",
+    "idleSignedOut": "You were signed out due to inactivity. Please sign in again."
   },
   "patients": {
     "title": "Patients",

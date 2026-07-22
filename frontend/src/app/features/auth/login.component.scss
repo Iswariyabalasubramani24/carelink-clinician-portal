@@ -86,6 +86,11 @@ form {
     color: var(--color-error);
   }
 
+  &--info {
+    background: var(--color-primary-soft, #e8f1f5);
+    color: var(--color-primary);
+  }
+
   &__icon {
     font-weight: 700;
   }

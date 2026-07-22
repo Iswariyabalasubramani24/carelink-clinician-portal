@@ -43,7 +43,7 @@ public class JwtTokenGenerator(IOptions<JwtSettings> options) : IJwtTokenGenerat
     public RefreshTokenResult GenerateRefreshToken()
     {
         var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-        var expiresAt = DateTime.UtcNow.AddDays(_settings.RefreshTokenExpiryDays);
+        var expiresAt = DateTime.UtcNow.AddMinutes(_settings.RefreshTokenIdleTimeoutMinutes);
 
         return new RefreshTokenResult(token, expiresAt);
     }

@@ -14,7 +14,7 @@ public class JwtTokenGeneratorTests
         Issuer = "CareLinkAPI",
         Audience = "CareLinkClient",
         AccessTokenExpiryMinutes = 15,
-        RefreshTokenExpiryDays = 7
+        RefreshTokenIdleTimeoutMinutes = 30
     }));
 
     private static Clinician MakeClinician() => new()
@@ -81,14 +81,16 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
-    public void GenerateRefreshToken_ReturnsUniqueTokensWithSevenDayExpiry()
+    public void GenerateRefreshToken_ReturnsUniqueTokensWithIdleWindowExpiry()
     {
+        // The refresh token is a sliding idle window (30 min here), not a
+        // long-lived "remember me" - clinical-app session hygiene.
         var generator = MakeGenerator();
 
         var first = generator.GenerateRefreshToken();
         var second = generator.GenerateRefreshToken();
 
         Assert.NotEqual(first.Token, second.Token);
-        Assert.True(Math.Abs((first.ExpiresAt - DateTime.UtcNow.AddDays(7)).TotalSeconds) < 5);
+        Assert.True(Math.Abs((first.ExpiresAt - DateTime.UtcNow.AddMinutes(30)).TotalSeconds) < 5);
     }
 }

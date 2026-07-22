@@ -7,6 +7,11 @@
 
     <app-country-language-selector></app-country-language-selector>
 
+    <div class="banner banner--info" *ngIf="idleSignedOut">
+      <span class="banner__icon">i</span>
+      {{ 'login.idleSignedOut' | translate }}
+    </div>
+
     <div class="banner banner--error" *ngIf="errorMessage">
       <span class="banner__icon">!</span>
       {{ errorMessage }}

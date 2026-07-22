@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
@@ -15,6 +15,9 @@ describe('LoginComponent', () => {
   let authServiceMock: { login: jest.Mock; getCurrentClinician: jest.Mock };
   let routerMock: { navigateByUrl: jest.Mock };
   let tenantServiceMock: { getAll: jest.Mock };
+  // Mutable so individual tests can simulate arriving with ?reason=idle
+  // before re-creating the component.
+  let loginQueryParams: Record<string, string>;
 
   function submitForm(): void {
     fixture.debugElement.query(By.css('form')).triggerEventHandler('ngSubmit', null);
@@ -25,6 +28,7 @@ describe('LoginComponent', () => {
     authServiceMock = { login: jest.fn(), getCurrentClinician: jest.fn().mockReturnValue(null) };
     routerMock = { navigateByUrl: jest.fn() };
     tenantServiceMock = { getAll: jest.fn().mockReturnValue(of([])) };
+    loginQueryParams = {};
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
@@ -32,7 +36,11 @@ describe('LoginComponent', () => {
         provideTranslateService(),
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },
-        { provide: TenantService, useValue: tenantServiceMock }
+        { provide: TenantService, useValue: tenantServiceMock },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParamMap: { get: (key: string) => loginQueryParams[key] ?? null } } }
+        }
       ]
     }).compileComponents();
 
@@ -144,5 +152,20 @@ describe('LoginComponent', () => {
       'Your account has been suspended. Please contact your clinic administrator.'
     );
     expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
+  });
+
+  it('shows the inactivity notice when arriving with ?reason=idle', () => {
+    loginQueryParams = { reason: 'idle' };
+    fixture = TestBed.createComponent(LoginComponent);
+    fixture.detectChanges();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    expect(el.querySelector('.banner--info')).toBeTruthy();
+    expect(el.textContent).toContain('You were signed out due to inactivity.');
+  });
+
+  it('does not show the inactivity notice on a normal visit', () => {
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    expect(el.querySelector('.banner--info')).toBeNull();
   });
 });

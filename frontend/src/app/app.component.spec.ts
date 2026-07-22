@@ -13,7 +13,10 @@ describe('AppComponent', () => {
       imports: [AppComponent],
       providers: [
         provideTranslateService(),
-        { provide: AuthService, useValue: { currentClinician$: of(null), logout: jest.fn() } },
+        {
+          provide: AuthService,
+          useValue: { currentClinician$: of(null), isAuthenticated$: of(false), logout: jest.fn() }
+        },
         {
           provide: Router,
           useValue: { navigateByUrl: jest.fn(), events: of(), url: '/patients' }
