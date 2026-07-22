@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
 import { Clinician } from './core/models/auth.model';
@@ -38,6 +38,14 @@ export class AppComponent {
     map((event) => event.url.startsWith('/login')),
     startWith(this.router.url.startsWith('/login'))
   );
+
+  // Drives the authenticated header chrome (nav + session controls). Gated on
+  // the route as well as the session so the chrome never overlays the login
+  // page, even in transitional states (e.g. mid-logout navigation).
+  chromeClinician$: Observable<Clinician | null> = combineLatest([
+    this.currentClinician$,
+    this.isLoginRoute$
+  ]).pipe(map(([clinician, isLogin]) => (isLogin ? null : clinician)));
 
   constructor(
     private readonly authService: AuthService,

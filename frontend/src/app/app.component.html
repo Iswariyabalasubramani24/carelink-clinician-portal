@@ -1,6 +1,6 @@
 <header class="app-header">
   <h1>{{ 'app.title' | translate }}</h1>
-  <nav class="app-header__nav" *ngIf="currentClinician$ | async as clinician">
+  <nav class="app-header__nav" *ngIf="chromeClinician$ | async as clinician">
     <!-- A SuperAdmin is a platform operator: they see only Hospitals, never the
          clinical pages (their hidden system tenant has no clinical data). -->
     <ng-container *ngIf="clinician.role !== 'SuperAdmin'">
@@ -45,7 +45,7 @@
   </nav>
   <div class="app-header__actions">
     <app-language-switcher *ngIf="!(isLoginRoute$ | async)"></app-language-switcher>
-    <div class="app-header__session" *ngIf="currentClinician$ | async as clinician">
+    <div class="app-header__session" *ngIf="chromeClinician$ | async as clinician">
       <!-- SuperAdmins belong to the hidden system tenant only, so the clinic
            switcher would render an empty hospital list for them. -->
       <ng-container *ngIf="clinician.role !== 'SuperAdmin'">

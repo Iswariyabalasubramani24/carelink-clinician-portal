@@ -17,6 +17,11 @@ describe('Authentication flow', () => {
     cy.location('pathname', { timeout: 10000 }).should('eq', '/dashboard');
     cy.contains('h1', 'Home Dashboard').should('be.visible');
 
+    // While signed in, the login page is off-limits: a direct visit bounces
+    // back home instead of showing the sign-in form under the app header.
+    cy.visit('/login');
+    cy.location('pathname', { timeout: 10000 }).should('eq', '/dashboard');
+
     // Navigate to Patients and confirm patient data loads
     cy.contains('a', 'Patients').click();
     cy.location('pathname', { timeout: 10000 }).should('eq', '/patients');
