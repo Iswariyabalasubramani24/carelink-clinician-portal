@@ -23,12 +23,7 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 > **Live demo:** https://carelink.20.241.145.139.nip.io/ — deployed on Azure Kubernetes Service with a trusted HTTPS certificate.
 > Demo credentials are listed under [Live Demo](#-live-demo) below.
 
-<!-- Replace this with a real demo GIF: record a 20-30s screen capture of the
-     login → dashboard → patient detail flow, save it as docs/screenshots/demo.gif,
-     and this image will render it. See docs/screenshots/README.md for a shot list. -->
-<div align="center">
-  <img src="docs/screenshots/demo.gif" alt="CareLink demo walkthrough" width="800">
-</div>
+> 🎥 **See it in action:** open the **[live demo](https://carelink.20.241.145.139.nip.io/)**, or add a short walkthrough GIF to `docs/screenshots/demo.gif` — see the [shot list](docs/screenshots/README.md) for a 30-second recipe.
 
 ---
 
@@ -66,7 +61,9 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 
 ## 📸 Screenshots
 
-> Drop your captures into `docs/screenshots/` (see the [shot list](docs/screenshots/README.md)). Filenames below are pre-wired.
+> **Add your own captures** — log into the app, screenshot these four screens, and drop them into [`docs/screenshots/`](docs/screenshots/README.md) with the filenames below. The easiest way: open `README.md` on GitHub, click ✏️ edit, and **drag-and-drop** each image into the table — GitHub uploads and links it automatically. Then uncomment the table below.
+
+<!-- Once the PNGs exist in docs/screenshots/, delete this comment and the block above's note, then keep the table:
 
 | Dashboard | Patient Detail |
 |:---:|:---:|
@@ -75,6 +72,15 @@ Manage patients with implanted cardiac devices (ICD, Pacemaker, CRT, ICM) across
 | Advanced Search | Multi-language (Français) |
 |:---:|:---:|
 | ![Patients](docs/screenshots/patients-list.png) | ![i18n](docs/screenshots/i18n-french.png) |
+
+-->
+
+| Screen | Filename to add | Where to capture |
+|---|---|---|
+| Home dashboard | `dashboard.png` | after login → `/dashboard` |
+| Patient detail (charts) | `patient-detail.png` | a patient → **History** tab |
+| Advanced search | `patients-list.png` | Patients → expand **Advanced Search** |
+| French UI | `i18n-french.png` | login page → set language to Français |
 
 ---
 
