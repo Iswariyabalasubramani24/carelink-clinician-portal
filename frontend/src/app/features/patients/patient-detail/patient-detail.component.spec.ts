@@ -14,11 +14,13 @@ window.URL.createObjectURL = jest.fn().mockReturnValue('blob:mock-url');
 window.URL.revokeObjectURL = jest.fn();
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 
 import { Alert, AlertType, AlertUrgency, PatientAlertSetting } from '../../../core/models/alert.model';
 import { PatientNote } from '../../../core/models/patient-note.model';
@@ -141,6 +143,7 @@ describe('PatientDetailComponent', () => {
       providers: [
         provideTranslateService(),
         provideMockStore({ initialState: {} }),
+        provideMockActions(() => new Subject().asObservable()),
         provideCharts(withDefaultRegisterables()),
         { provide: PatientService, useValue: patientServiceMock },
         { provide: AlertService, useValue: alertServiceMock },
@@ -312,6 +315,7 @@ describe('PatientDetailComponent', () => {
       providers: [
         provideTranslateService(),
         provideMockStore({ initialState: {} }),
+        provideMockActions(() => new Subject().asObservable()),
         provideCharts(withDefaultRegisterables()),
         { provide: PatientService, useValue: patientServiceMock },
         { provide: AlertService, useValue: alertServiceMock },
@@ -537,5 +541,29 @@ describe('PatientDetailComponent', () => {
     expect(el.querySelectorAll('.note-item').length).toBe(mockNotes.length + 1);
     expect(el.textContent).toContain('New note content');
     expect(textarea.value).toBe('');
+  });
+
+  it('opens the Edit Patient modal pre-filled with the current patient, and closes it', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    expect(el.querySelector('app-edit-patient-form')).toBeNull();
+
+    const editBtn = Array.from(el.querySelectorAll('.patient-detail-page__header button')).find((b) =>
+      b.textContent?.includes('Edit')
+    ) as HTMLButtonElement;
+    editBtn.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.showEditForm).toBe(true);
+    const editForm = fixture.debugElement.query(By.css('app-edit-patient-form'));
+    expect(editForm).toBeTruthy();
+    expect(editForm.componentInstance.patient).toEqual(mockPatient);
+
+    editForm.componentInstance.close.emit();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.showEditForm).toBe(false);
+    expect(el.querySelector('app-edit-patient-form')).toBeNull();
   });
 });

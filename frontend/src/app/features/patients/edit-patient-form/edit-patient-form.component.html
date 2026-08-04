@@ -1,0 +1,169 @@
+<div class="edit-patient-form">
+  <header class="edit-patient-form__header">
+    <h2>{{ 'editPatientForm.title' | translate }}</h2>
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="onCancel()"
+      [attr.aria-label]="'editPatientForm.close' | translate"
+    >
+      &times;
+    </button>
+  </header>
+
+  <div class="banner banner--success" *ngIf="submitSucceeded">
+    <span class="banner__icon">✓</span>
+    {{ 'editPatientForm.successMessage' | translate }}
+  </div>
+
+  <div class="banner banner--error" *ngIf="submitError">
+    <span class="banner__icon">!</span>
+    {{ submitError }}
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!submitSucceeded" novalidate>
+    <section class="form-section">
+      <h3>{{ 'addPatientForm.personalInfo' | translate }}</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="editMrn">{{ 'addPatientForm.mrn' | translate }}</label>
+          <input
+            id="editMrn"
+            type="text"
+            formControlName="medicalRecordNumber"
+            [attr.aria-invalid]="form.get('medicalRecordNumber')?.invalid && form.get('medicalRecordNumber')?.touched"
+          />
+          <span
+            class="field-error"
+            *ngIf="form.get('medicalRecordNumber')?.touched && form.get('medicalRecordNumber')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.mrnRequired' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editFirstName">{{ 'addPatientForm.firstName' | translate }}</label>
+          <input id="editFirstName" type="text" formControlName="firstName" />
+          <span
+            class="field-error"
+            *ngIf="form.get('firstName')?.touched && form.get('firstName')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.firstNameRequired' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editLastName">{{ 'addPatientForm.lastName' | translate }}</label>
+          <input id="editLastName" type="text" formControlName="lastName" />
+          <span
+            class="field-error"
+            *ngIf="form.get('lastName')?.touched && form.get('lastName')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.lastNameRequired' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editDob">{{ 'addPatientForm.dob' | translate }}</label>
+          <input id="editDob" type="date" formControlName="dateOfBirth" />
+          <span
+            class="field-error"
+            *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.dobRequired' | translate }}
+          </span>
+          <span
+            class="field-error"
+            *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.hasError('futureDate')"
+          >
+            {{ 'addPatientForm.errors.dobFuture' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editPhone">{{ 'addPatientForm.phone' | translate }}</label>
+          <input id="editPhone" type="tel" formControlName="phoneNumber" />
+        </div>
+
+        <div class="form-field">
+          <label for="editEmail">{{ 'addPatientForm.email' | translate }}</label>
+          <input id="editEmail" type="email" formControlName="email" />
+          <span class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
+            {{ 'addPatientForm.errors.emailInvalid' | translate }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h3>{{ 'addPatientForm.deviceInfo' | translate }}</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="editDeviceType">{{ 'addPatientForm.deviceType' | translate }}</label>
+          <select id="editDeviceType" formControlName="deviceType">
+            <option value="" disabled>{{ 'addPatientForm.selectDeviceType' | translate }}</option>
+            <option *ngFor="let device of deviceTypes" [value]="device.value">
+              {{ device.labelKey | translate }}
+            </option>
+          </select>
+          <span
+            class="field-error"
+            *ngIf="form.get('deviceType')?.touched && form.get('deviceType')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.deviceTypeRequired' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editManufacturer">{{ 'addPatientForm.manufacturer' | translate }}</label>
+          <input id="editManufacturer" type="text" formControlName="deviceManufacturer" />
+        </div>
+
+        <div class="form-field">
+          <label for="editModel">{{ 'addPatientForm.model' | translate }}</label>
+          <input id="editModel" type="text" formControlName="deviceModel" />
+        </div>
+
+        <div class="form-field">
+          <label for="editSerial">{{ 'addPatientForm.serial' | translate }}</label>
+          <input id="editSerial" type="text" formControlName="deviceSerialNumber" />
+          <span
+            class="field-error"
+            *ngIf="form.get('deviceSerialNumber')?.touched && form.get('deviceSerialNumber')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.serialRequired' | translate }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="editImplantDate">{{ 'addPatientForm.implantDate' | translate }}</label>
+          <input id="editImplantDate" type="date" formControlName="implantDate" />
+          <span
+            class="field-error"
+            *ngIf="form.get('implantDate')?.touched && form.get('implantDate')?.hasError('required')"
+          >
+            {{ 'addPatientForm.errors.implantDateRequired' | translate }}
+          </span>
+          <span
+            class="field-error"
+            *ngIf="form.get('implantDate')?.touched && form.get('implantDate')?.hasError('futureDate')"
+          >
+            {{ 'addPatientForm.errors.implantDateFuture' | translate }}
+          </span>
+          <span class="field-error" *ngIf="form.hasError('implantBeforeBirth') && form.get('implantDate')?.touched">
+            {{ 'addPatientForm.errors.implantBeforeBirth' | translate }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="form-actions">
+      <button type="button" class="btn btn--secondary" (click)="onCancel()" [disabled]="updating$ | async">
+        {{ 'editPatientForm.cancel' | translate }}
+      </button>
+      <button type="submit" class="btn btn--primary" [disabled]="updating$ | async">
+        {{ (updating$ | async) ? ('editPatientForm.saving' | translate) : ('editPatientForm.submit' | translate) }}
+      </button>
+    </footer>
+  </form>
+</div>

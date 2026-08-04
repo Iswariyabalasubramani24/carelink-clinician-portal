@@ -90,6 +90,14 @@
       "icm": "ICM — Moniteur cardiaque insérable"
     }
   },
+  "editPatientForm": {
+    "title": "Modifier le patient",
+    "close": "Fermer",
+    "successMessage": "Patient mis à jour avec succès.",
+    "cancel": "Annuler",
+    "saving": "Enregistrement...",
+    "submit": "Enregistrer les modifications"
+  },
   "language": {
     "select": "Langue",
     "en": "English",
@@ -196,6 +204,7 @@
   },
   "patientDetail": {
     "back": "← Retour aux patients",
+    "edit": "Modifier",
     "notFound": "Patient introuvable.",
     "tabs": {
       "overview": "Aperçu",
@@ -376,6 +385,7 @@
     },
     "actions": {
       "PatientCreated": "Patient créé",
+      "PatientUpdated": "Patient mis à jour",
       "AlertAcknowledged": "Alerte acquittée",
       "AlertSnoozed": "Alerte reportée",
       "ClinicUserCreated": "Utilisateur clinique créé",

@@ -49,6 +49,20 @@ export class PatientsEffects {
     )
   );
 
+  updatePatient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PatientsActions.updatePatient),
+      switchMap(({ id, patient }) =>
+        this.patientService.update(id, patient).pipe(
+          map((updated) => PatientsActions.updatePatientSuccess({ patient: updated })),
+          catchError((error) =>
+            of(PatientsActions.updatePatientFailure({ error: error.message ?? 'Unknown error' }))
+          )
+        )
+      )
+    )
+  );
+
   constructor(
     private readonly actions$: Actions,
     private readonly patientService: PatientService

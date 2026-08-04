@@ -90,6 +90,14 @@
       "icm": "MCI — Monitor cardíaco insertable"
     }
   },
+  "editPatientForm": {
+    "title": "Editar paciente",
+    "close": "Cerrar",
+    "successMessage": "Paciente actualizado correctamente.",
+    "cancel": "Cancelar",
+    "saving": "Guardando...",
+    "submit": "Guardar cambios"
+  },
   "language": {
     "select": "Idioma",
     "en": "English",
@@ -196,6 +204,7 @@
   },
   "patientDetail": {
     "back": "← Volver a pacientes",
+    "edit": "Editar",
     "notFound": "Paciente no encontrado.",
     "tabs": {
       "overview": "Resumen",
@@ -376,6 +385,7 @@
     },
     "actions": {
       "PatientCreated": "Paciente creado",
+      "PatientUpdated": "Paciente actualizado",
       "AlertAcknowledged": "Alerta confirmada",
       "AlertSnoozed": "Alerta pospuesta",
       "ClinicUserCreated": "Usuario de clínica creado",

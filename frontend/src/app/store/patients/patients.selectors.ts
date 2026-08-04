@@ -7,3 +7,5 @@ export const { selectLoading: selectPatientsLoading, selectError: selectPatients
   patientsFeature;
 export const { selectCreating: selectPatientCreating, selectCreateError: selectPatientCreateError } =
   patientsFeature;
+export const { selectUpdating: selectPatientUpdating, selectUpdateError: selectPatientUpdateError } =
+  patientsFeature;

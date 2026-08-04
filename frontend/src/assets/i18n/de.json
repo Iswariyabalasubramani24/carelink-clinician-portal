@@ -90,6 +90,14 @@
       "icm": "ICM — Implantierbarer Ereignisrekorder"
     }
   },
+  "editPatientForm": {
+    "title": "Patient bearbeiten",
+    "close": "Schließen",
+    "successMessage": "Patient erfolgreich aktualisiert.",
+    "cancel": "Abbrechen",
+    "saving": "Wird gespeichert...",
+    "submit": "Änderungen speichern"
+  },
   "language": {
     "select": "Sprache",
     "en": "English",
@@ -196,6 +204,7 @@
   },
   "patientDetail": {
     "back": "← Zurück zu Patienten",
+    "edit": "Bearbeiten",
     "notFound": "Patient nicht gefunden.",
     "tabs": {
       "overview": "Übersicht",
@@ -376,6 +385,7 @@
     },
     "actions": {
       "PatientCreated": "Patient erstellt",
+      "PatientUpdated": "Patient aktualisiert",
       "AlertAcknowledged": "Alarm bestätigt",
       "AlertSnoozed": "Alarm zurückgestellt",
       "ClinicUserCreated": "Klinikbenutzer erstellt",

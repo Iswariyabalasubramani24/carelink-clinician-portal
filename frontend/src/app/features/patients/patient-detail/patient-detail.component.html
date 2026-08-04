@@ -4,8 +4,13 @@
   <ng-container *ngIf="patients$ | async as patients">
     <ng-container *ngIf="findPatient(patients) as patient; else notFoundOrLoading">
       <header class="patient-detail-page__header">
-        <h1>{{ patient.firstName }} {{ patient.lastName }}</h1>
-        <p class="subtitle">{{ patient.medicalRecordNumber }}</p>
+        <div>
+          <h1>{{ patient.firstName }} {{ patient.lastName }}</h1>
+          <p class="subtitle">{{ patient.medicalRecordNumber }}</p>
+        </div>
+        <button type="button" class="btn btn--secondary" (click)="openEditForm()">
+          {{ 'patientDetail.edit' | translate }}
+        </button>
       </header>
 
       <div class="tabs">
@@ -453,6 +458,12 @@
           </ng-template>
         </ng-container>
       </section>
+
+      <div class="modal-backdrop" *ngIf="showEditForm" (click)="closeEditForm()">
+        <div class="modal-panel" (click)="$event.stopPropagation()">
+          <app-edit-patient-form [patient]="patient" (close)="closeEditForm()"></app-edit-patient-form>
+        </div>
+      </div>
     </ng-container>
 
     <ng-template #notFoundOrLoading>

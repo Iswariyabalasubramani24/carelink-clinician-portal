@@ -19,6 +19,7 @@ import { PatientService } from '../../../core/services/patient.service';
 import { ReportService } from '../../../core/services/report.service';
 import { PatientsActions } from '../../../store/patients/patients.actions';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
+import { EditPatientFormComponent } from '../edit-patient-form/edit-patient-form.component';
 
 type DetailTab = 'overview' | 'profile' | 'equipment' | 'schedule' | 'history' | 'careAlert' | 'reports' | 'notes';
 
@@ -30,13 +31,14 @@ interface AlertSettingRow {
 @Component({
   selector: 'app-patient-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule, BaseChartDirective],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule, BaseChartDirective, EditPatientFormComponent],
   templateUrl: './patient-detail.component.html',
   styleUrl: './patient-detail.component.scss'
 })
 export class PatientDetailComponent implements OnInit {
   activeTab: DetailTab = 'overview';
   patientId = 0;
+  showEditForm = false;
 
   patients$: Observable<Patient[]> = this.store.select(selectAllPatients);
   patientsLoading$: Observable<boolean> = this.store.select(selectPatientsLoading);
@@ -164,6 +166,14 @@ export class PatientDetailComponent implements OnInit {
 
   setTab(tab: DetailTab): void {
     this.activeTab = tab;
+  }
+
+  openEditForm(): void {
+    this.showEditForm = true;
+  }
+
+  closeEditForm(): void {
+    this.showEditForm = false;
   }
 
   acknowledgeAlert(alert: Alert): void {

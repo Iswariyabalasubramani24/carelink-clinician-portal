@@ -12,6 +12,10 @@ export const PatientsActions = createActionGroup({
 
     'Create Patient': props<{ patient: Partial<Patient> }>(),
     'Create Patient Success': props<{ patient: Patient }>(),
-    'Create Patient Failure': props<{ error: string }>()
+    'Create Patient Failure': props<{ error: string }>(),
+
+    'Update Patient': props<{ id: number; patient: Partial<Patient> }>(),
+    'Update Patient Success': props<{ patient: Patient }>(),
+    'Update Patient Failure': props<{ error: string }>()
   }
 });

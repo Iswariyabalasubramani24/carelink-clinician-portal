@@ -15,4 +15,6 @@ public interface IPatientRepository
 
     // Same tenant scoping as GetByTenantIdAsync, plus optional combinable filters.
     Task<List<Patient>> SearchAsync(int tenantId, PatientSearchFilters filters);
+
+    Task UpdateAsync(Patient patient);
 }

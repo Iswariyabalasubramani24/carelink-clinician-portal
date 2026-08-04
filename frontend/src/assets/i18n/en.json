@@ -90,6 +90,14 @@
       "icm": "ICM — Insertable Cardiac Monitor"
     }
   },
+  "editPatientForm": {
+    "title": "Edit Patient",
+    "close": "Close",
+    "successMessage": "Patient updated successfully.",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "submit": "Save Changes"
+  },
   "language": {
     "select": "Language",
     "en": "English",
@@ -196,6 +204,7 @@
   },
   "patientDetail": {
     "back": "← Back to Patients",
+    "edit": "Edit",
     "notFound": "Patient not found.",
     "tabs": {
       "overview": "Overview",
@@ -376,6 +385,7 @@
     },
     "actions": {
       "PatientCreated": "Patient Created",
+      "PatientUpdated": "Patient Updated",
       "AlertAcknowledged": "Alert Acknowledged",
       "AlertSnoozed": "Alert Snoozed",
       "ClinicUserCreated": "Clinic User Created",

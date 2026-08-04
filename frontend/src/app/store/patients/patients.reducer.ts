@@ -9,6 +9,8 @@ export interface PatientsState extends EntityState<Patient> {
   error: string | null;
   creating: boolean;
   createError: string | null;
+  updating: boolean;
+  updateError: string | null;
 }
 
 export const patientsAdapter = createEntityAdapter<Patient>();
@@ -17,7 +19,9 @@ const initialState: PatientsState = patientsAdapter.getInitialState({
   loading: false,
   error: null,
   creating: false,
-  createError: null
+  createError: null,
+  updating: false,
+  updateError: null
 });
 
 export const patientsFeature = createFeature({
@@ -47,6 +51,20 @@ export const patientsFeature = createFeature({
       ...state,
       creating: false,
       createError: error
+    })),
+
+    on(PatientsActions.updatePatient, (state) => ({
+      ...state,
+      updating: true,
+      updateError: null
+    })),
+    on(PatientsActions.updatePatientSuccess, (state, { patient }) =>
+      patientsAdapter.setOne(patient, { ...state, updating: false })
+    ),
+    on(PatientsActions.updatePatientFailure, (state, { error }) => ({
+      ...state,
+      updating: false,
+      updateError: error
     }))
   )
 });

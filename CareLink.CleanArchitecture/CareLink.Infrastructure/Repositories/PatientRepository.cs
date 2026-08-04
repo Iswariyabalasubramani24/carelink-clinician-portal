@@ -37,4 +37,10 @@ public class PatientRepository(ApplicationDbContext db) : IPatientRepository
 
         return await query.OrderBy(p => p.LastName).ToListAsync();
     }
+
+    public async Task UpdateAsync(Patient patient)
+    {
+        db.Patients.Update(patient);
+        await db.SaveChangesAsync();
+    }
 }

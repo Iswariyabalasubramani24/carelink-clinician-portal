@@ -37,6 +37,16 @@ public class PatientsController(IMediator mediator) : ControllerBase
         return CreatedAtAction(nameof(GetByTenant), result);
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult<PatientDto>> Update(int id, UpdatePatientCommand command)
+    {
+        command.PatientId = id;
+        command.TenantId = GetTenantId();
+        command.ClinicianId = GetClinicianId();
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PatientDto>>> GetByTenant(
         [FromQuery] DeviceType? deviceType,

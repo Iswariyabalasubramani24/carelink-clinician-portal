@@ -4,6 +4,10 @@
   padding: var(--space-6) var(--space-5);
 
   &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
     margin: var(--space-4) 0 var(--space-5);
 
     h1 {
