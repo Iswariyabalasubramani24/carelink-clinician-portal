@@ -16,6 +16,7 @@ const KNOWN_ACTIONS = [
   'ClinicUserActivated',
   'ReportGenerated',
   'PasswordChanged',
+  'PasswordReset',
   'TenantProvisioned'
 ];
 

@@ -3,7 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { ClinicianRole, ClinicUser, CreateClinicUserResult } from '../models/clinic-user.model';
+import {
+  ClinicianRole,
+  ClinicUser,
+  CreateClinicUserResult,
+  ResetClinicianPasswordResult
+} from '../models/clinic-user.model';
 
 export interface CreateClinicUserPayload {
   firstName: string;
@@ -33,5 +38,9 @@ export class ClinicUserService {
 
   activate(id: number): Observable<ClinicUser> {
     return this.http.put<ClinicUser>(`${this.baseUrl}/${id}/activate`, {});
+  }
+
+  resetPassword(id: number): Observable<ResetClinicianPasswordResult> {
+    return this.http.put<ResetClinicianPasswordResult>(`${this.baseUrl}/${id}/reset-password`, {});
   }
 }

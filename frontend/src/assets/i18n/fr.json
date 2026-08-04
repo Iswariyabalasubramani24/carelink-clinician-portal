@@ -331,6 +331,10 @@
     "createError": "Échec de la création de l'utilisateur.",
     "suspend": "Suspendre",
     "activate": "Activer",
+    "resetPasswordTitle": "Mot de passe réinitialisé — nouveau mot de passe temporaire créé",
+    "resetPasswordError": "Échec de la réinitialisation du mot de passe.",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetting": "Réinitialisation…",
     "table": {
       "name": "Nom",
       "email": "Nom d'utilisateur / E-mail",
@@ -379,7 +383,8 @@
       "ClinicUserActivated": "Utilisateur clinique activé",
       "ReportGenerated": "Rapport généré",
       "PasswordChanged": "Mot de passe modifié",
-      "TenantProvisioned": "Hôpital provisionné"
+      "TenantProvisioned": "Hôpital provisionné",
+      "PasswordReset": "Mot de passe réinitialisé"
     },
     "table": {
       "timestamp": "Horodatage",

@@ -24,3 +24,5 @@ public record ClinicUserDto(
 }
 
 public record CreateClinicUserResultDto(ClinicUserDto User, string TemporaryPassword);
+
+public record ResetClinicianPasswordResultDto(ClinicUserDto User, string TemporaryPassword);

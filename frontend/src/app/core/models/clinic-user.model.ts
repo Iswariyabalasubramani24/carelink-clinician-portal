@@ -18,3 +18,8 @@ export interface CreateClinicUserResult {
   user: ClinicUser;
   temporaryPassword: string;
 }
+
+export interface ResetClinicianPasswordResult {
+  user: ClinicUser;
+  temporaryPassword: string;
+}

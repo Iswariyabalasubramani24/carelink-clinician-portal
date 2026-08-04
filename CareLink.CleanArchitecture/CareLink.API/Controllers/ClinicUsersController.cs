@@ -52,6 +52,18 @@ public class ClinicUsersController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut("{id}/reset-password")]
+    public async Task<ActionResult<ResetClinicianPasswordResultDto>> ResetPassword(int id)
+    {
+        var result = await mediator.Send(new ResetClinicianPasswordCommand
+        {
+            ClinicianId = id,
+            TenantId = GetTenantId(),
+            ActingClinicianId = GetClinicianId()
+        });
+        return Ok(result);
+    }
+
     private int GetTenantId()
     {
         var claim = User.FindFirst("tenantId")?.Value;

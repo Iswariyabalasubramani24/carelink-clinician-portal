@@ -331,6 +331,10 @@
     "createError": "Fehler beim Erstellen des Benutzers.",
     "suspend": "Sperren",
     "activate": "Aktivieren",
+    "resetPasswordTitle": "Passwort zurückgesetzt — neues temporäres Passwort erstellt",
+    "resetPasswordError": "Das Passwort konnte nicht zurückgesetzt werden.",
+    "resetPassword": "Passwort zurücksetzen",
+    "resetting": "Wird zurückgesetzt…",
     "table": {
       "name": "Name",
       "email": "Benutzername / E-Mail",
@@ -379,7 +383,8 @@
       "ClinicUserActivated": "Klinikbenutzer aktiviert",
       "ReportGenerated": "Bericht erstellt",
       "PasswordChanged": "Passwort geändert",
-      "TenantProvisioned": "Krankenhaus bereitgestellt"
+      "TenantProvisioned": "Krankenhaus bereitgestellt",
+      "PasswordReset": "Passwort zurückgesetzt"
     },
     "table": {
       "timestamp": "Zeitstempel",

@@ -1,8 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
-import { ClinicianRole, ClinicUser, CreateClinicUserResult } from '../../core/models/clinic-user.model';
+import {
+  ClinicianRole,
+  ClinicUser,
+  CreateClinicUserResult,
+  ResetClinicianPasswordResult
+} from '../../core/models/clinic-user.model';
 import { ClinicUserService } from '../../core/services/clinic-user.service';
 import { useEnglishTestTranslations } from '../../core/testing/translate-testing';
 import { ClinicManagementComponent } from './clinic-management.component';
@@ -14,6 +19,7 @@ describe('ClinicManagementComponent', () => {
     create: jest.Mock;
     suspend: jest.Mock;
     activate: jest.Mock;
+    resetPassword: jest.Mock;
   };
 
   const mockUsers: ClinicUser[] = [
@@ -53,12 +59,18 @@ describe('ClinicManagementComponent', () => {
     temporaryPassword: 'Tmp#Passw0rd'
   };
 
+  const mockResetResult: ResetClinicianPasswordResult = {
+    user: mockUsers[0],
+    temporaryPassword: 'Reset#Passw0rd'
+  };
+
   async function setup(users: ClinicUser[] = mockUsers): Promise<void> {
     clinicUserServiceMock = {
       getAll: jest.fn().mockReturnValue(of(users)),
       create: jest.fn().mockReturnValue(of(mockCreateResult)),
       suspend: jest.fn().mockReturnValue(of({ ...mockUsers[0], isActive: false })),
-      activate: jest.fn().mockReturnValue(of({ ...mockUsers[1], isActive: true }))
+      activate: jest.fn().mockReturnValue(of({ ...mockUsers[1], isActive: true })),
+      resetPassword: jest.fn().mockReturnValue(of(mockResetResult))
     };
 
     await TestBed.configureTestingModule({
@@ -165,6 +177,36 @@ describe('ClinicManagementComponent', () => {
     fixture.detectChanges();
 
     expect(clinicUserServiceMock.activate).toHaveBeenCalledWith(2);
+  });
+
+  it('resetting a user\'s password calls the reset endpoint and reveals the new temporary password', async () => {
+    await setup();
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const firstRowButtons = el.querySelectorAll('tbody tr:first-child button');
+    const resetButton = Array.from(firstRowButtons).find((b) => b.textContent?.includes('Reset Password')) as HTMLButtonElement;
+    expect(resetButton).toBeTruthy();
+
+    resetButton.click();
+    fixture.detectChanges();
+
+    expect(clinicUserServiceMock.resetPassword).toHaveBeenCalledWith(1);
+    expect(el.textContent).toContain('Reset#Passw0rd');
+    expect(el.textContent).toContain('Password reset');
+  });
+
+  it('shows an error banner when resetting the password fails', async () => {
+    await setup();
+    clinicUserServiceMock.resetPassword.mockReturnValue(throwError(() => new Error('network error')));
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    const resetButton = Array.from(el.querySelectorAll('tbody tr:first-child button')).find((b) =>
+      b.textContent?.includes('Reset Password')
+    ) as HTMLButtonElement;
+    resetButton.click();
+    fixture.detectChanges();
+
+    expect(el.textContent).toContain('Failed to reset the password.');
   });
 
   it('filters the list to only active or only suspended users', async () => {

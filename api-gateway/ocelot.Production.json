@@ -349,6 +349,20 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/v1/clinic-users/{id}/reset-password",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/v1/clinic-users/{id}/reset-password",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/v1/audit-logs",
       "UpstreamHttpMethod": [
         "GET"

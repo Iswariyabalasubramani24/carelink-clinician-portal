@@ -25,6 +25,24 @@
     </button>
   </div>
 
+  <div class="banner banner--success temp-password-banner" *ngIf="resetResult">
+    <div>
+      <strong>{{ 'clinicManagement.resetPasswordTitle' | translate }}</strong>
+      <p>{{ 'clinicManagement.tempPasswordNote' | translate }}</p>
+      <code class="temp-password">{{ resetResult.temporaryPassword }}</code>
+    </div>
+    <button
+      type="button"
+      class="icon-btn"
+      (click)="dismissResetPassword()"
+      [attr.aria-label]="'clinicManagement.close' | translate"
+    >
+      &times;
+    </button>
+  </div>
+
+  <div class="banner banner--error" *ngIf="resetError">{{ 'clinicManagement.resetPasswordError' | translate }}</div>
+
   <section class="card">
     <div class="filter-toggle">
       <button
@@ -82,9 +100,20 @@
               {{ (user.isActive ? 'clinicManagement.status.active' : 'clinicManagement.status.suspended') | translate }}
             </span>
           </td>
-          <td>
+          <td class="row-actions">
             <button type="button" class="btn btn--secondary" (click)="toggleStatus(user)">
               {{ (user.isActive ? 'clinicManagement.suspend' : 'clinicManagement.activate') | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn--secondary"
+              [disabled]="resettingUserId === user.id"
+              (click)="resetPassword(user)"
+            >
+              {{
+                (resettingUserId === user.id ? 'clinicManagement.resetting' : 'clinicManagement.resetPassword')
+                  | translate
+              }}
             </button>
           </td>
         </tr>

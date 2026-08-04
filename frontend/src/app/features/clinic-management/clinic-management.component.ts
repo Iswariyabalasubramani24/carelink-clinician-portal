@@ -3,7 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ClinicianRole, ClinicUser, CreateClinicUserResult } from '../../core/models/clinic-user.model';
+import {
+  ClinicianRole,
+  ClinicUser,
+  CreateClinicUserResult,
+  ResetClinicianPasswordResult
+} from '../../core/models/clinic-user.model';
 import { ClinicUserService } from '../../core/services/clinic-user.service';
 
 type StatusFilter = 'all' | 'active' | 'suspended';
@@ -26,6 +31,10 @@ export class ClinicManagementComponent implements OnInit {
   creating = false;
   createError = false;
   createdResult: CreateClinicUserResult | null = null;
+
+  resettingUserId: number | null = null;
+  resetResult: ResetClinicianPasswordResult | null = null;
+  resetError = false;
 
   readonly ClinicianRole = ClinicianRole;
 
@@ -119,5 +128,25 @@ export class ClinicManagementComponent implements OnInit {
         this.users = this.users.map((u) => (u.id === updated.id ? updated : u));
       }
     });
+  }
+
+  resetPassword(user: ClinicUser): void {
+    this.resettingUserId = user.id;
+    this.resetError = false;
+
+    this.clinicUserService.resetPassword(user.id).subscribe({
+      next: (result) => {
+        this.resettingUserId = null;
+        this.resetResult = result;
+      },
+      error: () => {
+        this.resettingUserId = null;
+        this.resetError = true;
+      }
+    });
+  }
+
+  dismissResetPassword(): void {
+    this.resetResult = null;
   }
 }
