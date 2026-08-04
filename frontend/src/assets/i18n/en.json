@@ -205,6 +205,8 @@
   "patientDetail": {
     "back": "← Back to Patients",
     "edit": "Edit",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
     "notFound": "Patient not found.",
     "tabs": {
       "overview": "Overview",
@@ -386,6 +388,8 @@
     "actions": {
       "PatientCreated": "Patient Created",
       "PatientUpdated": "Patient Updated",
+      "PatientDeactivated": "Patient Deactivated",
+      "PatientActivated": "Patient Activated",
       "AlertAcknowledged": "Alert Acknowledged",
       "AlertSnoozed": "Alert Snoozed",
       "ClinicUserCreated": "Clinic User Created",

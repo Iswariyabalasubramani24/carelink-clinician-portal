@@ -69,6 +69,14 @@ export class PatientService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
+  deactivate(id: number): Observable<Patient> {
+    return this.http.put<Patient>(`${this.baseUrl}/${id}/deactivate`, {});
+  }
+
+  activate(id: number): Observable<Patient> {
+    return this.http.put<Patient>(`${this.baseUrl}/${id}/activate`, {});
+  }
+
   getTransmissionHistory(id: number): Observable<TransmissionHistoryPoint[]> {
     return this.http.get<TransmissionHistoryPoint[]>(`${this.baseUrl}/${id}/transmissions`);
   }

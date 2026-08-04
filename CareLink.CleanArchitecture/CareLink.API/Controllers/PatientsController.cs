@@ -47,6 +47,20 @@ public class PatientsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut("{id}/deactivate")]
+    public async Task<ActionResult<PatientDto>> Deactivate(int id)
+    {
+        var result = await mediator.Send(new DeactivatePatientCommand(id, GetTenantId(), GetClinicianId()));
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/activate")]
+    public async Task<ActionResult<PatientDto>> Activate(int id)
+    {
+        var result = await mediator.Send(new ActivatePatientCommand(id, GetTenantId(), GetClinicianId()));
+        return Ok(result);
+    }
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PatientDto>>> GetByTenant(
         [FromQuery] DeviceType? deviceType,

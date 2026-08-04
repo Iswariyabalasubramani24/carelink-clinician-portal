@@ -205,6 +205,8 @@
   "patientDetail": {
     "back": "← Retour aux patients",
     "edit": "Modifier",
+    "deactivate": "Désactiver",
+    "activate": "Activer",
     "notFound": "Patient introuvable.",
     "tabs": {
       "overview": "Aperçu",
@@ -386,6 +388,8 @@
     "actions": {
       "PatientCreated": "Patient créé",
       "PatientUpdated": "Patient mis à jour",
+      "PatientDeactivated": "Patient désactivé",
+      "PatientActivated": "Patient activé",
       "AlertAcknowledged": "Alerte acquittée",
       "AlertSnoozed": "Alerte reportée",
       "ClinicUserCreated": "Utilisateur clinique créé",

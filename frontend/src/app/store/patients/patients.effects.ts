@@ -63,6 +63,34 @@ export class PatientsEffects {
     )
   );
 
+  deactivatePatient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PatientsActions.deactivatePatient),
+      switchMap(({ id }) =>
+        this.patientService.deactivate(id).pipe(
+          map((patient) => PatientsActions.setPatientActiveSuccess({ patient })),
+          catchError((error) =>
+            of(PatientsActions.setPatientActiveFailure({ error: error.message ?? 'Unknown error' }))
+          )
+        )
+      )
+    )
+  );
+
+  activatePatient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PatientsActions.activatePatient),
+      switchMap(({ id }) =>
+        this.patientService.activate(id).pipe(
+          map((patient) => PatientsActions.setPatientActiveSuccess({ patient })),
+          catchError((error) =>
+            of(PatientsActions.setPatientActiveFailure({ error: error.message ?? 'Unknown error' }))
+          )
+        )
+      )
+    )
+  );
+
   constructor(
     private readonly actions$: Actions,
     private readonly patientService: PatientService

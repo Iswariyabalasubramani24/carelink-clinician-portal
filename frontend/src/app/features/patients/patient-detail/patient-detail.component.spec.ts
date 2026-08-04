@@ -32,6 +32,7 @@ import { AlertService } from '../../../core/services/alert.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { ReportService } from '../../../core/services/report.service';
 import { useEnglishTestTranslations } from '../../../core/testing/translate-testing';
+import { PatientsActions } from '../../../store/patients/patients.actions';
 import { selectAllPatients, selectPatientsLoading } from '../../../store/patients/patients.selectors';
 import { PatientDetailComponent } from './patient-detail.component';
 
@@ -565,5 +566,44 @@ describe('PatientDetailComponent', () => {
 
     expect(fixture.componentInstance.showEditForm).toBe(false);
     expect(el.querySelector('app-edit-patient-form')).toBeNull();
+  });
+
+  it('shows Active status with a Deactivate action, and dispatches deactivatePatient on click', async () => {
+    await setup();
+    jest.spyOn(store, 'dispatch');
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    expect(el.querySelector('.status-badge')?.textContent?.trim()).toBe('Active');
+
+    const toggleBtn = Array.from(el.querySelectorAll('.status-row button')).find((b) =>
+      b.textContent?.includes('Deactivate')
+    ) as HTMLButtonElement;
+    expect(toggleBtn).toBeTruthy();
+
+    toggleBtn.click();
+    fixture.detectChanges();
+
+    expect(store.dispatch).toHaveBeenCalledWith(PatientsActions.deactivatePatient({ id: mockPatient.id }));
+  });
+
+  it('shows Inactive status with an Activate action, and dispatches activatePatient on click', async () => {
+    await setup();
+    store.overrideSelector(selectAllPatients, [{ ...mockPatient, isActive: false }]);
+    store.refreshState();
+    fixture.detectChanges();
+    jest.spyOn(store, 'dispatch');
+
+    const el = fixture.debugElement.nativeElement as HTMLElement;
+    expect(el.querySelector('.status-badge')?.textContent?.trim()).toBe('Inactive');
+
+    const toggleBtn = Array.from(el.querySelectorAll('.status-row button')).find((b) =>
+      b.textContent?.includes('Activate')
+    ) as HTMLButtonElement;
+    expect(toggleBtn).toBeTruthy();
+
+    toggleBtn.click();
+    fixture.detectChanges();
+
+    expect(store.dispatch).toHaveBeenCalledWith(PatientsActions.activatePatient({ id: mockPatient.id }));
   });
 });

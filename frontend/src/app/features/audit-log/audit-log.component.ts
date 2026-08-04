@@ -10,6 +10,8 @@ const PAGE_SIZE = 25;
 const KNOWN_ACTIONS = [
   'PatientCreated',
   'PatientUpdated',
+  'PatientDeactivated',
+  'PatientActivated',
   'AlertAcknowledged',
   'AlertSnoozed',
   'ClinicUserCreated',

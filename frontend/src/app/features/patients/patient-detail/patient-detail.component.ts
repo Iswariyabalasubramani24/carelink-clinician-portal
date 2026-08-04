@@ -176,6 +176,14 @@ export class PatientDetailComponent implements OnInit {
     this.showEditForm = false;
   }
 
+  toggleActive(patient: Patient): void {
+    this.store.dispatch(
+      patient.isActive
+        ? PatientsActions.deactivatePatient({ id: patient.id })
+        : PatientsActions.activatePatient({ id: patient.id })
+    );
+  }
+
   acknowledgeAlert(alert: Alert): void {
     this.alertService.acknowledge(alert.id).subscribe({
       next: () => {

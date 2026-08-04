@@ -65,6 +65,8 @@ export const patientsFeature = createFeature({
       ...state,
       updating: false,
       updateError: error
-    }))
+    })),
+
+    on(PatientsActions.setPatientActiveSuccess, (state, { patient }) => patientsAdapter.setOne(patient, state))
   )
 });

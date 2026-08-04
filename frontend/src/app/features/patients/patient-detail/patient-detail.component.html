@@ -111,11 +111,20 @@
           <dt>{{ 'patientDetail.overview.email' | translate }}</dt>
           <dd>{{ patient.email || '—' }}</dd>
           <dt>{{ 'patientDetail.overview.status' | translate }}</dt>
-          <dd>
-            {{
-              (patient.isActive ? 'patientDetail.overview.active' : 'patientDetail.overview.inactive')
-                | translate
-            }}
+          <dd class="status-row">
+            <span
+              class="status-badge"
+              [class.status-badge--active]="patient.isActive"
+              [class.status-badge--suspended]="!patient.isActive"
+            >
+              {{
+                (patient.isActive ? 'patientDetail.overview.active' : 'patientDetail.overview.inactive')
+                  | translate
+              }}
+            </span>
+            <button type="button" class="btn btn--secondary" (click)="toggleActive(patient)">
+              {{ (patient.isActive ? 'patientDetail.deactivate' : 'patientDetail.activate') | translate }}
+            </button>
           </dd>
         </dl>
       </section>

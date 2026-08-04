@@ -74,6 +74,34 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/deactivate",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/deactivate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/patients/{id}/activate",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/v1/patients/{id}/activate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/v1/patients/{id}/transmissions",
       "UpstreamHttpMethod": [
         "GET"

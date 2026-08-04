@@ -98,6 +98,32 @@
   }
 }
 
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+
+  &--active {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+  }
+
+  &--suspended {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+  }
+}
+
 .device-badge {
   display: inline-block;
   padding: 2px var(--space-2);
